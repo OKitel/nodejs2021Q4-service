@@ -6,15 +6,8 @@ const {
   updateBoard,
 } = require('../controllers/boards-controller');
 
-const Board = {
-  type: 'object',
-  properties: {
-    id: { type: 'string' },
-    name: { type: 'string' },
-  },
-};
+const Board = require('../models/Board.model');
 
-// Options for get all boards
 const getBoardsOpts = {
   schema: {
     response: {
@@ -40,9 +33,9 @@ const postBoardOpts = {
   schema: {
     body: {
       type: 'object',
-      required: ['name'],
+      required: ['title'],
       properties: {
-        name: { type: 'string' },
+        title: { type: 'string' },
       },
     },
     response: {

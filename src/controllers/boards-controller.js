@@ -12,10 +12,10 @@ const getBoard = (req, reply) => {
 };
 
 const addBoard = (req, reply) => {
-  const { name } = req.body;
+  const { title } = req.body;
   const board = {
     id: uuidv4(),
-    name,
+    title,
   };
 
   boards = [...boards, board];
@@ -30,8 +30,8 @@ const deleteBoard = (req, reply) => {
 
 const updateBoard = (req, reply) => {
   const { id } = req.params;
-  const { name } = req.body;
-  boards = boards.map((board) => (board === id ? { id, name } : board));
+  const { title } = req.body;
+  boards = boards.map((board) => (board === id ? { id, title } : board));
   const board = boards.find((item) => item.id === id);
   reply.send(board);
 };
