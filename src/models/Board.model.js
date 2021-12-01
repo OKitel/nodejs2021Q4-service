@@ -3,8 +3,8 @@ const Board = {
   properties: {
     id: { type: 'string' },
     title: { type: 'string' },
-    columns: { type: 'string' },
+    columns: { type: 'array' },
   },
 };
 
-exports.modules = Board;
+module.exports = Board;

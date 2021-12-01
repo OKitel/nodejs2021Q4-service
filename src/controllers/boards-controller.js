@@ -8,14 +8,15 @@ const getBoards = (req, reply) => {
 const getBoard = (req, reply) => {
   const { id } = req.params;
   const board = boards.find((item) => item.id === id);
-  reply.send(board);
+  reply.code(200).header('Content-Type', 'application/json').send(board);
 };
 
 const addBoard = (req, reply) => {
-  const { title } = req.body;
+  const { title, columns } = req.body;
   const board = {
     id: uuidv4(),
     title,
+    columns,
   };
 
   boards = [...boards, board];
@@ -30,8 +31,10 @@ const deleteBoard = (req, reply) => {
 
 const updateBoard = (req, reply) => {
   const { id } = req.params;
-  const { title } = req.body;
-  boards = boards.map((board) => (board === id ? { id, title } : board));
+  const { title, columns } = req.body;
+  boards = boards.map((board) =>
+    board === id ? { id, title, columns } : board
+  );
   const board = boards.find((item) => item.id === id);
   reply.send(board);
 };

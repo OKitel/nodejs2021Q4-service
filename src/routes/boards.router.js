@@ -33,9 +33,10 @@ const postBoardOpts = {
   schema: {
     body: {
       type: 'object',
-      required: ['title'],
+      required: ['title', 'columns'],
       properties: {
         title: { type: 'string' },
+        columns: { type: 'array' },
       },
     },
     response: {

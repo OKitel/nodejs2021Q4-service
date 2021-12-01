@@ -8,4 +8,4 @@ const User = {
   },
 };
 
-exports.modules = User;
+module.exports = User;

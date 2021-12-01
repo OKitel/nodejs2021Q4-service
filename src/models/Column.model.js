@@ -7,4 +7,4 @@ const Column = {
   },
 };
 
-exports.modules = Column;
+module.exports = Column;
