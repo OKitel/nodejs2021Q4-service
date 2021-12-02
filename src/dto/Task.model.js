@@ -3,7 +3,7 @@ const Task = {
   properties: {
     id: { type: 'string' },
     title: { type: 'string' },
-    order: { type: 'string' },
+    order: { type: 'number' },
     description: { type: 'string' },
     userId: { type: 'string' },
     boardId: { type: 'string' },
