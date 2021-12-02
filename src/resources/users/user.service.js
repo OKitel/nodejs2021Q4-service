@@ -8,7 +8,7 @@ const getAll = async () => {
 const getOne = async (id) => {
   const user = await usersRepo.getOne(id);
   if (!user) {
-    throw new Error(`The user with id ${id} has't been found`);
+    throw new Error(`The user with id ${id} hasn't been found`);
   }
   return user;
 };
@@ -24,7 +24,7 @@ const save = async (user) => {
 const update = async (user) => {
   const oldUser = await usersRepo.getOne(user.id);
   if (!oldUser) {
-    throw new Error(`The board with id ${user.id} has't been found`);
+    throw new Error(`The board with id ${user.id} hasn't been found`);
   }
   const updatedUser = await usersRepo.update(user);
   return updatedUser;

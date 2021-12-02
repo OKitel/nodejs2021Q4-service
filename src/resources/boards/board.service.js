@@ -8,7 +8,7 @@ const getAll = async () => {
 const getOne = async (id) => {
   const board = await boardsRepo.getOne(id);
   if (!board) {
-    throw new Error(`The board with id ${id} has't been found`);
+    throw new Error(`The board with id ${id} hasn't been found`);
   }
   return board;
 };
@@ -24,7 +24,7 @@ const save = async (board) => {
 const update = async (board) => {
   const oldBoard = await boardsRepo.getOne(board.id);
   if (!oldBoard) {
-    throw new Error(`The board with id ${board.id} has't been found`);
+    throw new Error(`The board with id ${board.id} hasn't been found`);
   }
   const updatedBoard = await boardsRepo.update(board);
   return updatedBoard;

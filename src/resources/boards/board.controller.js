@@ -32,7 +32,7 @@ const addBoard = async (req, reply) => {
     reply.code(201).send(board);
   } catch (error) {
     fastify.log.error(error);
-    reply.send({ message: `There is an error: ${error} ` });
+    reply.send({ message: `${error} ` });
   }
 };
 

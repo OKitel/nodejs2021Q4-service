@@ -12,11 +12,6 @@ class User {
     this.login = login;
     this.password = password;
   }
-
-  static toResponse(user) {
-    const { id, name, login } = user;
-    return { id, name, login };
-  }
 }
 
 module.exports = User;
