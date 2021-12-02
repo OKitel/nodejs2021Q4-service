@@ -4,9 +4,9 @@ const {
   addBoard,
   deleteBoard,
   updateBoard,
-} = require('../controllers/boards-controller');
+} = require('../resources/boards/board.controller');
 
-const Board = require('../models/Board.model');
+const Board = require('../dto/Board.model');
 
 const getBoardsOpts = {
   schema: {

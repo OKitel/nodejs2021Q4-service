@@ -9,6 +9,7 @@ fastify.register(require('fastify-swagger'), {
     info: { title: 'REST-service' },
   },
 });
+
 fastify.register(require('./routes/boards.router'));
 
 const start = async () => {
