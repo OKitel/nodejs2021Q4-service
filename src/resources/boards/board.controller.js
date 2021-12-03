@@ -27,7 +27,7 @@ const getBoard = async (req, reply) => {
 const addBoard = async (req, reply) => {
   try {
     const { title, columns } = req.body;
-    const board = new Board(title, columns);
+    const board = new Board({ title, columns });
     await boardsService.save(board);
     reply.code(201).send(board);
   } catch (error) {

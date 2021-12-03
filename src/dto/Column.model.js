@@ -3,7 +3,7 @@ const Column = {
   properties: {
     id: { type: 'string' },
     title: { type: 'string' },
-    order: { type: 'string' },
+    order: { type: 'number' },
   },
 };
 
