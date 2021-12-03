@@ -33,7 +33,14 @@ const getTask = async (req, reply) => {
 const addTask = async (req, reply) => {
   try {
     const { title, order, description, userId, boardId, columnId } = req.body;
-    const task = new Task(title, order, description, userId, boardId, columnId);
+    const task = new Task({
+      title,
+      order,
+      description,
+      userId,
+      boardId,
+      columnId,
+    });
     await tasksService.save(task);
     reply.code(201).send(task);
   } catch (error) {
