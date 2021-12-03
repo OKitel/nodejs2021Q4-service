@@ -3,6 +3,18 @@ const uuid = require('uuid');
 const Task = require('./task.model');
 const tasksService = require('./task.service');
 
+const checkId = (boardId, taskId) => {
+  if (
+    !boardId ||
+    !uuid.validate(boardId) ||
+    !taskId ||
+    !uuid.validate(taskId)
+  ) {
+    return true;
+  }
+  return false;
+};
+
 const getTasks = async (req, reply) => {
   const { boardId } = req.params;
   if (!boardId || !uuid.validate(boardId)) {
@@ -18,12 +30,7 @@ const getTasks = async (req, reply) => {
 
 const getTask = async (req, reply) => {
   const { boardId, taskId } = req.params;
-  if (
-    !boardId ||
-    !uuid.validate(boardId) ||
-    !taskId ||
-    !uuid.validate(taskId)
-  ) {
+  if (checkId(boardId, taskId)) {
     return reply.code(400).send({ message: `Incorrect ID format.` });
   }
   try {
@@ -59,12 +66,7 @@ const addTask = async (req, reply) => {
 
 const deleteTask = async (req, reply) => {
   const { boardId, taskId } = req.params;
-  if (
-    !boardId ||
-    !uuid.validate(boardId) ||
-    !taskId ||
-    !uuid.validate(taskId)
-  ) {
+  if (checkId(boardId, taskId)) {
     reply.code(400).send({ message: `Incorrect ID format.` });
   }
   try {
@@ -78,12 +80,7 @@ const deleteTask = async (req, reply) => {
 
 const updateTask = async (req, reply) => {
   const { boardId: boardIdParam, taskId } = req.params;
-  if (
-    !boardIdParam ||
-    !uuid.validate(boardIdParam) ||
-    !taskId ||
-    !uuid.validate(taskId)
-  ) {
+  if (checkId(boardIdParam, taskId)) {
     reply.code(400).send({ message: `Incorrect ID format.` });
   }
   try {
