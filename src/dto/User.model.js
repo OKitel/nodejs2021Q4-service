@@ -8,4 +8,13 @@ const User = {
   },
 };
 
-module.exports = User;
+const UserToResponse = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    name: { type: 'string' },
+    login: { type: 'string' },
+  },
+};
+
+module.exports = { User, UserToResponse };

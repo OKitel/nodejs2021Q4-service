@@ -6,21 +6,14 @@ const {
   updateUser,
 } = require('../resources/users/user.controller');
 
-const User = require('../dto/User.model');
+const { User, UserToResponse } = require('../dto/User.model');
 
 const getUsersOpts = {
   schema: {
     response: {
       200: {
         type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            id: { type: 'string' },
-            name: { type: 'string' },
-            login: { type: 'string' },
-          },
-        },
+        items: UserToResponse,
       },
     },
   },
@@ -30,14 +23,7 @@ const getUsersOpts = {
 const getUserOpts = {
   schema: {
     response: {
-      200: {
-        type: 'object',
-        properties: {
-          id: { type: 'string' },
-          name: { type: 'string' },
-          login: { type: 'string' },
-        },
-      },
+      200: UserToResponse,
     },
   },
   handler: getUser,
@@ -55,7 +41,7 @@ const postUserOpts = {
       },
     },
     response: {
-      201: User,
+      201: UserToResponse,
     },
   },
   handler: addUser,
