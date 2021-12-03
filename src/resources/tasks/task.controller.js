@@ -18,20 +18,29 @@ const checkId = (boardId, taskId) => {
 const getTasks = async (req, reply) => {
   const { boardId } = req.params;
   if (!boardId || !uuid.validate(boardId)) {
-    return reply.code(400).send({ message: `Incorrect ID format.` });
+    return reply
+      .code(400)
+      .header('Content-Type', 'application/json')
+      .send({ message: `Incorrect ID format.` });
   }
   try {
     return reply.send(await tasksService.getAllTasksByBoardId(boardId));
   } catch (error) {
     fastify.log.error(error);
-    return reply.code(404).send({ message: `${error}` });
+    return reply
+      .code(404)
+      .header('Content-Type', 'application/json')
+      .send({ message: `${error}` });
   }
 };
 
 const getTask = async (req, reply) => {
   const { boardId, taskId } = req.params;
   if (checkId(boardId, taskId)) {
-    return reply.code(400).send({ message: `Incorrect ID format.` });
+    return reply
+      .code(400)
+      .header('Content-Type', 'application/json')
+      .send({ message: `Incorrect ID format.` });
   }
   try {
     const task = await tasksService.getOne(boardId, taskId);
@@ -41,7 +50,10 @@ const getTask = async (req, reply) => {
       .send(task);
   } catch (error) {
     fastify.log.error(error);
-    return reply.code(404).send({ message: `${error}.` });
+    return reply
+      .code(404)
+      .header('Content-Type', 'application/json')
+      .send({ message: `${error}.` });
   }
 };
 
@@ -58,31 +70,46 @@ const addTask = async (req, reply) => {
       columnId,
     });
     await tasksService.save(task);
-    return reply.code(201).send(task);
+    return reply
+      .code(201)
+      .header('Content-Type', 'application/json')
+      .send(task);
   } catch (error) {
     fastify.log.error(error);
-    return reply.send({ message: `${error}` });
+    return reply
+      .code(404)
+      .header('Content-Type', 'application/json')
+      .send({ message: `${error}` });
   }
 };
 
 const deleteTask = async (req, reply) => {
   const { boardId, taskId } = req.params;
   if (checkId(boardId, taskId)) {
-    reply.code(400).send({ message: `Incorrect ID format.` });
+    reply
+      .code(400)
+      .header('Content-Type', 'application/json')
+      .send({ message: `Incorrect ID format.` });
   }
   try {
     await tasksService.deleteById(taskId);
     reply.send({ message: `Task ${taskId} has been removed` });
   } catch (error) {
     fastify.log.error(error);
-    reply.code(404).send({ message: `${error}` });
+    reply
+      .code(404)
+      .header('Content-Type', 'application/json')
+      .send({ message: `${error}` });
   }
 };
 
 const updateTask = async (req, reply) => {
   const { boardId: boardIdParam, taskId } = req.params;
   if (checkId(boardIdParam, taskId)) {
-    reply.code(400).send({ message: `Incorrect ID format.` });
+    reply
+      .code(400)
+      .header('Content-Type', 'application/json')
+      .send({ message: `Incorrect ID format.` });
   }
   try {
     const { title, order, description, userId, boardId, columnId } = req.body;
@@ -95,10 +122,13 @@ const updateTask = async (req, reply) => {
       boardId,
       columnId,
     });
-    reply.code(200).send(task);
+    reply.code(200).header('Content-Type', 'application/json').send(task);
   } catch (error) {
     fastify.log.error(error);
-    reply.code(404).send({ message: `${error}` });
+    reply
+      .code(404)
+      .header('Content-Type', 'application/json')
+      .send({ message: `${error}` });
   }
 };
 
