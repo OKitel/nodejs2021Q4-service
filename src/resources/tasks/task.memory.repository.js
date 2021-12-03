@@ -4,7 +4,7 @@ let tasks = [
     title: 'Task one',
     order: 1,
     description: 'To do something #1',
-    userId: '1',
+    userId: 'a1a8478e-7172-4d55-bd3d-a4f594a02155',
     boardId: 'cd3a4828-1334-4dce-920f-6bd89af1539a',
     columnId: '1',
   },
@@ -13,7 +13,7 @@ let tasks = [
     title: 'Task two',
     order: 2,
     description: 'To do something #2',
-    userId: '2',
+    userId: 'a1a8478e-7172-4d55-bd3d-a4f594a02155',
     boardId: 'cd3a4828-1334-4dce-920f-6bd89af1539a',
     columnId: '2',
   },
@@ -22,7 +22,7 @@ let tasks = [
     title: 'Task three',
     order: 3,
     description: 'To do something #3',
-    userId: '3',
+    userId: 'a1a8478e-7172-4d55-bd3d-a4f594a02157',
     boardId: 'cd3a4828-1334-4dce-920f-6bd89af1539a',
     columnId: '3',
   },
@@ -31,7 +31,7 @@ let tasks = [
     title: 'Task three',
     order: 3,
     description: 'To do something #3',
-    userId: '3',
+    userId: 'a1a8478e-7172-4d55-bd3d-a4f594a02157',
     boardId: 'cd3a4828-1334-4dce-920f-6bd89af1539b',
     columnId: '1',
   },
@@ -39,6 +39,9 @@ let tasks = [
 
 const getAllByBoardId = async (id) =>
   tasks.filter((task) => task.boardId === id);
+
+const gettAllTasksByUserId = async (id) =>
+  tasks.filter((task) => task.userId === id);
 
 const getOne = async (boardId, taskId) => {
   const tasksOnBoard = tasks.filter((task) => task.boardId === boardId);
@@ -61,7 +64,7 @@ const save = async (task) => {
 
 const update = async (updatedTask) => {
   tasks = tasks.map((task) =>
-    task.id === updatedTask.id ? updatedTask : tasks
+    task.id === updatedTask.id ? updatedTask : task
   );
   return updatedTask;
 };
@@ -73,4 +76,5 @@ module.exports = {
   save,
   update,
   deleteTasksByBoardId,
+  gettAllTasksByUserId,
 };
