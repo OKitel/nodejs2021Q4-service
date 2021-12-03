@@ -1,6 +1,6 @@
 let tasks = [
   {
-    id: '1',
+    id: 'a9fb7928-0907-48ac-a388-06d4cc4eaeca',
     title: 'Task one',
     order: 1,
     description: 'To do something #1',
@@ -9,7 +9,7 @@ let tasks = [
     columnId: '1',
   },
   {
-    id: '2',
+    id: 'a9fb7928-0907-48ac-a388-06d4cc4eaecb',
     title: 'Task two',
     order: 2,
     description: 'To do something #2',
@@ -18,7 +18,7 @@ let tasks = [
     columnId: '2',
   },
   {
-    id: '3',
+    id: 'a9fb7928-0907-48ac-a388-06d4cc4eafca',
     title: 'Task three',
     order: 3,
     description: 'To do something #3',
@@ -27,7 +27,7 @@ let tasks = [
     columnId: '3',
   },
   {
-    id: '4',
+    id: 'a9fc7928-0907-48ac-a388-06d4cc4eaeca',
     title: 'Task three',
     order: 3,
     description: 'To do something #3',
@@ -40,7 +40,11 @@ let tasks = [
 const getAllByBoardId = async (id) =>
   tasks.filter((task) => task.boardId === id);
 
-const getOne = async (id) => tasks.find((task) => task.id === id);
+const getOne = async (boardId, taskId) => {
+  const tasksOnBoard = tasks.filter((task) => task.boardId === boardId);
+
+  return tasksOnBoard.find((task) => task.id === taskId);
+};
 
 const deleteById = async (id) => {
   tasks = tasks.filter((task) => task.id !== id);

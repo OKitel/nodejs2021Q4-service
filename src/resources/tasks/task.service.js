@@ -5,10 +5,10 @@ const getAllTasksByBoardId = async (id) => {
   return tasks;
 };
 
-const getOne = async (id) => {
-  const task = await tasksRepo.getOne(id);
+const getOne = async (boardId, taskId) => {
+  const task = await tasksRepo.getOne(boardId, taskId);
   if (!task) {
-    throw new Error(`The task with id ${id} hasn't been found`);
+    throw new Error(`The task with id ${taskId} hasn't been found`);
   }
   return task;
 };

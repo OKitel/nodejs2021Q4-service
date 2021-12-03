@@ -9,12 +9,17 @@ const getTasks = async (req, reply) => {
 };
 
 const getTask = async (req, reply) => {
-  const { id } = req.params;
-  if (!id || !uuid.validate(id)) {
+  const { boardId, taskId } = req.params;
+  if (
+    !boardId ||
+    !uuid.validate(boardId) ||
+    !taskId ||
+    !uuid.validate(taskId)
+  ) {
     return reply.code(400).send({ message: `Incorrect ID format.` });
   }
   try {
-    const task = await tasksService.getOne(id);
+    const task = await tasksService.getOne(boardId, taskId);
     return reply
       .code(200)
       .header('Content-Type', 'application/json')
