@@ -50,6 +50,10 @@ const deleteById = async (id) => {
   tasks = tasks.filter((task) => task.id !== id);
 };
 
+const deleteTasksByBoardId = async (id) => {
+  tasks = tasks.filter((task) => task.boardId !== id);
+};
+
 const save = async (task) => {
   tasks = [...tasks, task];
   return task;
@@ -62,4 +66,11 @@ const update = async (updatedTask) => {
   return updatedTask;
 };
 
-module.exports = { getAllByBoardId, getOne, deleteById, save, update };
+module.exports = {
+  getAllByBoardId,
+  getOne,
+  deleteById,
+  save,
+  update,
+  deleteTasksByBoardId,
+};

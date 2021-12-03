@@ -1,4 +1,5 @@
 const boardsRepo = require('./board.memory.repository');
+const tasksRepo = require('../tasks/task.memory.repository');
 
 const getAll = async () => {
   const boards = await boardsRepo.getAll();
@@ -14,6 +15,7 @@ const getOne = async (id) => {
 };
 
 const deleteById = async (id) => {
+  await tasksRepo.deleteTasksByBoardId(id);
   await boardsRepo.deleteById(id);
 };
 

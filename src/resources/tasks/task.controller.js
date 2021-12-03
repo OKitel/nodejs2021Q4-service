@@ -5,7 +5,15 @@ const tasksService = require('./task.service');
 
 const getTasks = async (req, reply) => {
   const { boardId } = req.params;
-  reply.send(await tasksService.getAllTasksByBoardId(boardId));
+  if (!boardId || !uuid.validate(boardId)) {
+    return reply.code(400).send({ message: `Incorrect ID format.` });
+  }
+  try {
+    return reply.send(await tasksService.getAllTasksByBoardId(boardId));
+  } catch (error) {
+    fastify.log.error(error);
+    return reply.code(404).send({ message: `${error}` });
+  }
 };
 
 const getTask = async (req, reply) => {
@@ -42,10 +50,10 @@ const addTask = async (req, reply) => {
       columnId,
     });
     await tasksService.save(task);
-    reply.code(201).send(task);
+    return reply.code(201).send(task);
   } catch (error) {
     fastify.log.error(error);
-    reply.send({ message: `${error}` });
+    return reply.send({ message: `${error}` });
   }
 };
 
