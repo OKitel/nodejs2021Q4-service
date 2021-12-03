@@ -22,9 +22,9 @@ const save = async (task) => {
 };
 
 const update = async (task) => {
-  const oldTask = await tasksRepo.getOne(task.id);
+  const oldTask = await tasksRepo.getOne(task.boardId, task.id);
   if (!oldTask) {
-    throw new Error(`The board with id ${task.id} hasn't been found`);
+    throw new Error(`The task with id ${task.id} hasn't been found`);
   }
   const updatedTask = await tasksRepo.update(task);
   return updatedTask;

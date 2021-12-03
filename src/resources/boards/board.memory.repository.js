@@ -11,7 +11,7 @@ let boards = [
   },
   {
     id: 'cd3a4828-1334-4dce-920f-6bd89af1539c',
-    title: 'Board #1',
+    title: 'Board #3',
     columns: [1, 2],
   },
 ];

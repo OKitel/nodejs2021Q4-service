@@ -64,14 +64,19 @@ const deleteTask = async (req, reply) => {
 };
 
 const updateTask = async (req, reply) => {
-  const { id } = req.params;
-  if (!id || !uuid.validate(id)) {
+  const { boardId: boardIdParam, taskId } = req.params;
+  if (
+    !boardIdParam ||
+    !uuid.validate(boardIdParam) ||
+    !taskId ||
+    !uuid.validate(taskId)
+  ) {
     reply.code(400).send({ message: `Incorrect ID format.` });
   }
   try {
     const { title, order, description, userId, boardId, columnId } = req.body;
-    const board = await tasksService.update({
-      id,
+    const task = await tasksService.update({
+      id: taskId,
       title,
       order,
       description,
@@ -79,7 +84,7 @@ const updateTask = async (req, reply) => {
       boardId,
       columnId,
     });
-    reply.code(200).send(board);
+    reply.code(200).send(task);
   } catch (error) {
     fastify.log.error(error);
     reply.code(404).send({ message: `${error}` });
