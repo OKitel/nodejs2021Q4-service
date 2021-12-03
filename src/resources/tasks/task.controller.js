@@ -4,7 +4,8 @@ const Task = require('./task.model');
 const tasksService = require('./task.service');
 
 const getTasks = async (req, reply) => {
-  reply.send(await tasksService.getAll());
+  const { boardId } = req.params;
+  reply.send(await tasksService.getAllTasksByBoardId(boardId));
 };
 
 const getTask = async (req, reply) => {

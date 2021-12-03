@@ -1,7 +1,7 @@
 const tasksRepo = require('./task.memory.repository');
 
-const getAll = async () => {
-  const tasks = await tasksRepo.getAll();
+const getAllTasksByBoardId = async (id) => {
+  const tasks = await tasksRepo.getAllByBoardId(id);
   return tasks;
 };
 
@@ -30,4 +30,4 @@ const update = async (task) => {
   return updatedTask;
 };
 
-module.exports = { getAll, getOne, deleteById, save, update };
+module.exports = { getAllTasksByBoardId, getOne, deleteById, save, update };

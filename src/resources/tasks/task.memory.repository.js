@@ -5,7 +5,7 @@ let tasks = [
     order: 1,
     description: 'To do something #1',
     userId: '1',
-    boardId: '1',
+    boardId: 'cd3a4828-1334-4dce-920f-6bd89af1539a',
     columnId: '1',
   },
   {
@@ -14,7 +14,7 @@ let tasks = [
     order: 2,
     description: 'To do something #2',
     userId: '2',
-    boardId: '2',
+    boardId: 'cd3a4828-1334-4dce-920f-6bd89af1539a',
     columnId: '2',
   },
   {
@@ -23,12 +23,22 @@ let tasks = [
     order: 3,
     description: 'To do something #3',
     userId: '3',
-    boardId: '3',
+    boardId: 'cd3a4828-1334-4dce-920f-6bd89af1539a',
     columnId: '3',
+  },
+  {
+    id: '4',
+    title: 'Task three',
+    order: 3,
+    description: 'To do something #3',
+    userId: '3',
+    boardId: 'cd3a4828-1334-4dce-920f-6bd89af1539b',
+    columnId: '1',
   },
 ];
 
-const getAll = async () => tasks;
+const getAllByBoardId = async (id) =>
+  tasks.filter((task) => task.boardId === id);
 
 const getOne = async (id) => tasks.find((task) => task.id === id);
 
@@ -48,4 +58,4 @@ const update = async (updatedTask) => {
   return updatedTask;
 };
 
-module.exports = { getAll, getOne, deleteById, save, update };
+module.exports = { getAllByBoardId, getOne, deleteById, save, update };

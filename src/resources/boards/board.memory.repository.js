@@ -1,7 +1,19 @@
 let boards = [
-  { id: '1', title: 'Board one', columns: [] },
-  { id: '2', title: 'Board two', columns: [] },
-  { id: '3', title: 'Board three', columns: [] },
+  {
+    id: 'cd3a4828-1334-4dce-920f-6bd89af1539a',
+    title: 'Board #1',
+    columns: [1, 2, 3],
+  },
+  {
+    id: 'cd3a4828-1334-4dce-920f-6bd89af1539b',
+    title: 'Board #2',
+    columns: [1, 2, 3],
+  },
+  {
+    id: 'cd3a4828-1334-4dce-920f-6bd89af1539c',
+    title: 'Board #1',
+    columns: [1, 2],
+  },
 ];
 
 const getAll = async () => boards;
