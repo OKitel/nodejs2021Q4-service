@@ -7,7 +7,7 @@ const Task = {
     description: { type: 'string' },
     userId: { type: 'string', nullable: true },
     boardId: { type: 'string' },
-    columnId: { type: 'string' },
+    columnId: { type: 'string', nullable: true },
   },
 };
 

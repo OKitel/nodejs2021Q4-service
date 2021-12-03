@@ -46,8 +46,9 @@ const getTask = async (req, reply) => {
 };
 
 const addTask = async (req, reply) => {
+  const { boardId } = req.params;
   try {
-    const { title, order, description, userId, boardId, columnId } = req.body;
+    const { title, order, description, userId, columnId } = req.body;
     const task = new Task({
       title,
       order,

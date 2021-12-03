@@ -33,14 +33,14 @@ const postTaskOpts = {
   schema: {
     body: {
       type: 'object',
-      required: ['title', 'order', 'description', 'userId', 'boardId'],
+      required: ['title', 'order', 'description'],
       properties: {
         title: { type: 'string' },
         order: { type: 'number' },
         description: { type: 'string' },
-        userId: { type: 'string' },
+        userId: { type: 'string', nullable: true },
         boardId: { type: 'string' },
-        columnId: { type: 'string' },
+        columnId: { type: 'string', nullable: true },
       },
     },
     response: {
