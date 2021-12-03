@@ -50,13 +50,18 @@ const addTask = async (req, reply) => {
 };
 
 const deleteTask = async (req, reply) => {
-  const { id } = req.params;
-  if (!id || !uuid.validate(id)) {
+  const { boardId, taskId } = req.params;
+  if (
+    !boardId ||
+    !uuid.validate(boardId) ||
+    !taskId ||
+    !uuid.validate(taskId)
+  ) {
     reply.code(400).send({ message: `Incorrect ID format.` });
   }
   try {
-    await tasksService.deleteById(id);
-    reply.send({ message: `Task ${id} has been removed` });
+    await tasksService.deleteById(taskId);
+    reply.send({ message: `Task ${taskId} has been removed` });
   } catch (error) {
     fastify.log.error(error);
     reply.code(404).send({ message: `${error}` });
