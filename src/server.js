@@ -1,5 +1,4 @@
 const fastify = require('fastify')({ logger: true });
-// const app = require('./app');
 const { PORT } = require('./common/config');
 
 fastify.register(require('fastify-swagger'), {
