@@ -1,4 +1,4 @@
-const Column = {
+export const Column = {
   type: 'object',
   properties: {
     id: { type: 'string' },
@@ -6,5 +6,3 @@ const Column = {
     order: { type: 'number' },
   },
 };
-
-module.exports = Column;

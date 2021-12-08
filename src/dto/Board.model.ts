@@ -1,4 +1,4 @@
-const Board = {
+export const Board = {
   type: 'object',
   properties: {
     id: { type: 'string' },
@@ -6,5 +6,3 @@ const Board = {
     columns: { type: 'array' },
   },
 };
-
-module.exports = Board;

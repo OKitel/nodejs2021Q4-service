@@ -1,4 +1,4 @@
-const User = {
+export const User = {
   type: 'object',
   properties: {
     id: { type: 'string' },
@@ -8,7 +8,7 @@ const User = {
   },
 };
 
-const UserToResponse = {
+export const UserToResponse = {
   type: 'object',
   properties: {
     id: { type: 'string' },
@@ -17,4 +17,3 @@ const UserToResponse = {
   },
 };
 
-module.exports = { User, UserToResponse };
