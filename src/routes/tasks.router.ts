@@ -1,12 +1,12 @@
-const {
+import {
   getTasks,
   getTask,
   addTask,
   deleteTask,
   updateTask,
-} = require('../resources/tasks/task.controller');
+} from '../resources/tasks/task.controller';
 
-const Task = require('../dto/Task.model');
+import { Task } from '../dto/Task.model';
 
 const getTasksOpts = {
   schema: {
@@ -73,7 +73,7 @@ const updateTaskOpts = {
   handler: updateTask,
 };
 
-function taskRoutes(fastify, options, done) {
+export const taskRoutes = (fastify, options, done) => {
   // Get all tasks on the board
   fastify.get('/boards/:boardId/tasks', getTasksOpts);
 
@@ -90,6 +90,4 @@ function taskRoutes(fastify, options, done) {
   fastify.put('/boards/:boardId/tasks/:taskId', updateTaskOpts);
 
   done();
-}
-
-module.exports = taskRoutes;
+};
