@@ -1,23 +1,45 @@
-const fastify = require('fastify')({ logger: true });
-const uuid = require('uuid');
-const Task = require('./task.model');
-const tasksService = require('./task.service');
+import fastify, { FastifyReply, FastifyRequest } from 'fastify';
+import { validate as uuidValidate } from 'uuid';
+import { Task } from './task.model';
+import { tasksService } from './task.service';
 
-const checkId = (boardId, taskId) => {
-  if (
-    !boardId ||
-    !uuid.validate(boardId) ||
-    !taskId ||
-    !uuid.validate(taskId)
-  ) {
+const server = fastify({ logger: true });
+
+type TaskRequestPost = FastifyRequest<{
+  Params: { boardId: string };
+  Body: {
+    title: string;
+    order: number;
+    description: string;
+    userId: string | null;
+    columnId: null | number;
+  };
+}>;
+type TaskRequestPut = FastifyRequest<{
+  Params: { boardId: string; taskId: string };
+  Body: {
+    title: string;
+    order: number;
+    description: string;
+    userId: string | null;
+    columnId: null | number;
+    boardId: string;
+  };
+}>;
+type TaskRequestParams = FastifyRequest<{
+  Params: { boardId: string; taskId: string };
+}>;
+
+export const checkId = (boardId: string, taskId: string) => {
+  if (!boardId || !uuidValidate(boardId) || !taskId || !uuidValidate(taskId)) {
     return true;
   }
   return false;
 };
 
-const getTasks = async (req, reply) => {
+export const getTasks = async (req: TaskRequestParams, reply: FastifyReply) => {
   const { boardId } = req.params;
-  if (!boardId || !uuid.validate(boardId)) {
+  if (!boardId || !uuidValidate(boardId)) {
     return reply
       .code(400)
       .header('Content-Type', 'application/json')
@@ -26,7 +48,7 @@ const getTasks = async (req, reply) => {
   try {
     return reply.send(await tasksService.getAllTasksByBoardId(boardId));
   } catch (error) {
-    fastify.log.error(error);
+    server.log.error(error);
     return reply
       .code(404)
       .header('Content-Type', 'application/json')
@@ -34,7 +56,7 @@ const getTasks = async (req, reply) => {
   }
 };
 
-const getTask = async (req, reply) => {
+export const getTask = async (req: TaskRequestParams, reply: FastifyReply) => {
   const { boardId, taskId } = req.params;
   if (checkId(boardId, taskId)) {
     return reply
@@ -49,7 +71,7 @@ const getTask = async (req, reply) => {
       .header('Content-Type', 'application/json')
       .send(task);
   } catch (error) {
-    fastify.log.error(error);
+    server.log.error(error);
     return reply
       .code(404)
       .header('Content-Type', 'application/json')
@@ -57,7 +79,7 @@ const getTask = async (req, reply) => {
   }
 };
 
-const addTask = async (req, reply) => {
+export const addTask = async (req: TaskRequestPost, reply: FastifyReply) => {
   const { boardId } = req.params;
   try {
     const { title, order, description, userId, columnId } = req.body;
@@ -75,7 +97,7 @@ const addTask = async (req, reply) => {
       .header('Content-Type', 'application/json')
       .send(task);
   } catch (error) {
-    fastify.log.error(error);
+    server.log.error(error);
     return reply
       .code(404)
       .header('Content-Type', 'application/json')
@@ -83,7 +105,10 @@ const addTask = async (req, reply) => {
   }
 };
 
-const deleteTask = async (req, reply) => {
+export const deleteTask = async (
+  req: TaskRequestParams,
+  reply: FastifyReply
+) => {
   const { boardId, taskId } = req.params;
   if (checkId(boardId, taskId)) {
     reply
@@ -95,7 +120,7 @@ const deleteTask = async (req, reply) => {
     await tasksService.deleteById(taskId);
     reply.send({ message: `Task ${taskId} has been removed` });
   } catch (error) {
-    fastify.log.error(error);
+    server.log.error(error);
     reply
       .code(404)
       .header('Content-Type', 'application/json')
@@ -103,7 +128,7 @@ const deleteTask = async (req, reply) => {
   }
 };
 
-const updateTask = async (req, reply) => {
+export const updateTask = async (req: TaskRequestPut, reply: FastifyReply) => {
   const { boardId: boardIdParam, taskId } = req.params;
   if (checkId(boardIdParam, taskId)) {
     reply
@@ -124,18 +149,10 @@ const updateTask = async (req, reply) => {
     });
     reply.code(200).header('Content-Type', 'application/json').send(task);
   } catch (error) {
-    fastify.log.error(error);
+    server.log.error(error);
     reply
       .code(404)
       .header('Content-Type', 'application/json')
       .send({ message: `${error}` });
   }
-};
-
-module.exports = {
-  getTasks,
-  getTask,
-  addTask,
-  deleteTask,
-  updateTask,
 };
