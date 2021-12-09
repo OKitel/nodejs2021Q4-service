@@ -1,4 +1,6 @@
-let users = [
+import { User } from './user.model';
+
+let users: Array<User> = [
   {
     id: 'a1a8478e-7172-4d55-bd3d-a4f594a02151',
     name: 'User one',
@@ -33,22 +35,22 @@ let users = [
 
 const getAll = async () => users;
 
-const getOne = async (id) => users.find((item) => item.id === id);
+const getOne = async (id: string) => users.find((item) => item.id === id);
 
-const deleteById = async (id) => {
+const deleteById = async (id: string) => {
   users = users.filter((user) => user.id !== id);
 };
 
-const save = async (user) => {
+const save = async (user: User) => {
   users = [...users, user];
   return user;
 };
 
-const update = async (updatedUser) => {
+const update = async (updatedUser: User) => {
   users = users.map((user) =>
     user.id === updatedUser.id ? updatedUser : user
   );
   return updatedUser;
 };
 
-module.exports = { getAll, getOne, deleteById, save, update };
+export const usersRepo = { getAll, getOne, deleteById, save, update };

@@ -1,12 +1,13 @@
-const usersRepo = require('./user.memory.repository');
-const tasksRepo = require('../tasks/task.memory.repository');
+import { usersRepo } from './user.memory.repository';
+import { tasksRepo } from '../tasks/task.memory.repository';
+import { User } from './user.model';
 
 const getAll = async () => {
   const users = await usersRepo.getAll();
   return users;
 };
 
-const getOne = async (id) => {
+const getOne = async (id: string) => {
   const user = await usersRepo.getOne(id);
   if (!user) {
     throw new Error(`The user with id ${id} hasn't been found`);
@@ -14,7 +15,7 @@ const getOne = async (id) => {
   return user;
 };
 
-const deleteById = async (id) => {
+const deleteById = async (id:string) => {
   const userTasks = await tasksRepo.gettAllTasksByUserId(id);
   for (let i = 0; i < userTasks.length; i += 1) {
     userTasks[i].userId = null;
@@ -23,11 +24,11 @@ const deleteById = async (id) => {
   await usersRepo.deleteById(id);
 };
 
-const save = async (user) => {
+const save = async (user: User) => {
   await usersRepo.save(user);
 };
 
-const update = async (user) => {
+const update = async (user: User) => {
   const oldUser = await usersRepo.getOne(user.id);
   if (!oldUser) {
     throw new Error(`The board with id ${user.id} hasn't been found`);
@@ -36,4 +37,4 @@ const update = async (user) => {
   return updatedUser;
 };
 
-module.exports = { getAll, getOne, deleteById, save, update };
+export const usersService = { getAll, getOne, deleteById, save, update };
