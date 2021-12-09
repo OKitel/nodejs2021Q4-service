@@ -1,15 +1,26 @@
-const fastify = require('fastify')({ logger: true });
-const uuid = require('uuid');
-const Board = require('./board.model');
-const boardsService = require('./board.service');
+import fastify, { FastifyReply, FastifyRequest } from 'fastify';
+import { validate as uuidValidate } from 'uuid';
+import { Board } from './board.model';
+import { boardsService } from './board.service';
 
-const getBoards = async (req, reply) => {
+const server = fastify({ logger: true });
+
+type BoardRequestPost = FastifyRequest<{
+  Body: { title: string; columns: Array<number> };
+}>;
+type BoardRequestPut = FastifyRequest<{ Params: { id: string }; Body: Board }>;
+type BoardRequestParams = FastifyRequest<{ Params: { id: string } }>;
+
+export const getBoards = async (req: FastifyRequest, reply: FastifyReply) => {
   reply.send(await boardsService.getAll());
 };
 
-const getBoard = async (req, reply) => {
+export const getBoard = async (
+  req: BoardRequestParams,
+  reply: FastifyReply
+) => {
   const { id } = req.params;
-  if (!id || !uuid.validate(id)) {
+  if (!id || !uuidValidate(id)) {
     return reply
       .code(400)
       .header('Content-Type', 'application/json')
@@ -22,7 +33,7 @@ const getBoard = async (req, reply) => {
       .header('Content-Type', 'application/json')
       .send(board);
   } catch (error) {
-    fastify.log.error(error);
+    server.log.error(error);
     return reply
       .code(404)
       .header('Content-Type', 'application/json')
@@ -30,14 +41,14 @@ const getBoard = async (req, reply) => {
   }
 };
 
-const addBoard = async (req, reply) => {
+export const addBoard = async (req: BoardRequestPost, reply: FastifyReply) => {
   try {
     const { title, columns } = req.body;
     const board = new Board({ title, columns });
     await boardsService.save(board);
     reply.code(201).header('Content-Type', 'application/json').send(board);
   } catch (error) {
-    fastify.log.error(error);
+    server.log.error(error);
     reply
       .code(404)
       .header('Content-Type', 'application/json')
@@ -45,9 +56,12 @@ const addBoard = async (req, reply) => {
   }
 };
 
-const deleteBoard = async (req, reply) => {
+export const deleteBoard = async (
+  req: BoardRequestParams,
+  reply: FastifyReply
+) => {
   const { id } = req.params;
-  if (!id || !uuid.validate(id)) {
+  if (!id || !uuidValidate(id)) {
     reply
       .code(400)
       .header('Content-Type', 'application/json')
@@ -57,7 +71,7 @@ const deleteBoard = async (req, reply) => {
     await boardsService.deleteById(id);
     reply.send({ message: `Board ${id} has been removed` });
   } catch (error) {
-    fastify.log.error(error);
+    server.log.error(error);
     reply
       .code(404)
       .header('Content-Type', 'application/json')
@@ -65,9 +79,12 @@ const deleteBoard = async (req, reply) => {
   }
 };
 
-const updateBoard = async (req, reply) => {
+export const updateBoard = async (
+  req: BoardRequestPut,
+  reply: FastifyReply
+) => {
   const { id } = req.params;
-  if (!id || !uuid.validate(id)) {
+  if (!id || !uuidValidate(id)) {
     reply
       .code(400)
       .header('Content-Type', 'application/json')
@@ -78,18 +95,10 @@ const updateBoard = async (req, reply) => {
     const board = await boardsService.update({ id, title, columns });
     reply.code(200).header('Content-Type', 'application/json').send(board);
   } catch (error) {
-    fastify.log.error(error);
+    server.log.error(error);
     reply
       .code(404)
       .header('Content-Type', 'application/json')
       .send({ message: `There is an error: ${error} ` });
   }
-};
-
-module.exports = {
-  getBoards,
-  getBoard,
-  addBoard,
-  deleteBoard,
-  updateBoard,
 };
