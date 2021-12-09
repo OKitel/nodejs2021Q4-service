@@ -35,7 +35,14 @@
     "linebreak-style": "off",
     "node/no-unsupported-features/es-syntax": "off",
     "no-underscore-dangle": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "node/no-missing-import": [
+      "error",
+      {
+        "resolvePaths": ["./src"],
+        "tryExtensions": [".js", ".ts"]
+      }
+    ]
   },
   "plugins": ["@typescript-eslint"]
 }
