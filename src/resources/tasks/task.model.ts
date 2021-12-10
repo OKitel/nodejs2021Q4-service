@@ -16,6 +16,9 @@ interface ITask {
   columnId: null | number;
 }
 
+/**
+ * Class to create a task object
+ */
 export class Task implements ITask {
   id: string;
 
