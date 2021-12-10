@@ -8,6 +8,9 @@ interface IBoard {
   columns: Array<number>;
 }
 
+/**
+ * Class to create a board object
+ */
 export class Board implements IBoard {
   id: string;
 
