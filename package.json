@@ -12,7 +12,8 @@
     "start": "npx ts-node src/server.ts",
     "lint": "eslint --ext .js,.ts --fix src/",
     "test": "cross-env DEBUG=rs:* jest --testMatch \"<rootDir>/test/e2e/test/*.test.js\" --noStackTrace --runInBand",
-    "test:auth": "cross-env DEBUG=rs:* TEST_MODE=auth jest --noStackTrace"
+    "test:auth": "cross-env DEBUG=rs:* TEST_MODE=auth jest --noStackTrace",
+    "docs": "typedoc"
   },
   "keywords": [
     "rs",
@@ -44,7 +45,6 @@
     ]
   },
   "dependencies": {
-    "@microsoft/tsdoc": "^0.13.2",
     "cross-env": "7.0.3",
     "dotenv": "10.0.0",
     "express": "4.17.1",
@@ -54,6 +54,7 @@
     "yamljs": "0.3.0"
   },
   "devDependencies": {
+    "@microsoft/tsdoc": "^0.13.2",
     "@types/node": "^16.11.11",
     "@types/uuid": "^8.3.3",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
@@ -76,6 +77,7 @@
     "prettier": "2.4.1",
     "supertest": "6.1.6",
     "ts-node": "^10.4.0",
+    "typedoc": "^0.22.10",
     "typescript": "^4.5.2"
   }
 }
