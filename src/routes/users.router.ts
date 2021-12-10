@@ -1,3 +1,4 @@
+import { FastifyError, FastifyInstance } from 'fastify';
 import { User, UserToResponse } from '../dto/User.model';
 
 import {
@@ -70,7 +71,16 @@ const updateUserOpts = {
   handler: updateUser,
 };
 
-export const userRoutes = (fastify, options, done) => {
+/**
+ * Declares routes for users
+ * @param fastify see type {@link FastifyInstance}
+ * @param done function to complete registration of users routes
+ */
+export const userRoutes = (
+  fastify: FastifyInstance,
+  _: unknown,
+  done: (err?: FastifyError) => void
+) => {
   // Get all users
   fastify.get('/users', getUsersOpts);
 

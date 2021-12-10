@@ -1,3 +1,4 @@
+import { FastifyError, FastifyInstance } from 'fastify';
 import {
   getTasks,
   getTask,
@@ -73,7 +74,16 @@ const updateTaskOpts = {
   handler: updateTask,
 };
 
-export const taskRoutes = (fastify, options, done) => {
+/**
+ * Declares routes for tasks
+ * @param fastify see type {@link FastifyInstance}
+ * @param done function to complete registration of tasks routes
+ */
+export const taskRoutes = (
+  fastify: FastifyInstance,
+  _: unknown,
+  done: (err?: FastifyError) => void
+) => {
   // Get all tasks on the board
   fastify.get('/boards/:boardId/tasks', getTasksOpts);
 
