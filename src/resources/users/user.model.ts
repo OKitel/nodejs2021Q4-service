@@ -10,6 +10,9 @@ interface IUser {
   password: string;
 }
 
+/**
+ * Class to create a user object
+ */
 export class User implements IUser {
   id: string;
 
