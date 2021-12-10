@@ -19,6 +19,9 @@ server.register(boardRoutes);
 server.register(userRoutes);
 server.register(taskRoutes);
 
+/**
+ * Start server on port from .env
+ */
 const start = async () => {
   try {
     await server.listen(PORT);
