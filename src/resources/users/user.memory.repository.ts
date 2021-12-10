@@ -33,19 +33,42 @@ let users: Array<User> = [
   },
 ];
 
+/**
+ * Returns all users from repository
+ * @returns all users
+ */
 const getAll = async () => users;
 
+/**
+ * Returns single user by ID from users repository
+ * @param id user ID
+ * @returns user by ID
+ */
 const getOne = async (id: string) => users.find((item) => item.id === id);
 
+/**
+ * Delete user by ID from repository
+ * @param id user ID
+ */
 const deleteById = async (id: string) => {
   users = users.filter((user) => user.id !== id);
 };
 
+/**
+ * Save user to users repository
+ * @param user see type {@link User}
+ * @returns saved user
+ */
 const save = async (user: User) => {
   users = [...users, user];
   return user;
 };
 
+/**
+ * Update user in users repository
+ * @param updatedUser see type {@link User}
+ * @returns updated user
+ */
 const update = async (updatedUser: User) => {
   users = users.map((user) =>
     user.id === updatedUser.id ? updatedUser : user
