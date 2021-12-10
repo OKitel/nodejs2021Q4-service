@@ -18,19 +18,42 @@ let boards: Array<Board> = [
   },
 ];
 
+/**
+ * Returns all boards from boards repository
+ * @returns all boards
+ */
 const getAll = async () => boards;
 
+/**
+ * Returns the single board by ID from boards repository
+ * @param id board ID
+ * @returns board by ID
+ */
 const getOne = async (id: string) => boards.find((item) => item.id === id);
 
+/**
+ * Delete board by ID from boards repository
+ * @param id board ID
+ */
 const deleteById = async (id: string) => {
   boards = boards.filter((board) => board.id !== id);
 };
 
+/**
+ * Save board to boards repository
+ * @param board see type {@link Board}
+ * @returns just saved board
+ */
 const save = async (board: Board) => {
   boards = [...boards, board];
   return board;
 };
 
+/**
+ * Update board by ID into boards repository
+ * @param updatedBoard see type {@link Board}
+ * @returns updated board
+ */
 const update = async (updatedBoard: Board) => {
   boards = boards.map((board) =>
     board.id === updatedBoard.id ? updatedBoard : board
