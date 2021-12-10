@@ -11,10 +11,21 @@ type BoardRequestPost = FastifyRequest<{
 type BoardRequestPut = FastifyRequest<{ Params: { id: string }; Body: Board }>;
 type BoardRequestParams = FastifyRequest<{ Params: { id: string } }>;
 
+/**
+ * Return all boards
+ * @param req - fastify request
+ * @param reply - fastify reply, contains an array of boards, see {@link FastifyReply}
+ */
 export const getBoards = async (req: FastifyRequest, reply: FastifyReply) => {
   reply.send(await boardsService.getAll());
 };
 
+/**
+ * Return the single board by ID
+ * @param req - fastify request with ID, see {@link BoardRequestParams}
+ * @param reply - fastify reply, contains single board
+ * @returns single board by ID as fastify reply
+ */
 export const getBoard = async (
   req: BoardRequestParams,
   reply: FastifyReply
@@ -41,6 +52,11 @@ export const getBoard = async (
   }
 };
 
+/**
+ * Add a new board
+ * @param req - fastify request with ID and new board info, see {@link BoardRequestPost}
+ * @param reply - fastify reply, contains just added new board
+ */
 export const addBoard = async (req: BoardRequestPost, reply: FastifyReply) => {
   try {
     const { title, columns } = req.body;
@@ -56,6 +72,11 @@ export const addBoard = async (req: BoardRequestPost, reply: FastifyReply) => {
   }
 };
 
+/**
+ * Delete the board by ID
+ * @param req - fastify request with ID, see {@link BoardRequestParams}
+ * @param reply - fastify reply, contains message that board with ID from params was deleted 
+ */
 export const deleteBoard = async (
   req: BoardRequestParams,
   reply: FastifyReply
@@ -79,6 +100,11 @@ export const deleteBoard = async (
   }
 };
 
+/**
+ * Update the board by ID
+ * @param req - fastify request with ID, see {@link BoardRequestPut}
+ * @param reply - fastify reply, contains updated board 
+ */
 export const updateBoard = async (
   req: BoardRequestPut,
   reply: FastifyReply
