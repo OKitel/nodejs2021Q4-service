@@ -26,14 +26,14 @@ const getAll = async () => boards;
 
 /**
  * Returns the single board by ID from boards repository
- * @param id board ID
+ * @param id - board ID
  * @returns board by ID
  */
 const getOne = async (id: string) => boards.find((item) => item.id === id);
 
 /**
  * Delete board by ID from boards repository
- * @param id board ID
+ * @param id - board ID
  */
 const deleteById = async (id: string) => {
   boards = boards.filter((board) => board.id !== id);
@@ -41,7 +41,7 @@ const deleteById = async (id: string) => {
 
 /**
  * Save board to boards repository
- * @param board see type {@link Board}
+ * @param board - see type {@link Board}
  * @returns just saved board
  */
 const save = async (board: Board) => {
@@ -51,7 +51,7 @@ const save = async (board: Board) => {
 
 /**
  * Update board by ID into boards repository
- * @param updatedBoard see type {@link Board}
+ * @param updatedBoard - see type {@link Board}
  * @returns updated board
  */
 const update = async (updatedBoard: Board) => {

@@ -73,8 +73,8 @@ const updateUserOpts = {
 
 /**
  * Declares routes for users
- * @param fastify see type {@link FastifyInstance}
- * @param done function to complete registration of users routes
+ * @param fastify - see type {@link FastifyInstance}
+ * @param done - function to complete registration of users routes
  */
 export const userRoutes = (
   fastify: FastifyInstance,

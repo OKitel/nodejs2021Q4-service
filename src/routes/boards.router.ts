@@ -72,8 +72,8 @@ const updateBoardOpts = {
 
 /**
  * Declares routes for boards
- * @param fastify see type {@link FastifyInstance}
- * @param done function to complete registration of board routes
+ * @param fastify - see type {@link FastifyInstance}
+ * @param done - function to complete registration of board routes
  */
 export const boardRoutes = (
   fastify: FastifyInstance,

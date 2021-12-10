@@ -76,8 +76,8 @@ const updateTaskOpts = {
 
 /**
  * Declares routes for tasks
- * @param fastify see type {@link FastifyInstance}
- * @param done function to complete registration of tasks routes
+ * @param fastify - see type {@link FastifyInstance}
+ * @param done - function to complete registration of tasks routes
  */
 export const taskRoutes = (
   fastify: FastifyInstance,

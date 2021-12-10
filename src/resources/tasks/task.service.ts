@@ -4,7 +4,7 @@ import { Task } from './task.model';
 
 /**
  * Returns all tasks by board ID
- * @param id board ID
+ * @param id - board ID
  * @throws an error if a board with a passed ID hasn't been found
  * @returns an array of tasks
  */
@@ -19,8 +19,8 @@ const getAllTasksByBoardId = async (id: string) => {
 
 /**
  * Returns single task by board ID and task ID
- * @param boardId board ID
- * @param taskId task ID
+ * @param boardId - board ID
+ * @param taskId - task ID
  * @throws an error if a task with a passed ID hasn't been found
  * @returns task
  */
@@ -34,7 +34,7 @@ const getOne = async (boardId: string, taskId: string) => {
 
 /**
  * Delete task by ID
- * @param id task ID
+ * @param id - task ID
  */
 const deleteById = async (id: string) => {
   await tasksRepo.deleteById(id);
@@ -42,7 +42,7 @@ const deleteById = async (id: string) => {
 
 /**
  * Save task
- * @param task see type {@link Task}
+ * @param task - see type {@link Task}
  */
 const save = async (task: Task) => {
   await tasksRepo.save(task);
@@ -50,7 +50,7 @@ const save = async (task: Task) => {
 
 /**
  * Update task
- * @param task see type {@link Task}
+ * @param task - see type {@link Task}
  * @throws an error if a task with a passed ID hasn't been found
  * @returns updated task
  */

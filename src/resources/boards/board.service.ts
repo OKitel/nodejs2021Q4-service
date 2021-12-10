@@ -13,7 +13,7 @@ const getAll = async () => {
 
 /**
  * Returns the single board by ID
- * @param id board ID
+ * @param id - board ID
  * @throws an error if a board with a passed ID hasn't been found
  * @returns board by ID
  */
@@ -27,7 +27,7 @@ const getOne = async (id: string) => {
 
 /**
  * Delete board by ID
- * @param id board ID
+ * @param id - board ID
  */
 const deleteById = async (id: string) => {
   await tasksRepo.deleteTasksByBoardId(id);
@@ -36,7 +36,7 @@ const deleteById = async (id: string) => {
 
 /**
  * Save board
- * @param board see type {@link Board}
+ * @param board - see type {@link Board}
  */
 const save = async (board: Board) => {
   await boardsRepo.save(board);
@@ -44,7 +44,7 @@ const save = async (board: Board) => {
 
 /**
  * Update board by ID
- * @param board see type {@link Board}
+ * @param board - see type {@link Board}
  * @throws an error if a board with a passed ID hasn't been found
  * @returns updated board
  */

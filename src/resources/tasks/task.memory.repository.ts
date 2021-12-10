@@ -41,7 +41,7 @@ let tasks: Array<Task> = [
 
 /**
  * Returns all tasks by board ID from tasks repository
- * @param id board ID
+ * @param id - board ID
  * @returns an array of all tasks from the board
  */
 const getAllByBoardId = async (id: string) =>
@@ -49,7 +49,7 @@ const getAllByBoardId = async (id: string) =>
 
 /**
  * Returns all tasks by user ID from tasks repository
- * @param id user ID
+ * @param id - user ID
  * @returns an array of tasks by User ID
  */
 const gettAllTasksByUserId = async (id: string) =>
@@ -57,8 +57,8 @@ const gettAllTasksByUserId = async (id: string) =>
 
 /**
  * Returns single task by ID from repository
- * @param boardId board ID
- * @param taskId task ID
+ * @param boardId - board ID
+ * @param taskId - task ID
  * @returns sigle task by ID
  */
 const getOne = async (boardId: string, taskId: string) => {
@@ -69,7 +69,7 @@ const getOne = async (boardId: string, taskId: string) => {
 
 /**
  * Delete task by ID from repository
- * @param id task ID
+ * @param id - task ID
  */
 const deleteById = async (id: string) => {
   tasks = tasks.filter((task) => task.id !== id);
@@ -77,7 +77,7 @@ const deleteById = async (id: string) => {
 
 /**
  * Delete all tasks from board by ID
- * @param id board ID
+ * @param id - board ID
  */
 const deleteTasksByBoardId = async (id: string) => {
   tasks = tasks.filter((task) => task.boardId !== id);
@@ -85,7 +85,7 @@ const deleteTasksByBoardId = async (id: string) => {
 
 /**
  * Save new task to tasks repository
- * @param task see type {@link Task}
+ * @param task - see type {@link Task}
  * @returns saved task
  */
 const save = async (task: Task) => {
@@ -95,7 +95,7 @@ const save = async (task: Task) => {
 
 /**
  * Update task in the tasks repository
- * @param updatedTask seet type {@link Task}
+ * @param updatedTask - see type {@link Task}
  * @returns updated task
  */
 const update = async (updatedTask: Task) => {

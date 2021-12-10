@@ -32,8 +32,8 @@ type TaskRequestParams = FastifyRequest<{
 
 /**
  * Checks if board ID and task ID are existing and valid
- * @param boardId board ID
- * @param taskId task ID
+ * @param boardId - board ID
+ * @param taskId - task ID
  * @returns true if all checks passed or false if not
  */
 export const checkId = (boardId: string, taskId: string) => {
@@ -45,8 +45,8 @@ export const checkId = (boardId: string, taskId: string) => {
 
 /**
  * Returns all tasks
- * @param req fastify request with board ID, see {@link TaskRequestParams}
- * @param reply fastify reply, contains an array of tasks from one board, see {@link FastifyReply}
+ * @param req - fastify request with board ID, see {@link TaskRequestParams}
+ * @param reply - fastify reply, contains an array of tasks from one board, see {@link FastifyReply}
  * @returns an array of tasks
  */
 export const getTasks = async (req: TaskRequestParams, reply: FastifyReply) => {
@@ -70,8 +70,8 @@ export const getTasks = async (req: TaskRequestParams, reply: FastifyReply) => {
 
 /**
  * Returns task by ID from the board
- * @param req fastify request with board ID, see {@link TaskRequestParams}
- * @param reply fastify reply, contains task
+ * @param req - fastify request with board ID, see {@link TaskRequestParams}
+ * @param reply - fastify reply, contains task
  * @returns task by ID
  */
 export const getTask = async (req: TaskRequestParams, reply: FastifyReply) => {
@@ -99,8 +99,8 @@ export const getTask = async (req: TaskRequestParams, reply: FastifyReply) => {
 
 /**
  * Save new task
- * @param req fastify request with board ID and new task info, see {@link TaskRequestPost}
- * @param reply fastify reply, contains just saved task witn generated ID
+ * @param req - fastify request with board ID and new task info, see {@link TaskRequestPost}
+ * @param reply - fastify reply, contains just saved task witn generated ID
  * @returns saved task with ID
  */
 export const addTask = async (req: TaskRequestPost, reply: FastifyReply) => {
@@ -131,8 +131,8 @@ export const addTask = async (req: TaskRequestPost, reply: FastifyReply) => {
 
 /**
  * Delete task by ID
- * @param req fastify request with board ID, see {@link TaskRequestParams}
- * @param reply fastify reply, contains message that task with passed ID has been removed
+ * @param req - fastify request with board ID, see {@link TaskRequestParams}
+ * @param reply - fastify reply, contains message that task with passed ID has been removed
  */
 export const deleteTask = async (
   req: TaskRequestParams,
@@ -159,8 +159,8 @@ export const deleteTask = async (
 
 /**
  * Update task
- * @param req fastify request with board ID and new task info, see {@link TaskRequestPut}
- * @param reply fastify reply, contains updated task
+ * @param req - fastify request with board ID and new task info, see {@link TaskRequestPut}
+ * @param reply - fastify reply, contains updated task
  */
 export const updateTask = async (req: TaskRequestPut, reply: FastifyReply) => {
   const { boardId: boardIdParam, taskId } = req.params;

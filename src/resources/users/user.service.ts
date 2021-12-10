@@ -13,7 +13,7 @@ const getAll = async () => {
 
 /**
  * Returns single user by ID
- * @param id user ID
+ * @param id - user ID
  * @throws an error if user with passed ID hasn't been found
  * @returns user
  */
@@ -27,7 +27,7 @@ const getOne = async (id: string) => {
 
 /**
  * Delete user by ID
- * @param id user ID
+ * @param id - user ID
  */
 const deleteById = async (id: string) => {
   const userTasks = await tasksRepo.gettAllTasksByUserId(id);
@@ -40,7 +40,7 @@ const deleteById = async (id: string) => {
 
 /**
  * Save new user
- * @param user see type {@link User}
+ * @param user - see type {@link User}
  */
 const save = async (user: User) => {
   await usersRepo.save(user);
@@ -48,7 +48,7 @@ const save = async (user: User) => {
 
 /**
  * Update user
- * @param user see type {@link User}
+ * @param user - see type {@link User}
  * @returns updated user
  */
 const update = async (user: User) => {

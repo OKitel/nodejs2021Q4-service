@@ -42,7 +42,12 @@
         "resolvePaths": ["./src"],
         "tryExtensions": [".js", ".ts"]
       }
-    ]
+    ],
+    "tsdoc/syntax": "warn"
   },
-  "plugins": ["@typescript-eslint"]
+  "plugins": [
+    "@typescript-eslint/eslint-plugin",
+    "@typescript-eslint",
+    "eslint-plugin-tsdoc"
+  ]
 }
