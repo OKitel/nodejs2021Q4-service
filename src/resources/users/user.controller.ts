@@ -11,10 +11,21 @@ type UserRequestPost = FastifyRequest<{
 type UserRequestPut = FastifyRequest<{ Params: { id: string }; Body: User }>;
 type UserRequestParams = FastifyRequest<{ Params: { id: string } }>;
 
+/**
+ * Returns all users
+ * @param req fastify request, see {@link FastifyRequest}
+ * @param reply fastify reply, contains an array of all users
+ */
 export const getUsers = async (req: FastifyRequest, reply: FastifyReply) => {
   reply.send(await usersService.getAll());
 };
 
+/**
+ * Returns single user by ID
+ * @param req fastify request with user ID, see {@link UserRequestParams}
+ * @param reply fastify reply, contains single user
+ * @returns user by ID
+ */
 export const getUser = async (req: UserRequestParams, reply: FastifyReply) => {
   const { id } = req.params;
   if (!id || !uuidValidate(id)) {
@@ -38,6 +49,11 @@ export const getUser = async (req: UserRequestParams, reply: FastifyReply) => {
   }
 };
 
+/**
+ * Save user
+ * @param req fastify request with new user info, see {@link UserRequestPost}
+ * @param reply fastify reply, contains new user
+ */
 export const addUser = async (req: UserRequestPost, reply: FastifyReply) => {
   try {
     const { name, login, password } = req.body;
@@ -53,6 +69,11 @@ export const addUser = async (req: UserRequestPost, reply: FastifyReply) => {
   }
 };
 
+/**
+ * Delete user by ID
+ * @param req fastify request with user ID, see {@link UserRequestParams}
+ * @param reply fastify reply, contains message that user with passed has been removed
+ */
 export const deleteUser = async (
   req: UserRequestParams,
   reply: FastifyReply
@@ -76,6 +97,11 @@ export const deleteUser = async (
   }
 };
 
+/**
+ * Update user
+ * @param req fastify request with ID and updated user info, see {@link UserRequestPut}
+ * @param reply fastify reply, contains updated user
+ */
 export const updateUser = async (req: UserRequestPut, reply: FastifyReply) => {
   const { id } = req.params;
   if (!id || !uuidValidate(id)) {
