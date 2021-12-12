@@ -13,10 +13,10 @@ type UserRequestParams = FastifyRequest<{ Params: { id: string } }>;
 
 /**
  * Returns all users
- * @param req - fastify request, see {@link FastifyRequest}
+ * @param _ - fastify request, see {@link FastifyRequest}
  * @param reply - fastify reply, contains an array of all users
  */
-export const getUsers = async (req: FastifyRequest, reply: FastifyReply) => {
+export const getUsers = async (_: FastifyRequest, reply: FastifyReply) => {
   reply.send(await usersService.getAll());
 };
 

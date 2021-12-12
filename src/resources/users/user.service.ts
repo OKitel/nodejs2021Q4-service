@@ -32,8 +32,12 @@ const getOne = async (id: string) => {
 const deleteById = async (id: string) => {
   const userTasks = await tasksRepo.gettAllTasksByUserId(id);
   for (let i = 0; i < userTasks.length; i += 1) {
-    userTasks[i].userId = null;
-    tasksRepo.update(userTasks[i]);
+    const task = userTasks[i];
+    if (!task) {
+      throw new Error(`The user task hasn't been found`);
+    }
+    task.userId = null;
+    tasksRepo.update(task);
   }
   await usersRepo.deleteById(id);
 };
