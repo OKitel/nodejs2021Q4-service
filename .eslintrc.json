@@ -8,6 +8,7 @@
     "node": true
   },
   "parserOptions": {
+    "project": ["./tsconfig.json"],
     "sourceType": "module",
     "ecmaVersion": 2021,
     "ecmaFeatures": {
@@ -31,6 +32,10 @@
   ],
   "rules": {
     "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-unsafe-call": "error",
+    "@typescript-eslint/no-unsafe-member-access": "error",
+    "@typescript-eslint/no-unsafe-argument": "error",
+    "@typescript-eslint/no-unsafe-assignment": "error",
     "import/extensions": "off",
     "linebreak-style": "off",
     "node/no-unsupported-features/es-syntax": "off",
