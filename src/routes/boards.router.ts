@@ -1,4 +1,4 @@
-import { FastifyError, FastifyInstance } from 'fastify';
+import { FastifyInstance } from 'fastify';
 import {
   getBoards,
   getBoard,
@@ -78,7 +78,7 @@ const updateBoardOpts = {
 export const boardRoutes = (
   fastify: FastifyInstance,
   _: unknown,
-  done: (err?: FastifyError) => void
+  done: () => void
 ) => {
   // Get all boards
   fastify.get('/boards', getBoardsOpts);

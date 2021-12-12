@@ -1,4 +1,4 @@
-import { FastifyError, FastifyInstance } from 'fastify';
+import { FastifyInstance } from 'fastify';
 import { User, UserToResponse } from '../dto/User.model';
 
 import {
@@ -79,7 +79,7 @@ const updateUserOpts = {
 export const userRoutes = (
   fastify: FastifyInstance,
   _: unknown,
-  done: (err?: FastifyError) => void
+  done: () => void
 ) => {
   // Get all users
   fastify.get('/users', getUsersOpts);
