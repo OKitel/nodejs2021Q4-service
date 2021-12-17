@@ -4,9 +4,9 @@ import { Board } from './board.model';
 
 /**
  * Returns all boards
- * @returns all boards
+ * @returns array of all boards
  */
-const getAll = async () => {
+const getAll = async (): Promise<Board[]> => {
   const boards = await boardsRepo.getAll();
   return boards;
 };
@@ -17,7 +17,7 @@ const getAll = async () => {
  * @throws an error if a board with a passed ID hasn't been found
  * @returns board by ID
  */
-const getOne = async (id: string) => {
+const getOne = async (id: string): Promise<Board> => {
   const board = await boardsRepo.getOne(id);
   if (!board) {
     throw new Error(`The board with id ${id} hasn't been found`);
@@ -28,8 +28,9 @@ const getOne = async (id: string) => {
 /**
  * Delete board by ID
  * @param id - board ID
+ * @returns this function doesn't return any value
  */
-const deleteById = async (id: string) => {
+const deleteById = async (id: string): Promise<void> => {
   await tasksRepo.deleteTasksByBoardId(id);
   await boardsRepo.deleteById(id);
 };
@@ -37,8 +38,9 @@ const deleteById = async (id: string) => {
 /**
  * Save board
  * @param board - see type {@link Board}
+ * @returns this function doesn't return any value
  */
-const save = async (board: Board) => {
+const save = async (board: Board): Promise<void> => {
   await boardsRepo.save(board);
 };
 
@@ -48,7 +50,7 @@ const save = async (board: Board) => {
  * @throws an error if a board with a passed ID hasn't been found
  * @returns updated board
  */
-const update = async (board: Board) => {
+const update = async (board: Board): Promise<Board> => {
   const oldBoard = await boardsRepo.getOne(board.id);
   if (!oldBoard) {
     throw new Error(`The board with id ${board.id} hasn't been found`);

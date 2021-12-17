@@ -12,40 +12,41 @@ type BoardRequestPut = FastifyRequest<{ Params: { id: string }; Body: Board }>;
 type BoardRequestParams = FastifyRequest<{ Params: { id: string } }>;
 
 /**
- * Return all boards
+ * Return all boards in response
  * @param _ - fastify request
  * @param reply - fastify reply, contains an array of boards, see {@link FastifyReply}
+ * @returns this function doesn't return any value
  */
-export const getBoards = async (_: FastifyRequest, reply: FastifyReply) => {
+export const getBoards = async (
+  _: FastifyRequest,
+  reply: FastifyReply
+): Promise<void> => {
   reply.send(await boardsService.getAll());
 };
 
 /**
- * Return the single board by ID
+ * Return the single board by ID in response
  * @param req - fastify request with ID, see {@link BoardRequestParams}
  * @param reply - fastify reply, contains single board
- * @returns single board by ID as fastify reply
+ * @returns this function doesn't return any value
  */
 export const getBoard = async (
   req: BoardRequestParams,
   reply: FastifyReply
-) => {
+): Promise<void> => {
   const { id } = req.params;
   if (!id || !uuidValidate(id)) {
-    return reply
+    reply
       .code(400)
       .header('Content-Type', 'application/json')
       .send({ message: `Incorrect ID format.` });
   }
   try {
     const board = await boardsService.getOne(id);
-    return reply
-      .code(200)
-      .header('Content-Type', 'application/json')
-      .send(board);
-  } catch (error) {
+    reply.code(200).header('Content-Type', 'application/json').send(board);
+  } catch (error: unknown) {
     server.log.error(error);
-    return reply
+    reply
       .code(404)
       .header('Content-Type', 'application/json')
       .send({ message: `${error}.` });
@@ -56,14 +57,18 @@ export const getBoard = async (
  * Add a new board
  * @param req - fastify request with ID and new board info, see {@link BoardRequestPost}
  * @param reply - fastify reply, contains just added new board
+ * @returns this function doesn't return any value
  */
-export const addBoard = async (req: BoardRequestPost, reply: FastifyReply) => {
+export const addBoard = async (
+  req: BoardRequestPost,
+  reply: FastifyReply
+): Promise<void> => {
   try {
     const { title, columns } = req.body;
     const board = new Board({ title, columns });
     await boardsService.save(board);
     reply.code(201).header('Content-Type', 'application/json').send(board);
-  } catch (error) {
+  } catch (error: unknown) {
     server.log.error(error);
     reply
       .code(404)
@@ -76,11 +81,12 @@ export const addBoard = async (req: BoardRequestPost, reply: FastifyReply) => {
  * Delete the board by ID
  * @param req - fastify request with ID, see {@link BoardRequestParams}
  * @param reply - fastify reply, contains message that board with ID from params was deleted
+ * @returns this function doesn't return any value
  */
 export const deleteBoard = async (
   req: BoardRequestParams,
   reply: FastifyReply
-) => {
+): Promise<void> => {
   const { id } = req.params;
   if (!id || !uuidValidate(id)) {
     reply
@@ -91,7 +97,7 @@ export const deleteBoard = async (
   try {
     await boardsService.deleteById(id);
     reply.send({ message: `Board ${id} has been removed` });
-  } catch (error) {
+  } catch (error: unknown) {
     server.log.error(error);
     reply
       .code(404)
@@ -104,11 +110,12 @@ export const deleteBoard = async (
  * Update the board by ID
  * @param req - fastify request with ID, see {@link BoardRequestPut}
  * @param reply - fastify reply, contains updated board
+ * @returns this function doesn't return any value
  */
 export const updateBoard = async (
   req: BoardRequestPut,
   reply: FastifyReply
-) => {
+): Promise<void> => {
   const { id } = req.params;
   if (!id || !uuidValidate(id)) {
     reply
@@ -120,7 +127,7 @@ export const updateBoard = async (
     const { title, columns } = req.body;
     const board = await boardsService.update({ id, title, columns });
     reply.code(200).header('Content-Type', 'application/json').send(board);
-  } catch (error) {
+  } catch (error: unknown) {
     server.log.error(error);
     reply
       .code(404)

@@ -20,22 +20,24 @@ let boards: Array<Board> = [
 
 /**
  * Returns all boards from boards repository
- * @returns all boards
+ * @returns array of all boards
  */
-const getAll = async () => boards;
+const getAll = async (): Promise<Board[]> => boards;
 
 /**
  * Returns the single board by ID from boards repository
  * @param id - board ID
- * @returns board by ID
+ * @returns board by ID or undefined if board wasn't found
  */
-const getOne = async (id: string) => boards.find((item) => item.id === id);
+const getOne = async (id: string): Promise<Board | undefined> =>
+  boards.find((item) => item.id === id);
 
 /**
  * Delete board by ID from boards repository
  * @param id - board ID
+ * @returns this function doesn't return any value
  */
-const deleteById = async (id: string) => {
+const deleteById = async (id: string): Promise<void> => {
   boards = boards.filter((board) => board.id !== id);
 };
 
@@ -44,17 +46,17 @@ const deleteById = async (id: string) => {
  * @param board - see type {@link Board}
  * @returns just saved board
  */
-const save = async (board: Board) => {
+const save = async (board: Board): Promise<Board> => {
   boards = [...boards, board];
   return board;
 };
 
 /**
  * Update board by ID into boards repository
- * @param updatedBoard - see type {@link Board}
+ * @param updatedBoard - new info for board, see type {@link Board}
  * @returns updated board
  */
-const update = async (updatedBoard: Board) => {
+const update = async (updatedBoard: Board): Promise<Board> => {
   boards = boards.map((board) =>
     board.id === updatedBoard.id ? updatedBoard : board
   );
