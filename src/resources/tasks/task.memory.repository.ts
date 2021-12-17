@@ -44,7 +44,7 @@ let tasks: Array<Task> = [
  * @param id - board ID
  * @returns an array of all tasks from the board
  */
-const getAllByBoardId = async (id: string) =>
+const getAllByBoardId = async (id: string): Promise<Task[]> =>
   tasks.filter((task) => task.boardId === id);
 
 /**
@@ -52,16 +52,19 @@ const getAllByBoardId = async (id: string) =>
  * @param id - user ID
  * @returns an array of tasks by User ID
  */
-const gettAllTasksByUserId = async (id: string) =>
+const gettAllTasksByUserId = async (id: string): Promise<Task[]> =>
   tasks.filter((task) => task.userId === id);
 
 /**
  * Returns single task by ID from repository
  * @param boardId - board ID
  * @param taskId - task ID
- * @returns sigle task by ID
+ * @returns sigle task by ID or undefined if there wasn't found task by passed ID
  */
-const getOne = async (boardId: string, taskId: string) => {
+const getOne = async (
+  boardId: string,
+  taskId: string
+): Promise<Task | undefined> => {
   const tasksOnBoard = tasks.filter((task) => task.boardId === boardId);
 
   return tasksOnBoard.find((task) => task.id === taskId);
@@ -70,16 +73,18 @@ const getOne = async (boardId: string, taskId: string) => {
 /**
  * Delete task by ID from repository
  * @param id - task ID
+ * @returns this function doesn't return any value
  */
-const deleteById = async (id: string) => {
+const deleteById = async (id: string): Promise<void> => {
   tasks = tasks.filter((task) => task.id !== id);
 };
 
 /**
  * Delete all tasks from board by ID
  * @param id - board ID
+ * @returns this function doesn't return any value
  */
-const deleteTasksByBoardId = async (id: string) => {
+const deleteTasksByBoardId = async (id: string): Promise<void> => {
   tasks = tasks.filter((task) => task.boardId !== id);
 };
 
@@ -88,7 +93,7 @@ const deleteTasksByBoardId = async (id: string) => {
  * @param task - see type {@link Task}
  * @returns saved task
  */
-const save = async (task: Task) => {
+const save = async (task: Task): Promise<Task> => {
   tasks = [...tasks, task];
   return task;
 };
@@ -98,7 +103,7 @@ const save = async (task: Task) => {
  * @param updatedTask - see type {@link Task}
  * @returns updated task
  */
-const update = async (updatedTask: Task) => {
+const update = async (updatedTask: Task): Promise<Task> => {
   tasks = tasks.map((task) =>
     task.id === updatedTask.id ? updatedTask : task
   );
