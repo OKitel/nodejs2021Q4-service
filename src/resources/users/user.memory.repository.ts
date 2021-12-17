@@ -35,22 +35,24 @@ let users: Array<User> = [
 
 /**
  * Returns all users from repository
- * @returns all users
+ * @returns an array of all users
  */
-const getAll = async () => users;
+const getAll = async (): Promise<User[]> => users;
 
 /**
  * Returns single user by ID from users repository
  * @param id - user ID
- * @returns user by ID
+ * @returns user by ID or undefined if user wasn't been found
  */
-const getOne = async (id: string) => users.find((item) => item.id === id);
+const getOne = async (id: string): Promise<User | undefined> =>
+  users.find((item) => item.id === id);
 
 /**
  * Delete user by ID from repository
  * @param id - user ID
+ * @returns this function doesn't return any value
  */
-const deleteById = async (id: string) => {
+const deleteById = async (id: string): Promise<void> => {
   users = users.filter((user) => user.id !== id);
 };
 
@@ -59,7 +61,7 @@ const deleteById = async (id: string) => {
  * @param user - see type {@link User}
  * @returns saved user
  */
-const save = async (user: User) => {
+const save = async (user: User): Promise<User> => {
   users = [...users, user];
   return user;
 };
@@ -69,7 +71,7 @@ const save = async (user: User) => {
  * @param updatedUser - see type {@link User}
  * @returns updated user
  */
-const update = async (updatedUser: User) => {
+const update = async (updatedUser: User): Promise<User> => {
   users = users.map((user) =>
     user.id === updatedUser.id ? updatedUser : user
   );
