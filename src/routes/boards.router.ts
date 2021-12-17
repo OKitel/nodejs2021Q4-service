@@ -74,12 +74,13 @@ const updateBoardOpts = {
  * Declares routes for boards
  * @param fastify - see type {@link FastifyInstance}
  * @param done - function to complete registration of board routes
+ * @returns this function doesn't return any value
  */
 export const boardRoutes = (
   fastify: FastifyInstance,
   _: unknown,
   done: () => void
-) => {
+): void => {
   // Get all boards
   fastify.get('/boards', getBoardsOpts);
 

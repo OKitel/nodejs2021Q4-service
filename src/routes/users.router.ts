@@ -75,12 +75,13 @@ const updateUserOpts = {
  * Declares routes for users
  * @param fastify - see type {@link FastifyInstance}
  * @param done - function to complete registration of users routes
+ * @returns this function doesn't return any value
  */
 export const userRoutes = (
   fastify: FastifyInstance,
   _: unknown,
   done: () => void
-) => {
+): void => {
   // Get all users
   fastify.get('/users', getUsersOpts);
 

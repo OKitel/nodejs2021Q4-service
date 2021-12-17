@@ -21,8 +21,9 @@ server.register(taskRoutes);
 
 /**
  * Start server on port from .env
+ * @returns this function doesn't return any value
  */
-const start = async () => {
+const start = async (): Promise<void> => {
   try {
     await server.listen(PORT);
   } catch (error) {
