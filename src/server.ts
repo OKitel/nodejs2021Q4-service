@@ -26,7 +26,7 @@ server.register(taskRoutes);
 const start = async (): Promise<void> => {
   try {
     await server.listen(PORT);
-  } catch (error) {
+  } catch (error: unknown) {
     server.log.error(error);
     process.exit(1);
   }
