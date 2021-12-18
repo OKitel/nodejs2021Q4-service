@@ -12,4 +12,5 @@ export const {
   JWT_SECRET_KEY,
 } = process.env;
 
-export const AUTH_MODE = process.env.AUTH_MODE === 'true';
+const { AUTH_MODE: TEMP } = process.env;
+export const AUTH_MODE = TEMP === 'true';
