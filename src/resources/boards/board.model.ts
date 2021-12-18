@@ -18,6 +18,11 @@ export class Board implements IBoard {
 
   columns: Array<number>;
 
+  /**
+   * Constructor for the `Board` object
+   * @param board - constructor parameter of type `Partial<IBoard>`
+   * @returns a new {@link Board} instance
+   */
   constructor({
     id = uuidv4(),
     title = 'Board title',

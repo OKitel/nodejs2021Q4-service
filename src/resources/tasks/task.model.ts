@@ -34,6 +34,11 @@ export class Task implements ITask {
 
   columnId: null | number;
 
+  /**
+   * Constructor for the `Task` object
+   * @param task - constructor parameter of type `Partial<ITask>`
+   * @returns a new {@link Task} instance
+   */
   constructor({
     id = uuidv4(),
     title = 'Task one',

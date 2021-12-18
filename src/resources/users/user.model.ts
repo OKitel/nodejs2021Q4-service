@@ -22,6 +22,11 @@ export class User implements IUser {
 
   password: string;
 
+  /**
+   * Constructor for the `User` object
+   * @param user - constructor parameter of type `Partial<IUser>`
+   * @returns a new {@link User} instance
+   */
   constructor({
     id = uuidv4(),
     name = 'USER',
