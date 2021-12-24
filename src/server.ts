@@ -13,7 +13,7 @@ import { taskRoutes } from './routes/tasks.router';
 import { userRoutes } from './routes/users.router';
 import { Logger } from './logger/Logger';
 
-const server = fastify({ logger: true });
+const server = fastify({ logger: { prettyPrint: true } });
 
 const logger = new Logger(server);
 logger.configureRequestLogging();
@@ -25,14 +25,14 @@ server.setErrorHandler(async (error, _, reply) => {
     error instanceof UserNotFoundError ||
     error instanceof UserTaskNotFoundError
   ) {
-    logger.warn(error);
+    logger.warn(error.message);
     return reply
       .code(StatusCodes.NOT_FOUND)
       .header('Content-Type', 'application/json')
       .send({ message: `${error}.` });
   }
   if (error instanceof IncorrectIdFormatError) {
-    logger.warn(error);
+    logger.warn(error.message);
     return reply
       .code(StatusCodes.BAD_REQUEST)
       .header('Content-Type', 'application/json')
