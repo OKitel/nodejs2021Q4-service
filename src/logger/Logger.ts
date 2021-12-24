@@ -7,16 +7,21 @@ export class Logger {
     this.server = fastify;
   }
 
-  static info(req: FastifyRequest, ...args: unknown[]) {
-    req.log.info(args);
+  static info(
+    req: FastifyRequest,
+    obj: unknown,
+    message: string,
+    ...args: unknown[]
+  ) {
+    req.log.info(obj, message, ...args);
   }
 
-  warn(...args: unknown[]) {
-    this.server.log.warn(args);
+  warn(obj: unknown, message?: string, ...args: unknown[]) {
+    this.server.log.warn(obj, message, ...args);
   }
 
-  error(...args: unknown[]) {
-    this.server.log.error(args);
+  error(message: string, ...args: unknown[]) {
+    this.server.log.error(message, ...args);
   }
 
   configureRequestLogging() {
