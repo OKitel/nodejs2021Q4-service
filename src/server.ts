@@ -52,8 +52,8 @@ process.on('uncaughtException', (err, origin) => {
   process.exit(1);
 });
 
-process.on('uncaughtException', (err, origin) => {
-  server.log.error(`Caught exception: ${err}. Exception origin: ${origin}`);
+process.on('unhandledRejection', (reason, promise) => {
+  server.log.error(`Unhandled Rejection at: ${promise}, reason: ${reason}`);
   process.exit(1);
 });
 
