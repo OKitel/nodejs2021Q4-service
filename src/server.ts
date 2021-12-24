@@ -7,6 +7,15 @@ import { userRoutes } from './routes/users.router';
 
 const server = fastify({ logger: true });
 
+server.addHook('preHandler', (req, _, done) => {
+  if (req.body) {
+    req.log.info({ body: req.body }, 'parsed body');
+  }
+  req.log.info({ query: req.query }, 'request query string');
+  req.log.info({ params: req.params }, 'path params');
+  done();
+});
+
 server.register(fastifySwagger, {
   exposeRoute: true,
   routePrefix: '/docs',
