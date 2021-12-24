@@ -1,6 +1,7 @@
 import fastify from 'fastify';
 import fastifySwagger from 'fastify-swagger';
 import process from 'process';
+import { StatusCodes } from 'http-status-codes';
 import { PORT } from './common/config';
 import { BoardNotFoundError } from './errors/BoardNotFoundError';
 import { IncorrectIdFormatError } from './errors/IncorrectIdFormatError';
@@ -31,19 +32,19 @@ server.setErrorHandler(async (error, _, reply) => {
   ) {
     server.log.warn(error);
     return reply
-      .code(404)
+      .code(StatusCodes.NOT_FOUND)
       .header('Content-Type', 'application/json')
       .send({ message: `${error}.` });
   }
   if (error instanceof IncorrectIdFormatError) {
     server.log.warn(error);
     return reply
-      .code(400)
+      .code(StatusCodes.BAD_REQUEST)
       .header('Content-Type', 'application/json')
       .send({ message: `Incorrect ID format.` });
   }
   server.log.error('Internal error');
-  reply.status(500);
+  reply.status(StatusCodes.INTERNAL_SERVER_ERROR);
   return reply.send();
 });
 

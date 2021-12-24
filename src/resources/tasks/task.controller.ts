@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { StatusCodes } from 'http-status-codes';
 import { validate as uuidValidate } from 'uuid';
 import { IncorrectIdFormatError } from '../../errors/IncorrectIdFormatError';
 import { Task } from './task.model';
@@ -74,7 +75,7 @@ export const getTask = async (
     throw new IncorrectIdFormatError();
   }
   const task = await tasksService.getOne(boardId, taskId);
-  reply.code(200).header('Content-Type', 'application/json').send(task);
+  reply.code(StatusCodes.OK).header('Content-Type', 'application/json').send(task);
 };
 
 /**
@@ -98,7 +99,7 @@ export const addTask = async (
     columnId,
   });
   await tasksService.save(task);
-  reply.code(201).header('Content-Type', 'application/json').send(task);
+  reply.code(StatusCodes.CREATED).header('Content-Type', 'application/json').send(task);
 };
 
 /**
@@ -143,5 +144,5 @@ export const updateTask = async (
     boardId,
     columnId,
   });
-  reply.code(200).header('Content-Type', 'application/json').send(task);
+  reply.code(StatusCodes.OK).header('Content-Type', 'application/json').send(task);
 };

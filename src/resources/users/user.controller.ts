@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { StatusCodes } from 'http-status-codes';
 import { validate as uuidValidate } from 'uuid';
 import { IncorrectIdFormatError } from '../../errors/IncorrectIdFormatError';
 import { User } from './user.model';
@@ -38,7 +39,10 @@ export const getUser = async (
     throw new IncorrectIdFormatError();
   }
   const user = await usersService.getOne(id);
-  reply.code(200).header('Content-Type', 'application/json').send(user);
+  reply
+    .code(StatusCodes.OK)
+    .header('Content-Type', 'application/json')
+    .send(user);
 };
 
 /**
@@ -54,7 +58,10 @@ export const addUser = async (
   const { name, login, password } = req.body;
   const user = new User({ name, login, password });
   await usersService.save(user);
-  reply.code(201).header('Content-Type', 'application/json').send(user);
+  reply
+    .code(StatusCodes.CREATED)
+    .header('Content-Type', 'application/json')
+    .send(user);
 };
 
 /**
@@ -91,5 +98,8 @@ export const updateUser = async (
   }
   const { name, login, password } = req.body;
   const user = await usersService.update({ id, name, login, password });
-  reply.code(200).header('Content-Type', 'application/json').send(user);
+  reply
+    .code(StatusCodes.OK)
+    .header('Content-Type', 'application/json')
+    .send(user);
 };
