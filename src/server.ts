@@ -11,17 +11,12 @@ import { UserTaskNotFoundError } from './errors/UserTaskNotFoundError';
 import { boardRoutes } from './routes/boards.router';
 import { taskRoutes } from './routes/tasks.router';
 import { userRoutes } from './routes/users.router';
+import { Logger } from './logger/Logger';
 
 const server = fastify({ logger: true });
 
-server.addHook('preHandler', (req, _, done) => {
-  if (req.body) {
-    req.log.info({ body: req.body }, 'parsed body');
-  }
-  req.log.info({ query: req.query }, 'request query string');
-  req.log.info({ params: req.params }, 'path params');
-  done();
-});
+const logger = new Logger(server);
+logger.configureRequestLogging();
 
 server.setErrorHandler(async (error, _, reply) => {
   if (
@@ -30,31 +25,31 @@ server.setErrorHandler(async (error, _, reply) => {
     error instanceof UserNotFoundError ||
     error instanceof UserTaskNotFoundError
   ) {
-    server.log.warn(error);
+    logger.warn(error);
     return reply
       .code(StatusCodes.NOT_FOUND)
       .header('Content-Type', 'application/json')
       .send({ message: `${error}.` });
   }
   if (error instanceof IncorrectIdFormatError) {
-    server.log.warn(error);
+    logger.warn(error);
     return reply
       .code(StatusCodes.BAD_REQUEST)
       .header('Content-Type', 'application/json')
       .send({ message: `Incorrect ID format.` });
   }
-  server.log.error('Internal error');
+  logger.error('Internal error');
   reply.status(StatusCodes.INTERNAL_SERVER_ERROR);
   return reply.send();
 });
 
 process.on('uncaughtException', (err, origin) => {
-  server.log.error(`Caught exception: ${err}. Exception origin: ${origin}`);
+  logger.error(`Caught exception: ${err}. Exception origin: ${origin}`);
   process.exit(1);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
-  server.log.error(`Unhandled Rejection at: ${promise}, reason: ${reason}`);
+  logger.error(`Unhandled Rejection at: ${promise}, reason: ${reason}`);
   process.exit(1);
 });
 
