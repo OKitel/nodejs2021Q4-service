@@ -1,9 +1,8 @@
-import fastify, { FastifyReply, FastifyRequest } from 'fastify';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import { validate as uuidValidate } from 'uuid';
+import { IncorrectIdFormatError } from '../../errors/IncorrectIdFormatError';
 import { Board } from './board.model';
 import { boardsService } from './board.service';
-
-const server = fastify({ logger: true });
 
 type BoardRequestPost = FastifyRequest<{
   Body: { title: string; columns: Array<number> };
@@ -36,21 +35,10 @@ export const getBoard = async (
 ): Promise<void> => {
   const { id } = req.params;
   if (!id || !uuidValidate(id)) {
-    reply
-      .code(400)
-      .header('Content-Type', 'application/json')
-      .send({ message: `Incorrect ID format.` });
+    throw new IncorrectIdFormatError();
   }
-  try {
-    const board = await boardsService.getOne(id);
-    reply.code(200).header('Content-Type', 'application/json').send(board);
-  } catch (error: unknown) {
-    server.log.error(error);
-    reply
-      .code(404)
-      .header('Content-Type', 'application/json')
-      .send({ message: `${error}.` });
-  }
+  const board = await boardsService.getOne(id);
+  reply.code(200).header('Content-Type', 'application/json').send(board);
 };
 
 /**
@@ -63,18 +51,10 @@ export const addBoard = async (
   req: BoardRequestPost,
   reply: FastifyReply
 ): Promise<void> => {
-  try {
-    const { title, columns } = req.body;
-    const board = new Board({ title, columns });
-    await boardsService.save(board);
-    reply.code(201).header('Content-Type', 'application/json').send(board);
-  } catch (error: unknown) {
-    server.log.error(error);
-    reply
-      .code(404)
-      .header('Content-Type', 'application/json')
-      .send({ message: `${error} ` });
-  }
+  const { title, columns } = req.body;
+  const board = new Board({ title, columns });
+  await boardsService.save(board);
+  reply.code(201).header('Content-Type', 'application/json').send(board);
 };
 
 /**
@@ -89,21 +69,10 @@ export const deleteBoard = async (
 ): Promise<void> => {
   const { id } = req.params;
   if (!id || !uuidValidate(id)) {
-    reply
-      .code(400)
-      .header('Content-Type', 'application/json')
-      .send({ message: `Incorrect ID format.` });
+    throw new IncorrectIdFormatError();
   }
-  try {
-    await boardsService.deleteById(id);
-    reply.send({ message: `Board ${id} has been removed` });
-  } catch (error: unknown) {
-    server.log.error(error);
-    reply
-      .code(404)
-      .header('Content-Type', 'application/json')
-      .send({ message: `There is an error: ${error} ` });
-  }
+  await boardsService.deleteById(id);
+  reply.send({ message: `Board ${id} has been removed` });
 };
 
 /**
@@ -118,20 +87,9 @@ export const updateBoard = async (
 ): Promise<void> => {
   const { id } = req.params;
   if (!id || !uuidValidate(id)) {
-    reply
-      .code(400)
-      .header('Content-Type', 'application/json')
-      .send({ message: `Incorrect ID format.` });
+    throw new IncorrectIdFormatError();
   }
-  try {
-    const { title, columns } = req.body;
-    const board = await boardsService.update({ id, title, columns });
-    reply.code(200).header('Content-Type', 'application/json').send(board);
-  } catch (error: unknown) {
-    server.log.error(error);
-    reply
-      .code(404)
-      .header('Content-Type', 'application/json')
-      .send({ message: `There is an error: ${error} ` });
-  }
+  const { title, columns } = req.body;
+  const board = await boardsService.update({ id, title, columns });
+  reply.code(200).header('Content-Type', 'application/json').send(board);
 };

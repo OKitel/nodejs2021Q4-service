@@ -1,7 +1,7 @@
 import { boardsRepo } from './board.memory.repository';
 import { tasksRepo } from '../tasks/task.memory.repository';
 import { Board } from './board.model';
-import { BoardNotFound } from '../../errors/BoardNotFound';
+import { BoardNotFoundError } from '../../errors/BoardNotFoundError';
 
 /**
  * Returns all boards
@@ -21,7 +21,7 @@ const getAll = async (): Promise<Board[]> => {
 const getOne = async (id: string): Promise<Board> => {
   const board = await boardsRepo.getOne(id);
   if (!board) {
-    throw new BoardNotFound(id);
+    throw new BoardNotFoundError(id);
   }
   return board;
 };
@@ -54,7 +54,7 @@ const save = async (board: Board): Promise<void> => {
 const update = async (board: Board): Promise<Board> => {
   const oldBoard = await boardsRepo.getOne(board.id);
   if (!oldBoard) {
-    throw new BoardNotFound(board.id);
+    throw new BoardNotFoundError(board.id);
   }
   const updatedBoard = await boardsRepo.update(board);
   return updatedBoard;

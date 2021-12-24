@@ -1,6 +1,11 @@
 import fastify from 'fastify';
 import fastifySwagger from 'fastify-swagger';
 import { PORT } from './common/config';
+import { BoardNotFoundError } from './errors/BoardNotFoundError';
+import { IncorrectIdFormatError } from './errors/IncorrectIdFormatError';
+import { TaskNotFoundError } from './errors/TaskNotFoundError';
+import { UserNotFoundError } from './errors/UserNotFoundError';
+import { UserTaskNotFoundError } from './errors/UserTaskNotFoundError';
 import { boardRoutes } from './routes/boards.router';
 import { taskRoutes } from './routes/tasks.router';
 import { userRoutes } from './routes/users.router';
@@ -14,6 +19,31 @@ server.addHook('preHandler', (req, _, done) => {
   req.log.info({ query: req.query }, 'request query string');
   req.log.info({ params: req.params }, 'path params');
   done();
+});
+
+server.setErrorHandler(async (error, _, reply) => {
+  if (
+    error instanceof BoardNotFoundError ||
+    error instanceof TaskNotFoundError ||
+    error instanceof UserNotFoundError ||
+    error instanceof UserTaskNotFoundError
+  ) {
+    server.log.warn(error);
+    return reply
+      .code(404)
+      .header('Content-Type', 'application/json')
+      .send({ message: `${error}.` });
+  }
+  if (error instanceof IncorrectIdFormatError) {
+    server.log.warn(error);
+    return reply
+      .code(400)
+      .header('Content-Type', 'application/json')
+      .send({ message: `Incorrect ID format.` });
+  }
+  server.log.error('Internal error');
+  reply.status(500);
+  return reply.send();
 });
 
 server.register(fastifySwagger, {
