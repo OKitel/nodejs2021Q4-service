@@ -1,5 +1,6 @@
 import fastify from 'fastify';
 import fastifySwagger from 'fastify-swagger';
+import process from 'process';
 import { PORT } from './common/config';
 import { BoardNotFoundError } from './errors/BoardNotFoundError';
 import { IncorrectIdFormatError } from './errors/IncorrectIdFormatError';
@@ -46,6 +47,16 @@ server.setErrorHandler(async (error, _, reply) => {
   return reply.send();
 });
 
+process.on('uncaughtException', (err, origin) => {
+  server.log.error(`Caught exception: ${err}. Exception origin: ${origin}`);
+  process.exit(1);
+});
+
+process.on('uncaughtException', (err, origin) => {
+  server.log.error(`Caught exception: ${err}. Exception origin: ${origin}`);
+  process.exit(1);
+});
+
 server.register(fastifySwagger, {
   exposeRoute: true,
   routePrefix: '/docs',
@@ -63,12 +74,7 @@ server.register(taskRoutes);
  * @returns this function doesn't return any value
  */
 const start = async (): Promise<void> => {
-  try {
-    await server.listen(PORT);
-  } catch (error: unknown) {
-    server.log.error(error);
-    process.exit(1);
-  }
+  await server.listen(PORT);
 };
 
 start();
