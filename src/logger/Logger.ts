@@ -46,5 +46,17 @@ export class Logger {
       Logger.info(req, { params: req.params }, 'path params');
       done();
     });
+    this.server.addHook('onResponse', (req, reply, done) => {
+      Logger.trace(
+        req,
+        {
+          url: req.raw.url,
+          statusCode: reply.raw.statusCode,
+          durationMs: reply.getResponseTime(),
+        },
+        'request completed'
+      );
+      done();
+    });
   }
 }
