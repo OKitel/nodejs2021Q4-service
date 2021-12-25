@@ -12,8 +12,11 @@ import { boardRoutes } from './routes/boards.router';
 import { taskRoutes } from './routes/tasks.router';
 import { userRoutes } from './routes/users.router';
 import { Logger } from './logger/Logger';
+import { pinoLogger } from './logger/pinoLogger';
 
-const server = fastify({ logger: { prettyPrint: true } });
+const server = fastify({
+  logger: pinoLogger,
+});
 
 const logger = new Logger(server);
 logger.configureRequestLogging();
