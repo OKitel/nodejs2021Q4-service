@@ -1,4 +1,6 @@
-let tasks = [
+import { Task } from './task.model';
+
+let tasks: Array<Task> = [
   {
     id: 'a9fb7928-0907-48ac-a388-06d4cc4eaeca',
     title: 'Task one',
@@ -6,7 +8,7 @@ let tasks = [
     description: 'To do something #1',
     userId: 'a1a8478e-7172-4d55-bd3d-a4f594a02155',
     boardId: 'cd3a4828-1334-4dce-920f-6bd89af1539a',
-    columnId: '1',
+    columnId: 1,
   },
   {
     id: 'a9fb7928-0907-48ac-a388-06d4cc4eaecb',
@@ -15,7 +17,7 @@ let tasks = [
     description: 'To do something #2',
     userId: 'a1a8478e-7172-4d55-bd3d-a4f594a02155',
     boardId: 'cd3a4828-1334-4dce-920f-6bd89af1539a',
-    columnId: '2',
+    columnId: 2,
   },
   {
     id: 'a9fb7928-0907-48ac-a388-06d4cc4eafca',
@@ -24,7 +26,7 @@ let tasks = [
     description: 'To do something #3',
     userId: 'a1a8478e-7172-4d55-bd3d-a4f594a02157',
     boardId: 'cd3a4828-1334-4dce-920f-6bd89af1539a',
-    columnId: '3',
+    columnId: 3,
   },
   {
     id: 'a9fc7928-0907-48ac-a388-06d4cc4eaeca',
@@ -33,43 +35,82 @@ let tasks = [
     description: 'To do something #3',
     userId: 'a1a8478e-7172-4d55-bd3d-a4f594a02157',
     boardId: 'cd3a4828-1334-4dce-920f-6bd89af1539b',
-    columnId: '1',
+    columnId: 1,
   },
 ];
 
-const getAllByBoardId = async (id) =>
+/**
+ * Returns all tasks by board ID from tasks repository
+ * @param id - board ID
+ * @returns an array of all tasks from the board
+ */
+const getAllByBoardId = async (id: string): Promise<Task[]> =>
   tasks.filter((task) => task.boardId === id);
 
-const gettAllTasksByUserId = async (id) =>
+/**
+ * Returns all tasks by user ID from tasks repository
+ * @param id - user ID
+ * @returns an array of tasks by User ID
+ */
+const gettAllTasksByUserId = async (id: string): Promise<Task[]> =>
   tasks.filter((task) => task.userId === id);
 
-const getOne = async (boardId, taskId) => {
+/**
+ * Returns single task by ID from repository
+ * @param boardId - board ID
+ * @param taskId - task ID
+ * @returns sigle task by ID or undefined if there wasn't found task by passed ID
+ */
+const getOne = async (
+  boardId: string,
+  taskId: string
+): Promise<Task | undefined> => {
   const tasksOnBoard = tasks.filter((task) => task.boardId === boardId);
 
   return tasksOnBoard.find((task) => task.id === taskId);
 };
 
-const deleteById = async (id) => {
+/**
+ * Delete task by ID from repository
+ * @param id - task ID
+ * @returns this function doesn't return any value
+ */
+const deleteById = async (id: string): Promise<void> => {
   tasks = tasks.filter((task) => task.id !== id);
 };
 
-const deleteTasksByBoardId = async (id) => {
+/**
+ * Delete all tasks from board by ID
+ * @param id - board ID
+ * @returns this function doesn't return any value
+ */
+const deleteTasksByBoardId = async (id: string): Promise<void> => {
   tasks = tasks.filter((task) => task.boardId !== id);
 };
 
-const save = async (task) => {
+/**
+ * Save new task to tasks repository
+ * @param task - see type {@link Task}
+ * @returns saved task
+ */
+const save = async (task: Task): Promise<Task> => {
   tasks = [...tasks, task];
   return task;
 };
 
-const update = async (updatedTask) => {
+/**
+ * Update task in the tasks repository
+ * @param updatedTask - see type {@link Task}
+ * @returns updated task
+ */
+const update = async (updatedTask: Task): Promise<Task> => {
   tasks = tasks.map((task) =>
     task.id === updatedTask.id ? updatedTask : task
   );
   return updatedTask;
 };
 
-module.exports = {
+export const tasksRepo = {
   getAllByBoardId,
   getOne,
   deleteById,

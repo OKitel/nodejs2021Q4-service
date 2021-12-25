@@ -1,12 +1,13 @@
-const {
+import { FastifyInstance } from 'fastify';
+import { User, UserToResponse } from '../dto/User.model';
+
+import {
   getUsers,
   getUser,
   addUser,
   deleteUser,
   updateUser,
-} = require('../resources/users/user.controller');
-
-const { User, UserToResponse } = require('../dto/User.model');
+} from '../resources/users/user.controller';
 
 const getUsersOpts = {
   schema: {
@@ -70,7 +71,17 @@ const updateUserOpts = {
   handler: updateUser,
 };
 
-function userRoutes(fastify, options, done) {
+/**
+ * Declares routes for users
+ * @param fastify - see type {@link FastifyInstance}
+ * @param done - function to complete registration of users routes
+ * @returns this function doesn't return any value
+ */
+export const userRoutes = (
+  fastify: FastifyInstance,
+  _: unknown,
+  done: () => void
+): void => {
   // Get all users
   fastify.get('/users', getUsersOpts);
 
@@ -87,6 +98,4 @@ function userRoutes(fastify, options, done) {
   fastify.put('/users/:id', updateUserOpts);
 
   done();
-}
-
-module.exports = userRoutes;
+};

@@ -1,12 +1,13 @@
-const {
+import { FastifyInstance } from 'fastify';
+import {
   getBoards,
   getBoard,
   addBoard,
   deleteBoard,
   updateBoard,
-} = require('../resources/boards/board.controller');
+} from '../resources/boards/board.controller';
 
-const Board = require('../dto/Board.model');
+import { Board } from '../dto/Board.model';
 
 const getBoardsOpts = {
   schema: {
@@ -69,7 +70,17 @@ const updateBoardOpts = {
   handler: updateBoard,
 };
 
-function boardRoutes(fastify, options, done) {
+/**
+ * Declares routes for boards
+ * @param fastify - see type {@link FastifyInstance}
+ * @param done - function to complete registration of board routes
+ * @returns this function doesn't return any value
+ */
+export const boardRoutes = (
+  fastify: FastifyInstance,
+  _: unknown,
+  done: () => void
+): void => {
   // Get all boards
   fastify.get('/boards', getBoardsOpts);
 
@@ -86,6 +97,4 @@ function boardRoutes(fastify, options, done) {
   fastify.put('/boards/:id', updateBoardOpts);
 
   done();
-}
-
-module.exports = boardRoutes;
+};

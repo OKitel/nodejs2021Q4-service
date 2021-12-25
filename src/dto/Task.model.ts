@@ -1,4 +1,4 @@
-const Task = {
+export const Task = {
   type: 'object',
   properties: {
     id: { type: 'string' },
@@ -10,5 +10,3 @@ const Task = {
     columnId: { type: 'string', nullable: true },
   },
 };
-
-module.exports = Task;
