@@ -16,6 +16,19 @@ export class Logger {
     req.log.info(obj, message, ...args);
   }
 
+  static trace(
+    req: FastifyRequest,
+    obj: unknown,
+    message: string,
+    ...args: unknown[]
+  ) {
+    req.log.trace(obj, message, ...args);
+  }
+
+  debug(obj: unknown, message?: string, ...args: unknown[]) {
+    this.server.log.debug(obj, message, ...args);
+  }
+
   warn(obj: unknown, message?: string, ...args: unknown[]) {
     this.server.log.warn(obj, message, ...args);
   }

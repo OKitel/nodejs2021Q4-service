@@ -29,6 +29,7 @@ server.setErrorHandler(async (error, _, reply) => {
     error instanceof UserTaskNotFoundError
   ) {
     logger.warn(error.message);
+    logger.debug(error);
     return reply
       .code(StatusCodes.NOT_FOUND)
       .header('Content-Type', 'application/json')
@@ -36,18 +37,21 @@ server.setErrorHandler(async (error, _, reply) => {
   }
   if (error instanceof IncorrectIdFormatError) {
     logger.warn(error.message);
+    logger.debug(error);
     return reply
       .code(StatusCodes.BAD_REQUEST)
       .header('Content-Type', 'application/json')
       .send({ message: `Incorrect ID format.` });
   }
-  logger.error('Internal error');
+  logger.error(`Internal error: ${error.message}`);
+  logger.debug(error);
   reply.status(StatusCodes.INTERNAL_SERVER_ERROR);
   return reply.send();
 });
 
 process.on('uncaughtException', (err, origin) => {
   logger.error(`Caught exception: ${err}. Exception origin: ${origin}`);
+  logger.debug(err);
   process.exit(1);
 });
 
