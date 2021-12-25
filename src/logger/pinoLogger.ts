@@ -1,10 +1,11 @@
 import pino from 'pino';
+import { LOG_LEVEL } from '../common/config';
 
 export const pinoLogger = pino({
   transport: {
     targets: [
       {
-        level: 'trace',
+        level: LOG_LEVEL,
         target: 'pino/file',
         options: {
           destination: './logs/allLogs.log',
@@ -12,7 +13,7 @@ export const pinoLogger = pino({
         },
       },
       {
-        level: 'info',
+        level: LOG_LEVEL,
         target: 'pino-pretty',
         options: {
           destination: 2,
@@ -29,4 +30,5 @@ export const pinoLogger = pino({
       },
     ],
   },
+  level: LOG_LEVEL,
 });
