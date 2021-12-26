@@ -1,6 +1,9 @@
 import pino from 'pino';
 import { LOG_LEVEL } from '../common/config';
 
+/**
+ * Create custom pino logger
+ */
 export const pinoLogger = pino({
   transport: {
     targets: [

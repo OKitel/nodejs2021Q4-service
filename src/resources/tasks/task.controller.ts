@@ -47,6 +47,7 @@ export const checkId = (boardId: string, taskId: string): boolean => {
  * Returns all tasks in response
  * @param req - fastify request with board ID, see {@link TaskRequestParams}
  * @param reply - fastify reply, contains an array of tasks from one board, see {@link FastifyReply}
+ * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const getTasks = async (
@@ -64,6 +65,7 @@ export const getTasks = async (
  * Returns task by ID from the board in response
  * @param req - fastify request with board ID, see {@link TaskRequestParams}
  * @param reply - fastify reply, contains task
+ * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const getTask = async (
@@ -75,7 +77,10 @@ export const getTask = async (
     throw new IncorrectIdFormatError();
   }
   const task = await tasksService.getOne(boardId, taskId);
-  reply.code(StatusCodes.OK).header('Content-Type', 'application/json').send(task);
+  reply
+    .code(StatusCodes.OK)
+    .header('Content-Type', 'application/json')
+    .send(task);
 };
 
 /**
@@ -99,13 +104,17 @@ export const addTask = async (
     columnId,
   });
   await tasksService.save(task);
-  reply.code(StatusCodes.CREATED).header('Content-Type', 'application/json').send(task);
+  reply
+    .code(StatusCodes.CREATED)
+    .header('Content-Type', 'application/json')
+    .send(task);
 };
 
 /**
  * Delete task by ID
  * @param req - fastify request with board ID, see {@link TaskRequestParams}
  * @param reply - fastify reply, contains message that task with passed ID has been removed
+ * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const deleteTask = async (
@@ -124,6 +133,7 @@ export const deleteTask = async (
  * Update task
  * @param req - fastify request with board ID and new task info, see {@link TaskRequestPut}
  * @param reply - fastify reply, contains updated task
+ * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const updateTask = async (
@@ -144,5 +154,8 @@ export const updateTask = async (
     boardId,
     columnId,
   });
-  reply.code(StatusCodes.OK).header('Content-Type', 'application/json').send(task);
+  reply
+    .code(StatusCodes.OK)
+    .header('Content-Type', 'application/json')
+    .send(task);
 };

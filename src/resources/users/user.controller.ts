@@ -28,6 +28,7 @@ export const getUsers = async (
  * Returns single user by ID in response
  * @param req - fastify request with user ID, see {@link UserRequestParams}
  * @param reply - fastify reply, contains single user
+ * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const getUser = async (
@@ -68,6 +69,7 @@ export const addUser = async (
  * Delete user by ID
  * @param req - fastify request with user ID, see {@link UserRequestParams}
  * @param reply - fastify reply, contains message that user with passed has been removed
+ * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const deleteUser = async (
@@ -86,6 +88,7 @@ export const deleteUser = async (
  * Update user
  * @param req - fastify request with ID and updated user info, see {@link UserRequestPut}
  * @param reply - fastify reply, contains updated user
+ * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const updateUser = async (

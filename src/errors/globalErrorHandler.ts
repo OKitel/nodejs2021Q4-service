@@ -7,7 +7,14 @@ import { TaskNotFoundError } from './TaskNotFoundError';
 import { UserNotFoundError } from './UserNotFoundError';
 import { UserTaskNotFoundError } from './UserTaskNotFoundError';
 
-export const globalErrorHandler = (server: FastifyInstance, logger: Logger) => {
+
+/**
+ * Global error handler for requests
+ * @param server - instance of Fastify server
+ * @param logger - instanse of Logger 
+ * @returns this function doesn't return any value
+ */
+export const globalErrorHandler = (server: FastifyInstance, logger: Logger): void => {
   server.setErrorHandler(async (error, _, reply) => {
     if (
       error instanceof BoardNotFoundError ||

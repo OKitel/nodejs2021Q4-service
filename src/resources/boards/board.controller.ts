@@ -28,6 +28,7 @@ export const getBoards = async (
  * Return the single board by ID in response
  * @param req - fastify request with ID, see {@link BoardRequestParams}
  * @param reply - fastify reply, contains single board
+ * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const getBoard = async (
@@ -62,6 +63,7 @@ export const addBoard = async (
  * Delete the board by ID
  * @param req - fastify request with ID, see {@link BoardRequestParams}
  * @param reply - fastify reply, contains message that board with ID from params was deleted
+ * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const deleteBoard = async (
@@ -80,6 +82,7 @@ export const deleteBoard = async (
  * Update the board by ID
  * @param req - fastify request with ID, see {@link BoardRequestPut}
  * @param reply - fastify reply, contains updated board
+ * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const updateBoard = async (
