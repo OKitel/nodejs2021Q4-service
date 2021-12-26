@@ -4,8 +4,7 @@ import { PORT } from './common/config';
 import { boardRoutes } from './routes/boards.router';
 import { taskRoutes } from './routes/tasks.router';
 import { userRoutes } from './routes/users.router';
-import { Logger } from './logger/Logger';
-import { pinoLogger } from './logger/pinoLogger';
+import { Logger, pinoLogger } from './logger';
 import { globalErrorHandler } from './errors/globalErrorHandler';
 
 const server = fastify({

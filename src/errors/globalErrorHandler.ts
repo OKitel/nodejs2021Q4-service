@@ -1,20 +1,22 @@
 import { FastifyInstance } from 'fastify';
 import { StatusCodes } from 'http-status-codes';
-import { Logger } from '../logger/Logger';
+import { Logger } from '../logger';
 import { BoardNotFoundError } from './BoardNotFoundError';
 import { IncorrectIdFormatError } from './IncorrectIdFormatError';
 import { TaskNotFoundError } from './TaskNotFoundError';
 import { UserNotFoundError } from './UserNotFoundError';
 import { UserTaskNotFoundError } from './UserTaskNotFoundError';
 
-
 /**
  * Global error handler for requests
  * @param server - instance of Fastify server
- * @param logger - instanse of Logger 
+ * @param logger - instanse of Logger
  * @returns this function doesn't return any value
  */
-export const globalErrorHandler = (server: FastifyInstance, logger: Logger): void => {
+export const globalErrorHandler = (
+  server: FastifyInstance,
+  logger: Logger
+): void => {
   server.setErrorHandler(async (error, _, reply) => {
     if (
       error instanceof BoardNotFoundError ||
