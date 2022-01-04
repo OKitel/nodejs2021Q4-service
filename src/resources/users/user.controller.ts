@@ -1,9 +1,9 @@
-import fastify, { FastifyReply, FastifyRequest } from 'fastify';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { StatusCodes } from 'http-status-codes';
 import { validate as uuidValidate } from 'uuid';
+import { IncorrectIdFormatError } from '../../errors/IncorrectIdFormatError';
 import { User } from './user.model';
 import { usersService } from './user.service';
-
-export const server = fastify({ logger: true });
 
 type UserRequestPost = FastifyRequest<{
   Body: { name: string; login: string; password: string };
@@ -28,6 +28,7 @@ export const getUsers = async (
  * Returns single user by ID in response
  * @param req - fastify request with user ID, see {@link UserRequestParams}
  * @param reply - fastify reply, contains single user
+ * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const getUser = async (
@@ -36,21 +37,13 @@ export const getUser = async (
 ): Promise<void> => {
   const { id } = req.params;
   if (!id || !uuidValidate(id)) {
-    reply
-      .code(400)
-      .header('Content-Type', 'application/json')
-      .send({ message: `Incorrect ID format.` });
+    throw new IncorrectIdFormatError();
   }
-  try {
-    const user = await usersService.getOne(id);
-    reply.code(200).header('Content-Type', 'application/json').send(user);
-  } catch (error: unknown) {
-    server.log.error(error);
-    reply
-      .code(404)
-      .header('Content-Type', 'application/json')
-      .send({ message: `${error}.` });
-  }
+  const user = await usersService.getOne(id);
+  reply
+    .code(StatusCodes.OK)
+    .header('Content-Type', 'application/json')
+    .send(user);
 };
 
 /**
@@ -63,24 +56,20 @@ export const addUser = async (
   req: UserRequestPost,
   reply: FastifyReply
 ): Promise<void> => {
-  try {
-    const { name, login, password } = req.body;
-    const user = new User({ name, login, password });
-    await usersService.save(user);
-    reply.code(201).header('Content-Type', 'application/json').send(user);
-  } catch (error: unknown) {
-    server.log.error(error);
-    reply
-      .code(404)
-      .header('Content-Type', 'application/json')
-      .send({ message: `${error}` });
-  }
+  const { name, login, password } = req.body;
+  const user = new User({ name, login, password });
+  await usersService.save(user);
+  reply
+    .code(StatusCodes.CREATED)
+    .header('Content-Type', 'application/json')
+    .send(user);
 };
 
 /**
  * Delete user by ID
  * @param req - fastify request with user ID, see {@link UserRequestParams}
  * @param reply - fastify reply, contains message that user with passed has been removed
+ * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const deleteUser = async (
@@ -89,27 +78,17 @@ export const deleteUser = async (
 ): Promise<void> => {
   const { id } = req.params;
   if (!id || !uuidValidate(id)) {
-    reply
-      .code(400)
-      .header('Content-Type', 'application/json')
-      .send({ message: `Incorrect ID format.` });
+    throw new IncorrectIdFormatError();
   }
-  try {
-    await usersService.deleteById(id);
-    reply.send({ message: `User ${id} has been removed` });
-  } catch (error: unknown) {
-    server.log.error(error);
-    reply
-      .code(404)
-      .header('Content-Type', 'application/json')
-      .send({ message: `${error}` });
-  }
+  await usersService.deleteById(id);
+  reply.send({ message: `User ${id} has been removed` });
 };
 
 /**
  * Update user
  * @param req - fastify request with ID and updated user info, see {@link UserRequestPut}
  * @param reply - fastify reply, contains updated user
+ * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const updateUser = async (
@@ -118,20 +97,12 @@ export const updateUser = async (
 ): Promise<void> => {
   const { id } = req.params;
   if (!id || !uuidValidate(id)) {
-    reply
-      .code(400)
-      .header('Content-Type', 'application/json')
-      .send({ message: `Incorrect ID format.` });
+    throw new IncorrectIdFormatError();
   }
-  try {
-    const { name, login, password } = req.body;
-    const user = await usersService.update({ id, name, login, password });
-    reply.code(200).header('Content-Type', 'application/json').send(user);
-  } catch (error: unknown) {
-    server.log.error(error);
-    reply
-      .code(404)
-      .header('Content-Type', 'application/json')
-      .send({ message: `${error}` });
-  }
+  const { name, login, password } = req.body;
+  const user = await usersService.update({ id, name, login, password });
+  reply
+    .code(StatusCodes.OK)
+    .header('Content-Type', 'application/json')
+    .send(user);
 };

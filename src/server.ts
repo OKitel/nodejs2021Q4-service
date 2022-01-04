@@ -4,8 +4,17 @@ import { PORT } from './common/config';
 import { boardRoutes } from './routes/boards.router';
 import { taskRoutes } from './routes/tasks.router';
 import { userRoutes } from './routes/users.router';
+import { Logger, pinoLogger } from './logger';
+import { globalErrorHandler } from './errors/globalErrorHandler';
 
-const server = fastify({ logger: true });
+const server = fastify({
+  logger: pinoLogger,
+});
+
+const logger = new Logger(server);
+logger.configureRequestLogging();
+
+globalErrorHandler(server, logger);
 
 server.register(fastifySwagger, {
   exposeRoute: true,
@@ -24,12 +33,7 @@ server.register(taskRoutes);
  * @returns this function doesn't return any value
  */
 const start = async (): Promise<void> => {
-  try {
-    await server.listen(PORT);
-  } catch (error: unknown) {
-    server.log.error(error);
-    process.exit(1);
-  }
+  await server.listen(PORT);
 };
 
 start();

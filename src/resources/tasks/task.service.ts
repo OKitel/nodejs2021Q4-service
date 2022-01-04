@@ -1,6 +1,8 @@
 import { tasksRepo } from './task.memory.repository';
 import { boardsRepo } from '../boards/board.memory.repository';
 import { Task } from './task.model';
+import { BoardNotFoundError } from '../../errors/BoardNotFoundError';
+import { TaskNotFoundError } from '../../errors/TaskNotFoundError';
 
 /**
  * Returns all tasks by board ID
@@ -11,7 +13,7 @@ import { Task } from './task.model';
 const getAllTasksByBoardId = async (id: string): Promise<Task[]> => {
   const board = await boardsRepo.getOne(id);
   if (!board) {
-    throw new Error(`Board with id ${id} has't found!`);
+    throw new BoardNotFoundError(id);
   }
   const tasks = await tasksRepo.getAllByBoardId(id);
   return tasks;
@@ -27,7 +29,7 @@ const getAllTasksByBoardId = async (id: string): Promise<Task[]> => {
 const getOne = async (boardId: string, taskId: string): Promise<Task> => {
   const task = await tasksRepo.getOne(boardId, taskId);
   if (!task) {
-    throw new Error(`The task with id ${taskId} hasn't been found`);
+    throw new TaskNotFoundError(taskId);
   }
   return task;
 };
@@ -59,7 +61,7 @@ const save = async (task: Task): Promise<void> => {
 const update = async (task: Task): Promise<Task> => {
   const oldTask = await tasksRepo.getOne(task.boardId, task.id);
   if (!oldTask) {
-    throw new Error(`The task with id ${task.id} hasn't been found`);
+    throw new TaskNotFoundError(task.id);
   }
   const updatedTask = await tasksRepo.update(task);
   return updatedTask;

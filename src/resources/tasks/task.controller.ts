@@ -1,9 +1,9 @@
-import fastify, { FastifyReply, FastifyRequest } from 'fastify';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { StatusCodes } from 'http-status-codes';
 import { validate as uuidValidate } from 'uuid';
+import { IncorrectIdFormatError } from '../../errors/IncorrectIdFormatError';
 import { Task } from './task.model';
 import { tasksService } from './task.service';
-
-const server = fastify({ logger: true });
 
 type TaskRequestPost = FastifyRequest<{
   Params: { boardId: string };
@@ -47,6 +47,7 @@ export const checkId = (boardId: string, taskId: string): boolean => {
  * Returns all tasks in response
  * @param req - fastify request with board ID, see {@link TaskRequestParams}
  * @param reply - fastify reply, contains an array of tasks from one board, see {@link FastifyReply}
+ * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const getTasks = async (
@@ -55,26 +56,16 @@ export const getTasks = async (
 ): Promise<void> => {
   const { boardId } = req.params;
   if (!boardId || !uuidValidate(boardId)) {
-    reply
-      .code(400)
-      .header('Content-Type', 'application/json')
-      .send({ message: `Incorrect ID format.` });
+    throw new IncorrectIdFormatError();
   }
-  try {
-    reply.send(await tasksService.getAllTasksByBoardId(boardId));
-  } catch (error: unknown) {
-    server.log.error(error);
-    reply
-      .code(404)
-      .header('Content-Type', 'application/json')
-      .send({ message: `${error}` });
-  }
+  reply.send(await tasksService.getAllTasksByBoardId(boardId));
 };
 
 /**
  * Returns task by ID from the board in response
  * @param req - fastify request with board ID, see {@link TaskRequestParams}
  * @param reply - fastify reply, contains task
+ * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const getTask = async (
@@ -83,21 +74,13 @@ export const getTask = async (
 ): Promise<void> => {
   const { boardId, taskId } = req.params;
   if (checkId(boardId, taskId)) {
-    reply
-      .code(400)
-      .header('Content-Type', 'application/json')
-      .send({ message: `Incorrect ID format.` });
+    throw new IncorrectIdFormatError();
   }
-  try {
-    const task = await tasksService.getOne(boardId, taskId);
-    reply.code(200).header('Content-Type', 'application/json').send(task);
-  } catch (error: unknown) {
-    server.log.error(error);
-    reply
-      .code(404)
-      .header('Content-Type', 'application/json')
-      .send({ message: `${error}.` });
-  }
+  const task = await tasksService.getOne(boardId, taskId);
+  reply
+    .code(StatusCodes.OK)
+    .header('Content-Type', 'application/json')
+    .send(task);
 };
 
 /**
@@ -111,31 +94,27 @@ export const addTask = async (
   reply: FastifyReply
 ): Promise<void> => {
   const { boardId } = req.params;
-  try {
-    const { title, order, description, userId, columnId } = req.body;
-    const task = new Task({
-      title,
-      order,
-      description,
-      userId,
-      boardId,
-      columnId,
-    });
-    await tasksService.save(task);
-    reply.code(201).header('Content-Type', 'application/json').send(task);
-  } catch (error: unknown) {
-    server.log.error(error);
-    reply
-      .code(404)
-      .header('Content-Type', 'application/json')
-      .send({ message: `${error}` });
-  }
+  const { title, order, description, userId, columnId } = req.body;
+  const task = new Task({
+    title,
+    order,
+    description,
+    userId,
+    boardId,
+    columnId,
+  });
+  await tasksService.save(task);
+  reply
+    .code(StatusCodes.CREATED)
+    .header('Content-Type', 'application/json')
+    .send(task);
 };
 
 /**
  * Delete task by ID
  * @param req - fastify request with board ID, see {@link TaskRequestParams}
  * @param reply - fastify reply, contains message that task with passed ID has been removed
+ * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const deleteTask = async (
@@ -144,27 +123,17 @@ export const deleteTask = async (
 ): Promise<void> => {
   const { boardId, taskId } = req.params;
   if (checkId(boardId, taskId)) {
-    reply
-      .code(400)
-      .header('Content-Type', 'application/json')
-      .send({ message: `Incorrect ID format.` });
+    throw new IncorrectIdFormatError();
   }
-  try {
-    await tasksService.deleteById(taskId);
-    reply.send({ message: `Task ${taskId} has been removed` });
-  } catch (error: unknown) {
-    server.log.error(error);
-    reply
-      .code(404)
-      .header('Content-Type', 'application/json')
-      .send({ message: `${error}` });
-  }
+  await tasksService.deleteById(taskId);
+  reply.send({ message: `Task ${taskId} has been removed` });
 };
 
 /**
  * Update task
  * @param req - fastify request with board ID and new task info, see {@link TaskRequestPut}
  * @param reply - fastify reply, contains updated task
+ * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const updateTask = async (
@@ -173,28 +142,20 @@ export const updateTask = async (
 ): Promise<void> => {
   const { boardId: boardIdParam, taskId } = req.params;
   if (checkId(boardIdParam, taskId)) {
-    reply
-      .code(400)
-      .header('Content-Type', 'application/json')
-      .send({ message: `Incorrect ID format.` });
+    throw new IncorrectIdFormatError();
   }
-  try {
-    const { title, order, description, userId, boardId, columnId } = req.body;
-    const task = await tasksService.update({
-      id: taskId,
-      title,
-      order,
-      description,
-      userId,
-      boardId,
-      columnId,
-    });
-    reply.code(200).header('Content-Type', 'application/json').send(task);
-  } catch (error: unknown) {
-    server.log.error(error);
-    reply
-      .code(404)
-      .header('Content-Type', 'application/json')
-      .send({ message: `${error}` });
-  }
+  const { title, order, description, userId, boardId, columnId } = req.body;
+  const task = await tasksService.update({
+    id: taskId,
+    title,
+    order,
+    description,
+    userId,
+    boardId,
+    columnId,
+  });
+  reply
+    .code(StatusCodes.OK)
+    .header('Content-Type', 'application/json')
+    .send(task);
 };
