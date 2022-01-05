@@ -33,7 +33,7 @@ server.register(taskRoutes);
  * @returns this function doesn't return any value
  */
 const start = async (): Promise<void> => {
-  await server.listen(PORT);
+  await server.listen(PORT, '0.0.0.0');
 };
 
 start();
