@@ -1,0 +1,16 @@
+node_modules/
+.github/
+.vscode/
+build/
+coverage/
+doc/
+docs/
+logs/
+postgres/
+test/
+.eslintignore
+.eslintrc.json
+.gitignore
+.prettierrc
+README.md
+typedoc.json
