@@ -9,6 +9,8 @@ services:
       PORT: ${PORT}
     depends_on:
       - postgres
+    networks:
+      - back
   postgres:
     build: ./postgres
     ports:
@@ -18,3 +20,13 @@ services:
       POSTGRES_PORT: ${POSTGRES_PORT}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - back
+
+networks:
+  back:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
