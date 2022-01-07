@@ -13,6 +13,7 @@ services:
       - back
     volumes:
       - ./logs:/app/logs
+      - ./src:/app/src
 
   postgres:
     build: ./postgres
@@ -39,3 +40,4 @@ networks:
 volumes:
   postgres_data:
   logs:
+  src:
