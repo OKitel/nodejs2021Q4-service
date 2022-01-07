@@ -11,6 +11,9 @@ services:
       - postgres
     networks:
       - back
+    volumes:
+      - ./logs:/app/logs
+
   postgres:
     build: ./postgres
     ports:
@@ -22,6 +25,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     networks:
       - back
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
 
 networks:
   back:
@@ -30,3 +35,7 @@ networks:
       driver: default
       config:
         - subnet: 172.16.238.0/24
+
+volumes:
+  postgres_data:
+  logs:
