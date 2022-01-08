@@ -8,7 +8,7 @@ RUN npm i --no-optional
 
 COPY . .
 
-EXPOSE 4000
+EXPOSE ${PORT}
 
 CMD ["npm", "run", "dev"]
 
