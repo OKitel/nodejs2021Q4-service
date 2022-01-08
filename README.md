@@ -4,7 +4,7 @@
 
 This application is a [Trello](https://trello.com/) competitor. It can be used for managing tasks and boards. Backend is written in [Typescript](https://www.typescriptlang.org/) and uses [Fastify](https://www.fastify.io/) framework to handle requests in [nodejs](https://nodejs.org/en/) server. It may be used on every type of OS because it works inside isolated [Docker](https://www.docker.com/) containers.
 
-There is an opportunity to store data inside PostgreSQL database (🚧work in progress🚧)
+There is an opportunity to store data inside PostgreSQL database (🚧work in progress🚧).
 
 ## Prerequisites
 
@@ -129,3 +129,11 @@ docker image rm <image ID>
 ```
 
 The image of this app is in private Docker Hub repository [okitel/rsschool-nodejs-service](https://hub.docker.com/repository/docker/okitel/rsschool-nodejs-service).
+
+### Documentation
+
+Typedoc is installed so you can generate documentation based on tsdoc. To do this, use the following script:
+
+```
+npm run docs
+```
