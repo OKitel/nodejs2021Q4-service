@@ -1,11 +1,13 @@
-node_modules/
+.git
 .github/
 .vscode/
+assets/
 build/
 coverage/
 doc/
 docs/
 logs/
+node_modules/
 postgres/
 postgres_data/
 test/
@@ -15,3 +17,6 @@ test/
 .prettierrc
 README.md
 typedoc.json
+.dockerignore
+docker-compose.yml
+Dockerfile

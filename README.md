@@ -86,7 +86,7 @@ To run the entire app use the next command in your terminal in the project root 
 docker compose up
 ```
 
-This command will build containers with app and postgreSQL database. The size of app container is 288 MB.
+This command will build containers with app and postgreSQL database. The size of app container is 270 MB.
 
 When containers start, the application waits for the Postgres container to start first.
 
