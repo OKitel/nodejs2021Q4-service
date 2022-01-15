@@ -1,3 +1,4 @@
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 
 interface IUser {
@@ -13,13 +14,18 @@ interface IUser {
 /**
  * Class to create a user object
  */
+@Entity()
 export class User implements IUser {
+  @PrimaryColumn()
   id: string;
 
+  @Column()
   name: string;
 
+  @Column({ type: 'varchar', length: 255, unique: true })
   login: string;
 
+  @Column()
   password: string;
 
   /**

@@ -40,7 +40,8 @@ const deleteById = async (id: string): Promise<void> => {
     if (!task) {
       throw new UserTaskNotFoundError();
     }
-    task.userId = null;
+    // TODO new method in repo
+    task.user = null;
     tasksRepo.update(task);
   }
   await usersRepo.deleteById(id);
