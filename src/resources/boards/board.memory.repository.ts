@@ -1,36 +1,47 @@
+import { getConnection, getRepository } from 'typeorm';
 import { Board } from './board.model';
 
-let boards: Array<Board> = [
-  {
-    id: 'cd3a4828-1334-4dce-920f-6bd89af1539a',
-    title: 'Board #1',
-    columns: [1, 2, 3],
-  },
-  {
-    id: 'cd3a4828-1334-4dce-920f-6bd89af1539b',
-    title: 'Board #2',
-    columns: [1, 2, 3],
-  },
-  {
-    id: 'cd3a4828-1334-4dce-920f-6bd89af1539c',
-    title: 'Board #3',
-    columns: [1, 2],
-  },
-];
+// let boards: Array<Board> = [
+//   {
+//     id: 'cd3a4828-1334-4dce-920f-6bd89af1539a',
+//     title: 'Board #1',
+//     columns: [1, 2, 3],
+//   },
+//   {
+//     id: 'cd3a4828-1334-4dce-920f-6bd89af1539b',
+//     title: 'Board #2',
+//     columns: [1, 2, 3],
+//   },
+//   {
+//     id: 'cd3a4828-1334-4dce-920f-6bd89af1539c',
+//     title: 'Board #3',
+//     columns: [1, 2],
+//   },
+// ];
 
 /**
  * Returns all boards from boards repository
  * @returns array of all boards
  */
-const getAll = async (): Promise<Board[]> => boards;
+const getAll = async (): Promise<Board[]> => {
+  const boards = await getRepository(Board)
+    .createQueryBuilder('board')
+    .getMany();
+  return boards;
+};
 
 /**
  * Returns the single board by ID from boards repository
  * @param id - board ID
  * @returns board by ID or undefined if board wasn't found
  */
-const getOne = async (id: string): Promise<Board | undefined> =>
-  boards.find((item) => item.id === id);
+const getOne = async (id: string): Promise<Board | undefined> => {
+  const board = await getRepository(Board)
+    .createQueryBuilder('board')
+    .where('board.id = :id', { id })
+    .getOne();
+  return board;
+};
 
 /**
  * Delete board by ID from boards repository
@@ -38,7 +49,11 @@ const getOne = async (id: string): Promise<Board | undefined> =>
  * @returns this function doesn't return any value
  */
 const deleteById = async (id: string): Promise<void> => {
-  boards = boards.filter((board) => board.id !== id);
+  await getRepository(Board)
+    .createQueryBuilder()
+    .delete()
+    .where('id = :id', { id })
+    .execute();
 };
 
 /**
@@ -47,7 +62,11 @@ const deleteById = async (id: string): Promise<void> => {
  * @returns just saved board
  */
 const save = async (board: Board): Promise<Board> => {
-  boards = [...boards, board];
+  await getRepository(Board)
+    .createQueryBuilder()
+    .insert()
+    .values(board)
+    .execute();
   return board;
 };
 
@@ -57,9 +76,12 @@ const save = async (board: Board): Promise<Board> => {
  * @returns updated board
  */
 const update = async (updatedBoard: Board): Promise<Board> => {
-  boards = boards.map((board) =>
-    board.id === updatedBoard.id ? updatedBoard : board
-  );
+  await getConnection()
+    .createQueryBuilder()
+    .update(Board)
+    .set(updatedBoard)
+    .where('id = :id', { id: updatedBoard.id })
+    .execute();
   return updatedBoard;
 };
 

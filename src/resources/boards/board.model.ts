@@ -1,3 +1,4 @@
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 
 interface IBoard {
@@ -11,9 +12,12 @@ interface IBoard {
 /**
  * Class to create a board object
  */
+@Entity()
 export class Board implements IBoard {
+  @PrimaryColumn()
   id: string;
 
+  @Column()
   title: string;
 
   columns: Array<number>;
@@ -32,4 +36,5 @@ export class Board implements IBoard {
     this.title = title;
     this.columns = columns;
   }
+
 }
