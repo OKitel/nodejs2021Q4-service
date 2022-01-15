@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+import { createConnection } from 'typeorm';
 import fastify from 'fastify';
 import fastifySwagger from 'fastify-swagger';
 import { PORT } from './common/config';
@@ -15,6 +17,8 @@ const logger = new Logger(server);
 logger.configureRequestLogging();
 
 globalErrorHandler(server, logger);
+
+createConnection();
 
 server.register(fastifySwagger, {
   exposeRoute: true,
