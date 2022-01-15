@@ -2,7 +2,6 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { StatusCodes } from 'http-status-codes';
 import { validate as uuidValidate } from 'uuid';
 import { IncorrectIdFormatError } from '../../errors/IncorrectIdFormatError';
-import { Task } from './task.model';
 import { tasksService } from './task.service';
 
 type TaskRequestPost = FastifyRequest<{
@@ -12,7 +11,7 @@ type TaskRequestPost = FastifyRequest<{
     order: number;
     description: string;
     userId: string | null;
-    columnId: null | number;
+    columnId: null | string;
   };
 }>;
 type TaskRequestPut = FastifyRequest<{
@@ -22,7 +21,7 @@ type TaskRequestPut = FastifyRequest<{
     order: number;
     description: string;
     userId: string | null;
-    columnId: null | number;
+    columnId: null | string;
     boardId: string;
   };
 }>;
@@ -95,7 +94,7 @@ export const addTask = async (
 ): Promise<void> => {
   const { boardId } = req.params;
   const { title, order, description, userId, columnId } = req.body;
-  const task = new Task({
+  const task = await tasksService.save({
     title,
     order,
     description,
@@ -103,7 +102,6 @@ export const addTask = async (
     boardId,
     columnId,
   });
-  await tasksService.save(task);
   reply
     .code(StatusCodes.CREATED)
     .header('Content-Type', 'application/json')

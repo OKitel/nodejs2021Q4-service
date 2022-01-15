@@ -1,4 +1,8 @@
+import { Entity, Column, PrimaryColumn, ManyToOne } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
+import { Board } from '../boards/board.model';
+import { BoardColumn } from '../columns/column.model';
+import { User } from '../users/user.model';
 
 interface ITask {
   id: string;
@@ -9,30 +13,38 @@ interface ITask {
 
   description: string;
 
-  userId: string | null;
+  user: User | null;
 
-  boardId: string;
+  board: Board;
 
-  columnId: null | number;
+  column: BoardColumn | null;
 }
 
 /**
  * Class to create a task object
  */
+@Entity()
 export class Task implements ITask {
+  @PrimaryColumn()
   id: string;
 
+  @Column()
   title: string;
 
+  @Column()
   order: number;
 
+  @Column()
   description: string;
 
-  userId: string | null;
+  @ManyToOne(() => User)
+  user: User | null;
 
-  boardId: string;
+  @ManyToOne(() => Board)
+  board: Board;
 
-  columnId: null | number;
+  @ManyToOne(() => BoardColumn)
+  column: BoardColumn | null;
 
   /**
    * Constructor for the `Task` object
@@ -44,16 +56,16 @@ export class Task implements ITask {
     title = 'Task one',
     order = 1,
     description = 'To do something #1',
-    userId = '1',
-    boardId = '1',
-    columnId = null,
+    user = null,
+    board = new Board({}),
+    column = null,
   }: Partial<ITask>) {
     this.id = id;
     this.title = title;
     this.order = order;
     this.description = description;
-    this.userId = userId;
-    this.boardId = boardId;
-    this.columnId = columnId;
+    this.user = user;
+    this.board = board;
+    this.column = column;
   }
 }
