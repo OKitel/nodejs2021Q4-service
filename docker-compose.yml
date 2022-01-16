@@ -30,6 +30,7 @@ services:
       - back
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
+    command: -p ${TYPEORM_PORT}
 
 networks:
   back:
