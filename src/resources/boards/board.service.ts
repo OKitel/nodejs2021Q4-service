@@ -4,6 +4,7 @@ import { Board } from './board.model';
 import { BoardNotFoundError } from '../../errors';
 import { BoardColumn } from '../columns/column.model';
 import { BoardLight } from './boardLight.interface';
+import { columnsRepo } from '../columns/column.repository';
 
 /**
  * Returns all boards
@@ -35,6 +36,7 @@ const getOne = async (id: string): Promise<Board> => {
  */
 const deleteById = async (id: string): Promise<void> => {
   await tasksRepo.deleteTasksByBoardId(id);
+  await columnsRepo.deleteByBoardId(id);
   await boardsRepo.deleteById(id);
 };
 
