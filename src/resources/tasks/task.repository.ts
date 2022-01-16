@@ -77,14 +77,15 @@ const save = async (task: Task): Promise<Task> => {
 /**
  * Update task in the tasks repository
  * @param updatedTask - see type {@link Task}
+ * @param id - task id
  * @returns updated task
  */
-const update = async (updatedTask: Task): Promise<Task> => {
+const update = async (updatedTask: Task, id: string): Promise<Task> => {
   await getConnection()
     .createQueryBuilder()
     .update(Task)
     .set(updatedTask)
-    .where('id = :id', { id: updatedTask.id })
+    .where('id = :id', { id })
     .execute();
   return updatedTask;
 };

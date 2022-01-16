@@ -1,5 +1,4 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
-import { v4 as uuidv4 } from 'uuid';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 interface IUser {
   id: string;
@@ -16,7 +15,7 @@ interface IUser {
  */
 @Entity()
 export class User implements IUser {
-  @PrimaryColumn({ type: 'varchar', length: 40 })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ type: 'varchar', length: 255 })
@@ -34,12 +33,10 @@ export class User implements IUser {
    * @returns a new {@link User} instance
    */
   constructor({
-    id = uuidv4(),
     name = 'USER',
     login = 'user',
     password = 'P@55w0rd',
   }: Partial<IUser> = {}) {
-    this.id = id;
     this.name = name;
     this.login = login;
     this.password = password;

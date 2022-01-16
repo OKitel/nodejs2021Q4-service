@@ -1,5 +1,4 @@
-import { Entity, Column, PrimaryColumn, ManyToOne } from 'typeorm';
-import { v4 as uuidv4 } from 'uuid';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 // eslint-disable-next-line import/no-cycle
 import { Board } from '../boards/board.model';
 
@@ -18,7 +17,7 @@ interface IBoardColumn {
  */
 @Entity()
 export class BoardColumn implements IBoardColumn {
-  @PrimaryColumn({ type: 'varchar', length: 40 })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ type: 'varchar', length: 1024 })
@@ -36,12 +35,10 @@ export class BoardColumn implements IBoardColumn {
    * @returns a new {@link BoardColumn} instance
    */
   constructor({
-    id = uuidv4(),
-    title = `column #${id}`,
     order = 0,
+    title = `column #${order}`,
     board = new Board({}),
   }: Partial<IBoardColumn> = {}) {
-    this.id = id;
     this.title = title;
     this.order = order;
     this.board = board;

@@ -113,7 +113,6 @@ const update = async (task: ITaskWithIds): Promise<ITaskWithIds> => {
   if (!board) throw new BoardNotFoundError(task.boardId);
   const column = task.columnId ? await columnsRepo.getOne(task.columnId) : null;
   const newTask = new Task({
-    id: task.id,
     title: task.title,
     order: task.order,
     description: task.description,
@@ -121,7 +120,7 @@ const update = async (task: ITaskWithIds): Promise<ITaskWithIds> => {
     board,
     column,
   });
-  const updatedTask = await tasksRepo.update(newTask);
+  const updatedTask = await tasksRepo.update(newTask, task.id);
   return {
     ...updatedTask,
     userId: user?.id ?? null,
