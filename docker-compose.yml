@@ -30,7 +30,8 @@ services:
       - back
     volumes:
       - db:/var/lib/postgresql/data
-    command: -p ${TYPEORM_PORT}
+      - ./logs:/logs:z
+    command: -p ${TYPEORM_PORT} -c logging_collector=on -c log_destination=stderr -c log_directory=/logs
 
 networks:
   back:
@@ -43,4 +44,3 @@ networks:
 volumes:
   db:
   logs:
-  src:
