@@ -57,7 +57,8 @@ export const getTasks = async (
   if (!boardId || !uuidValidate(boardId)) {
     throw new IncorrectIdFormatError();
   }
-  reply.send(await tasksService.getAllTasksByBoardId(boardId));
+  const tasks = await tasksService.getAllTasksByBoardId(boardId);
+  reply.send(tasks);
 };
 
 /**

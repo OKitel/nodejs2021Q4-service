@@ -22,7 +22,9 @@ export class Board implements IBoard {
   @Column({ type: 'varchar', length: 1024 })
   title: string;
 
-  @OneToMany(() => BoardColumn, (column) => column.board)
+  @OneToMany(() => BoardColumn, (column) => column.board, {
+    cascade: true,
+  })
   columns: Array<BoardColumn>;
 
   /**

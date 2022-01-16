@@ -54,19 +54,6 @@ const getAllByBoardId = async (id: string): Promise<Task[]> => {
 };
 
 /**
- * Returns all tasks by user ID from tasks repository
- * @param id - user ID
- * @returns an array of tasks by User ID
- */
-const gettAllTasksByUserId = async (id: string): Promise<Task[]> => {
-  const tasks = await getRepository(Task)
-    .createQueryBuilder('task')
-    .where('task.userId = :id', { id })
-    .getMany();
-  return tasks;
-};
-
-/**
  * Returns single task by ID from repository
  * @param boardId - board ID
  * @param taskId - task ID
@@ -78,8 +65,8 @@ const getOne = async (
 ): Promise<Task | undefined> => {
   const task = await getRepository(Task)
     .createQueryBuilder('task')
-    .where('task.id = :id', { id: taskId })
-    .andWhere('task.boardId = :id', { id: boardId })
+    .where('task.id = :taskId', { taskId })
+    .andWhere('task.board.id = :boardId', { boardId })
     .getOne();
   return task;
 };
@@ -141,6 +128,15 @@ const update = async (updatedTask: Task): Promise<Task> => {
   return updatedTask;
 };
 
+const unassignUserFromAllTasks = async (userId: string): Promise<void> => {
+  await getConnection()
+    .createQueryBuilder()
+    .update(Task)
+    .set({ user: null })
+    .where('userId = :id', { id: userId })
+    .execute();
+};
+
 export const tasksRepo = {
   getAllByBoardId,
   getOne,
@@ -148,5 +144,5 @@ export const tasksRepo = {
   save,
   update,
   deleteTasksByBoardId,
-  gettAllTasksByUserId,
+  unassignUserFromAllTasks,
 };

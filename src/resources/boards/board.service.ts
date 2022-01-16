@@ -61,7 +61,11 @@ const update = async (board: Board): Promise<Board> => {
   if (!oldBoard) {
     throw new BoardNotFoundError(board.id);
   }
-  const updatedBoard = await boardsRepo.update(board);
+
+  const updatedBoard = await boardsRepo.update({
+    ...board,
+    columns: board.columns.map((item) => ({ ...item, board })),
+  });
   return updatedBoard;
 };
 

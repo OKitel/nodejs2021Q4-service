@@ -26,6 +26,7 @@ import { Board } from './board.model';
 const getAll = async (): Promise<Board[]> => {
   const boards = await getRepository(Board)
     .createQueryBuilder('board')
+    .leftJoinAndSelect('board.columns', 'bc')
     .getMany();
   return boards;
 };
@@ -38,6 +39,7 @@ const getAll = async (): Promise<Board[]> => {
 const getOne = async (id: string): Promise<Board | undefined> => {
   const board = await getRepository(Board)
     .createQueryBuilder('board')
+    .leftJoinAndSelect('board.columns', 'bc')
     .where('board.id = :id', { id })
     .getOne();
   return board;
@@ -73,16 +75,11 @@ const save = async (board: Board): Promise<Board> => {
 
 /**
  * Update board by ID into boards repository
- * @param updatedBoard - new info for board, see type {@link Board}
+ * @param board - new info for board, see type {@link Board}
  * @returns updated board
  */
-const update = async (updatedBoard: Board): Promise<Board> => {
-  await getConnection()
-    .createQueryBuilder()
-    .update(Board)
-    .set(updatedBoard)
-    .where('id = :id', { id: updatedBoard.id })
-    .execute();
+const update = async (board: Board): Promise<Board> => {
+  const updatedBoard = await getRepository(Board).save(board);
   return updatedBoard;
 };
 
