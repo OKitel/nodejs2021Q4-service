@@ -1,7 +1,7 @@
-import { usersRepo } from './user.memory.repository';
-import { tasksRepo } from '../tasks/task.memory.repository';
+import { usersRepo } from './user.repository';
+import { tasksRepo } from '../tasks/task.repository';
 import { User } from './user.model';
-import { UserNotFoundError } from '../../errors/UserNotFoundError';
+import { UserNotFoundError } from '../../errors';
 
 /**
  * Returns all users

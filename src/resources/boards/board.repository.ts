@@ -1,24 +1,6 @@
 import { getConnection, getRepository } from 'typeorm';
 import { Board } from './board.model';
 
-// let boards: Array<Board> = [
-//   {
-//     id: 'cd3a4828-1334-4dce-920f-6bd89af1539a',
-//     title: 'Board #1',
-//     columns: [1, 2, 3],
-//   },
-//   {
-//     id: 'cd3a4828-1334-4dce-920f-6bd89af1539b',
-//     title: 'Board #2',
-//     columns: [1, 2, 3],
-//   },
-//   {
-//     id: 'cd3a4828-1334-4dce-920f-6bd89af1539c',
-//     title: 'Board #3',
-//     columns: [1, 2],
-//   },
-// ];
-
 /**
  * Returns all boards from boards repository
  * @returns array of all boards

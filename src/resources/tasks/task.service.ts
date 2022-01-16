@@ -1,9 +1,8 @@
-import { tasksRepo } from './task.memory.repository';
-import { boardsRepo } from '../boards/board.memory.repository';
+import { tasksRepo } from './task.repository';
+import { boardsRepo } from '../boards/board.repository';
 import { Task } from './task.model';
-import { BoardNotFoundError } from '../../errors/BoardNotFoundError';
-import { TaskNotFoundError } from '../../errors/TaskNotFoundError';
-import { usersRepo } from '../users/user.memory.repository';
+import { BoardNotFoundError, TaskNotFoundError } from '../../errors';
+import { usersRepo } from '../users/user.repository';
 import { columnsRepo } from '../columns/column.repository';
 
 interface ITaskWithIds {

@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { StatusCodes } from 'http-status-codes';
 import { validate as uuidValidate } from 'uuid';
-import { IncorrectIdFormatError } from '../../errors/IncorrectIdFormatError';
+import { IncorrectIdFormatError } from '../../errors';
 import { Board } from './board.model';
 import { boardsService } from './board.service';
 import { BoardLight } from './boardLight.interface';

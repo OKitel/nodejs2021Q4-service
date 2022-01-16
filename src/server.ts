@@ -7,7 +7,7 @@ import { boardRoutes } from './routes/boards.router';
 import { taskRoutes } from './routes/tasks.router';
 import { userRoutes } from './routes/users.router';
 import { Logger, pinoLogger } from './logger';
-import { globalErrorHandler } from './errors/globalErrorHandler';
+import { globalErrorHandler } from './errors';
 
 const server = fastify({
   logger: pinoLogger,

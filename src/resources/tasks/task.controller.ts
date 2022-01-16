@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { StatusCodes } from 'http-status-codes';
 import { validate as uuidValidate } from 'uuid';
-import { IncorrectIdFormatError } from '../../errors/IncorrectIdFormatError';
+import { IncorrectIdFormatError } from '../../errors';
 import { tasksService } from './task.service';
 
 type TaskRequestPost = FastifyRequest<{

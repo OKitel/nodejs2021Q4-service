@@ -1,7 +1,7 @@
-import { boardsRepo } from './board.memory.repository';
-import { tasksRepo } from '../tasks/task.memory.repository';
+import { boardsRepo } from './board.repository';
+import { tasksRepo } from '../tasks/task.repository';
 import { Board } from './board.model';
-import { BoardNotFoundError } from '../../errors/BoardNotFoundError';
+import { BoardNotFoundError } from '../../errors';
 import { BoardColumn } from '../columns/column.model';
 import { BoardLight } from './boardLight.interface';
 
