@@ -30,11 +30,11 @@ export class Board implements IBoard {
    * @param board - constructor parameter of type `Partial<IBoard>`
    * @returns a new {@link Board} instance
    */
-  constructor({ title }: Partial<IBoard> = {}) {
+  constructor({ title, columns }: Partial<IBoard> = {}) {
     if (title) {
       this.id = uuidv4();
       this.title = title;
-      this.columns = [];
+      this.columns = columns || [];
     }
   }
 }
