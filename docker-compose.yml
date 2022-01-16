@@ -1,0 +1,43 @@
+version: '3.0'
+services:
+  app:
+    build: .
+    restart: always
+    ports:
+      - ${PORT}:${PORT}
+    environment:
+      PORT: ${PORT}
+    depends_on:
+      - postgres
+    networks:
+      - back
+    volumes:
+      - ./logs:/app/logs
+      - ./src:/app/src
+
+  postgres:
+    build: ./postgres
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    restart: always
+    environment:
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - back
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+
+networks:
+  back:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${SUBNET}
+
+volumes:
+  postgres_data:
+  logs:
+  src:
