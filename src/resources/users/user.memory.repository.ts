@@ -62,9 +62,10 @@ const getOne = async (id: string): Promise<User | undefined> => {
  * @returns this function doesn't return any value
  */
 const deleteById = async (id: string): Promise<void> => {
-  await getRepository(User)
+  await getConnection()
     .createQueryBuilder()
     .delete()
+    .from(User)
     .where('id = :id', { id })
     .execute();
 };

@@ -1,12 +1,14 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
+// eslint-disable-next-line import/no-cycle
+import { BoardColumn } from '../columns/column.model';
 
 interface IBoard {
   id: string;
 
   title: string;
 
-  columns: Array<number>;
+  columns: Array<BoardColumn>;
 }
 
 /**
@@ -14,27 +16,25 @@ interface IBoard {
  */
 @Entity()
 export class Board implements IBoard {
-  @PrimaryColumn()
+  @PrimaryColumn({ type: 'varchar', length: 40 })
   id: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 1024 })
   title: string;
 
-  columns: Array<number>;
+  @OneToMany(() => BoardColumn, (column) => column.board)
+  columns: Array<BoardColumn>;
 
   /**
    * Constructor for the `Board` object
    * @param board - constructor parameter of type `Partial<IBoard>`
    * @returns a new {@link Board} instance
    */
-  constructor({
-    id = uuidv4(),
-    title = 'Board title',
-    columns = [],
-  }: Partial<IBoard>) {
-    this.id = id;
-    this.title = title;
-    this.columns = columns;
+  constructor({ title }: Partial<IBoard> = {}) {
+    if (title) {
+      this.id = uuidv4();
+      this.title = title;
+      this.columns = [];
+    }
   }
-
 }

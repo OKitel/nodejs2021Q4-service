@@ -90,9 +90,10 @@ const getOne = async (
  * @returns this function doesn't return any value
  */
 const deleteById = async (id: string): Promise<void> => {
-  await getRepository(Task)
+  await getConnection()
     .createQueryBuilder()
     .delete()
+    .from(Task)
     .where('id = :id', { id })
     .execute();
 };
@@ -103,10 +104,11 @@ const deleteById = async (id: string): Promise<void> => {
  * @returns this function doesn't return any value
  */
 const deleteTasksByBoardId = async (id: string): Promise<void> => {
-  await getRepository(Task)
-    .createQueryBuilder('task')
+  await getConnection()
+    .createQueryBuilder()
     .delete()
-    .where('task.boardId = :id', { id })
+    .from(Task)
+    .where('board.id = :id', { id })
     .execute();
 };
 

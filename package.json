@@ -13,7 +13,8 @@
     "lint": "eslint --ext .js,.ts --fix src/",
     "test": "cross-env DEBUG=rs:* jest --testMatch \"<rootDir>/test/e2e/test/*.test.js\" --noStackTrace --runInBand",
     "test:auth": "cross-env DEBUG=rs:* TEST_MODE=auth jest --noStackTrace",
-    "docs": "typedoc"
+    "docs": "typedoc",
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js migration:generate -n FirstMigration -p"
   },
   "keywords": [
     "rs",

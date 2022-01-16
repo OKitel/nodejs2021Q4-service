@@ -18,7 +18,9 @@ logger.configureRequestLogging();
 
 globalErrorHandler(server, logger);
 
-createConnection();
+createConnection().then(async (connection) => {
+  await connection.runMigrations();
+});
 
 server.register(fastifySwagger, {
   exposeRoute: true,

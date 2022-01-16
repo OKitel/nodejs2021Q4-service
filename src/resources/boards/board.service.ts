@@ -2,6 +2,8 @@ import { boardsRepo } from './board.memory.repository';
 import { tasksRepo } from '../tasks/task.memory.repository';
 import { Board } from './board.model';
 import { BoardNotFoundError } from '../../errors/BoardNotFoundError';
+import { BoardColumn } from '../columns/column.model';
+import { BoardLight } from './boardLight.interface';
 
 /**
  * Returns all boards
@@ -41,8 +43,11 @@ const deleteById = async (id: string): Promise<void> => {
  * @param board - see type {@link Board}
  * @returns this function doesn't return any value
  */
-const save = async (board: Board): Promise<void> => {
+const save = async ({ title, columns }: BoardLight): Promise<Board> => {
+  const createdColumns = columns.map((column) => new BoardColumn(column));
+  const board = new Board({ title, columns: createdColumns });
   await boardsRepo.save(board);
+  return board;
 };
 
 /**

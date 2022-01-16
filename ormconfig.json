@@ -6,6 +6,10 @@
   "password": "pass123",
   "database": "rssello",
   "synchronize": false,
-  "logging": false,
-  "entities": ["src/resources/**/*.model.ts"]
+  "logging": true,
+  "entities": ["src/resources/**/*.model.ts"],
+  "migrations": ["src/migration/**/*.ts"],
+  "cli": {
+    "migrationsDir": "src/migration"
+  }
 }

@@ -25,22 +25,22 @@ interface ITask {
  */
 @Entity()
 export class Task implements ITask {
-  @PrimaryColumn()
+  @PrimaryColumn({ type: 'varchar', length: 40 })
   id: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 1024 })
   title: string;
 
   @Column()
   order: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 1024 })
   description: string;
 
   @ManyToOne(() => User)
   user: User | null;
 
-  @ManyToOne(() => Board)
+  @ManyToOne(() => Board, { nullable: false })
   board: Board;
 
   @ManyToOne(() => BoardColumn)
@@ -59,7 +59,7 @@ export class Task implements ITask {
     user = null,
     board = new Board({}),
     column = null,
-  }: Partial<ITask>) {
+  }: Partial<ITask> = {}) {
     this.id = id;
     this.title = title;
     this.order = order;

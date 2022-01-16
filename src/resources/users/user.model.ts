@@ -16,16 +16,16 @@ interface IUser {
  */
 @Entity()
 export class User implements IUser {
-  @PrimaryColumn()
+  @PrimaryColumn({ type: 'varchar', length: 40 })
   id: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255 })
   name: string;
 
-  @Column({ type: 'varchar', length: 255, unique: true })
+  @Column({ type: 'varchar', length: 255 })
   login: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255 })
   password: string;
 
   /**
@@ -38,7 +38,7 @@ export class User implements IUser {
     name = 'USER',
     login = 'user',
     password = 'P@55w0rd',
-  }: Partial<IUser>) {
+  }: Partial<IUser> = {}) {
     this.id = id;
     this.name = name;
     this.login = login;
