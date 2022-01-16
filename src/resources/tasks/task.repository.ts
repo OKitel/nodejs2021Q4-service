@@ -89,6 +89,11 @@ const update = async (updatedTask: Task): Promise<Task> => {
   return updatedTask;
 };
 
+/**
+ * Set userId to null when user was deleted
+ * @param userId - user ID
+ * @returns this function doesn't return any value
+ */
 const unassignUserFromAllTasks = async (userId: string): Promise<void> => {
   await getConnection()
     .createQueryBuilder()

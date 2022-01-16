@@ -69,7 +69,6 @@ export const addUser = async (
  * Delete user by ID
  * @param req - fastify request with user ID, see {@link UserRequestParams}
  * @param reply - fastify reply, contains message that user with passed has been removed
- * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const deleteUser = async (
