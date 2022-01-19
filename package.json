@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/OKitel/nodejs2021Q4-service"
   },
   "description": "REST service starter for RS School",
   "main": "src/server.js",
