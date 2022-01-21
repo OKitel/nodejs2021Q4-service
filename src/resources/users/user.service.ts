@@ -1,7 +1,8 @@
 import { usersRepo } from './user.repository';
 import { tasksRepo } from '../tasks/task.repository';
-import { User } from './user.model';
+import { IUser, User } from './user.model';
 import { UserNotFoundError } from '../../errors';
+import { hashPassword } from '../../common/crypto';
 
 /**
  * Returns all users
@@ -42,8 +43,13 @@ const deleteById = async (id: string): Promise<void> => {
  * @param user - see type {@link User}
  * @returns this function doesn't return any value
  */
-const save = async (user: User): Promise<void> => {
-  await usersRepo.save(user);
+const save = async (user: IUser): Promise<void> => {
+  const userSaltAndHash = await hashPassword(user.password);
+  await usersRepo.save({
+    ...user,
+    password: userSaltAndHash[1],
+    salt: userSaltAndHash[0],
+  });
 };
 
 /**
@@ -52,16 +58,21 @@ const save = async (user: User): Promise<void> => {
  * @throws an error if user with passed ID hasn't been found
  * @returns updated user
  */
-const update = async (user: User): Promise<User> => {
+const update = async (user: IUser): Promise<IUser> => {
   const oldUser = await usersRepo.getOne(user.id);
   if (!oldUser) {
     throw new UserNotFoundError(user.id);
   }
-  const updatedUser = await usersRepo.update(user);
+  const userSaltAndHash = await hashPassword(user.password);
+  const updatedUser = await usersRepo.update({
+    ...user,
+    password: userSaltAndHash[1],
+    salt: userSaltAndHash[0],
+  });
   return updatedUser;
 };
 
 /**
- * User Service with standart CRUD operations
+ * User Service with standard CRUD operations
  */
 export const usersService = { getAll, getOne, deleteById, save, update };
