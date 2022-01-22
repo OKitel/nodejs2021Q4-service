@@ -66,4 +66,18 @@ const update = async (updatedUser: User): Promise<User> => {
   return updatedUser;
 };
 
-export const usersRepo = { getAll, getOne, deleteById, save, update };
+const getUserByLogin = async (login: string) => {
+  const user = await getRepository(User)
+    .createQueryBuilder('user')
+    .where('user.login = :login', { login })
+    .getOne();
+  return user;
+};
+export const usersRepo = {
+  getAll,
+  getOne,
+  deleteById,
+  save,
+  update,
+  getUserByLogin,
+};

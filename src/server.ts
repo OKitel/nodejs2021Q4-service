@@ -8,6 +8,7 @@ import { taskRoutes } from './routes/tasks.router';
 import { userRoutes } from './routes/users.router';
 import { Logger, pinoLogger } from './logger';
 import { globalErrorHandler } from './errors';
+import { loginRoute } from './routes/login.router';
 
 const server = fastify({
   logger: pinoLogger,
@@ -33,6 +34,7 @@ server.register(fastifySwagger, {
 server.register(boardRoutes);
 server.register(userRoutes);
 server.register(taskRoutes);
+server.register(loginRoute);
 
 /**
  * Start server on port from .env

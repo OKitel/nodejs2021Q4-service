@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { StatusCodes } from 'http-status-codes';
+import { AccessForbiddenError } from './AccessForbiddenError';
 import { Logger } from '../logger';
 import { BoardNotFoundError } from './BoardNotFoundError';
 import { IncorrectIdFormatError } from './IncorrectIdFormatError';
@@ -39,6 +40,15 @@ export const globalErrorHandler = (
         .header('Content-Type', 'application/json')
         .send({ message: `Incorrect ID format.` });
     }
+    if (error instanceof AccessForbiddenError) {
+      logger.warn(error.message);
+      logger.debug(error);
+      return reply
+        .code(StatusCodes.FORBIDDEN)
+        .header('Content-Type', 'application/json')
+        .send({ message: `FORBIDDEN` });
+    }
+
     logger.error(`Internal error: ${error.message}`);
     logger.debug(error);
     reply.status(StatusCodes.INTERNAL_SERVER_ERROR);

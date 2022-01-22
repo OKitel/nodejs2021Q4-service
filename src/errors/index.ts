@@ -1,3 +1,4 @@
+export * from './AccessForbiddenError';
 export * from './BoardNotFoundError';
 export * from './globalErrorHandler';
 export * from './IncorrectIdFormatError';
