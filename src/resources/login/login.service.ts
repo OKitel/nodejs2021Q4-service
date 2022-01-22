@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET_KEY } from '../../common/config';
-import { hashPasswordWithSalt } from '../../common/crypto';
+import { hashPasswordWithSalt } from '../../auth/crypto';
 import { AccessForbiddenError } from '../../errors';
 import { User } from '../users/user.model';
 import { usersRepo } from '../users/user.repository';

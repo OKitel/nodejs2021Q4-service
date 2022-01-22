@@ -7,6 +7,7 @@ import { IncorrectIdFormatError } from './IncorrectIdFormatError';
 import { TaskNotFoundError } from './TaskNotFoundError';
 import { UserNotFoundError } from './UserNotFoundError';
 import { UserTaskNotFoundError } from './UserTaskNotFoundError';
+import { UnauthorizedError } from './UnauthorizedError';
 
 /**
  * Global error handler for requests
@@ -47,6 +48,15 @@ export const globalErrorHandler = (
         .code(StatusCodes.FORBIDDEN)
         .header('Content-Type', 'application/json')
         .send({ message: `FORBIDDEN` });
+    }
+
+    if (error instanceof UnauthorizedError) {
+      logger.warn(error.message);
+      logger.debug(error);
+      return reply
+        .code(StatusCodes.UNAUTHORIZED)
+        .header('Content-Type', 'application/json')
+        .send({ message: `Unauthorized` });
     }
 
     logger.error(`Internal error: ${error.message}`);

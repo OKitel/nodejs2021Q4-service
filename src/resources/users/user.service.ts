@@ -2,7 +2,7 @@ import { usersRepo } from './user.repository';
 import { tasksRepo } from '../tasks/task.repository';
 import { IUser, User } from './user.model';
 import { UserNotFoundError } from '../../errors';
-import { hashPassword } from '../../common/crypto';
+import { hashPassword } from '../../auth/crypto';
 
 /**
  * Returns all users
