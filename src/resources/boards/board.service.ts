@@ -1,7 +1,10 @@
-import { boardsRepo } from './board.memory.repository';
-import { tasksRepo } from '../tasks/task.memory.repository';
+import { boardsRepo } from './board.repository';
+import { tasksRepo } from '../tasks/task.repository';
 import { Board } from './board.model';
-import { BoardNotFoundError } from '../../errors/BoardNotFoundError';
+import { BoardNotFoundError } from '../../errors';
+import { BoardColumn } from '../columns/column.model';
+import { BoardLight } from './boardLight.interface';
+import { columnsRepo } from '../columns/column.repository';
 
 /**
  * Returns all boards
@@ -33,6 +36,7 @@ const getOne = async (id: string): Promise<Board> => {
  */
 const deleteById = async (id: string): Promise<void> => {
   await tasksRepo.deleteTasksByBoardId(id);
+  await columnsRepo.deleteByBoardId(id);
   await boardsRepo.deleteById(id);
 };
 
@@ -41,8 +45,11 @@ const deleteById = async (id: string): Promise<void> => {
  * @param board - see type {@link Board}
  * @returns this function doesn't return any value
  */
-const save = async (board: Board): Promise<void> => {
+const save = async ({ title, columns }: BoardLight): Promise<Board> => {
+  const createdColumns = columns.map((column) => new BoardColumn(column));
+  const board = new Board({ title, columns: createdColumns });
   await boardsRepo.save(board);
+  return board;
 };
 
 /**
@@ -56,7 +63,11 @@ const update = async (board: Board): Promise<Board> => {
   if (!oldBoard) {
     throw new BoardNotFoundError(board.id);
   }
-  const updatedBoard = await boardsRepo.update(board);
+
+  const updatedBoard = await boardsRepo.update({
+    ...board,
+    columns: board.columns.map((item) => ({ ...item, board })),
+  });
   return updatedBoard;
 };
 

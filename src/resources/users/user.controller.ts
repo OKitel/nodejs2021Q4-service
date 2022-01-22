@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { StatusCodes } from 'http-status-codes';
 import { validate as uuidValidate } from 'uuid';
-import { IncorrectIdFormatError } from '../../errors/IncorrectIdFormatError';
+import { IncorrectIdFormatError } from '../../errors';
 import { User } from './user.model';
 import { usersService } from './user.service';
 
@@ -69,7 +69,6 @@ export const addUser = async (
  * Delete user by ID
  * @param req - fastify request with user ID, see {@link UserRequestParams}
  * @param reply - fastify reply, contains message that user with passed has been removed
- * @throws IncorrectIdFormatError when id format is invalid
  * @returns this function doesn't return any value
  */
 export const deleteUser = async (

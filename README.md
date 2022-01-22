@@ -130,6 +130,8 @@ docker image rm <image ID>
 
 The image of this app is in private Docker Hub repository [okitel/rsschool-nodejs-service](https://hub.docker.com/repository/docker/okitel/rsschool-nodejs-service).
 
+To launch tests you need to install all dependencies into the root directory. There are no tests inside docker containers.
+
 ### Documentation
 
 Typedoc is installed so you can generate documentation based on tsdoc. To do this, use the following script:

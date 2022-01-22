@@ -1,12 +1,13 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { StatusCodes } from 'http-status-codes';
 import { validate as uuidValidate } from 'uuid';
-import { IncorrectIdFormatError } from '../../errors/IncorrectIdFormatError';
+import { IncorrectIdFormatError } from '../../errors';
 import { Board } from './board.model';
 import { boardsService } from './board.service';
+import { BoardLight } from './boardLight.interface';
 
 type BoardRequestPost = FastifyRequest<{
-  Body: { title: string; columns: Array<number> };
+  Body: BoardLight;
 }>;
 type BoardRequestPut = FastifyRequest<{ Params: { id: string }; Body: Board }>;
 type BoardRequestParams = FastifyRequest<{ Params: { id: string } }>;
@@ -40,7 +41,10 @@ export const getBoard = async (
     throw new IncorrectIdFormatError();
   }
   const board = await boardsService.getOne(id);
-  reply.code(StatusCodes.OK).header('Content-Type', 'application/json').send(board);
+  reply
+    .code(StatusCodes.OK)
+    .header('Content-Type', 'application/json')
+    .send(board);
 };
 
 /**
@@ -54,9 +58,11 @@ export const addBoard = async (
   reply: FastifyReply
 ): Promise<void> => {
   const { title, columns } = req.body;
-  const board = new Board({ title, columns });
-  await boardsService.save(board);
-  reply.code(StatusCodes.CREATED).header('Content-Type', 'application/json').send(board);
+  const board = await boardsService.save({ title, columns });
+  reply
+    .code(StatusCodes.CREATED)
+    .header('Content-Type', 'application/json')
+    .send(board);
 };
 
 /**
@@ -95,5 +101,8 @@ export const updateBoard = async (
   }
   const { title, columns } = req.body;
   const board = await boardsService.update({ id, title, columns });
-  reply.code(StatusCodes.OK).header('Content-Type', 'application/json').send(board);
+  reply
+    .code(StatusCodes.OK)
+    .header('Content-Type', 'application/json')
+    .send(board);
 };

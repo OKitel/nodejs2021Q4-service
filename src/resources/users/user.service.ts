@@ -1,8 +1,7 @@
-import { usersRepo } from './user.memory.repository';
-import { tasksRepo } from '../tasks/task.memory.repository';
+import { usersRepo } from './user.repository';
+import { tasksRepo } from '../tasks/task.repository';
 import { User } from './user.model';
-import { UserNotFoundError } from '../../errors/UserNotFoundError';
-import { UserTaskNotFoundError } from '../../errors/UserTaskNotFoundError';
+import { UserNotFoundError } from '../../errors';
 
 /**
  * Returns all users
@@ -34,15 +33,7 @@ const getOne = async (id: string): Promise<User> => {
  * @returns this function doesn't return any value
  */
 const deleteById = async (id: string): Promise<void> => {
-  const userTasks = await tasksRepo.gettAllTasksByUserId(id);
-  for (let i = 0; i < userTasks.length; i += 1) {
-    const task = userTasks[i];
-    if (!task) {
-      throw new UserTaskNotFoundError();
-    }
-    task.userId = null;
-    tasksRepo.update(task);
-  }
+  await tasksRepo.unassignUserFromAllTasks(id);
   await usersRepo.deleteById(id);
 };
 
