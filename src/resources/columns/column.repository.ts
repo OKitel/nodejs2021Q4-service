@@ -28,7 +28,18 @@ const deleteByBoardId = async (id: string): Promise<void> => {
     .execute();
 };
 
+/**
+ * Save all columns to db
+ * @param columns - an array of columns
+ * @returns all columns
+ */
+const saveAll = async (columns: BoardColumn[]): Promise<BoardColumn[]> => {
+  await getRepository(BoardColumn).save(columns);
+  return columns;
+};
+
 export const columnsRepo = {
   getOne,
   deleteByBoardId,
+  saveAll,
 };
