@@ -150,14 +150,14 @@ export const updateTask = async (
   if (checkId(boardIdParam, taskId)) {
     throw new IncorrectIdFormatError();
   }
-  const { title, order, description, userId, boardId, columnId } = req.body;
+  const { title, order, description, userId, columnId } = req.body;
   const task = await tasksService.update({
     id: taskId,
     title,
     order,
     description,
     userId,
-    boardId,
+    boardId: boardIdParam,
     columnId,
   });
   reply
