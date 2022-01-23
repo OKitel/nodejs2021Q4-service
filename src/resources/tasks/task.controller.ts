@@ -35,7 +35,7 @@ type TaskRequestParams = FastifyRequest<{
  * @param taskId - task ID
  * @returns true if all checks passed or false if not
  */
-export const checkId = (boardId: string, taskId: string): boolean => {
+const checkId = (boardId: string, taskId: string): boolean => {
   if (!boardId || !uuidValidate(boardId) || !taskId || !uuidValidate(taskId)) {
     return true;
   }
@@ -95,6 +95,13 @@ export const addTask = async (
 ): Promise<void> => {
   const { boardId } = req.params;
   const { title, order, description, userId, columnId } = req.body;
+  if (
+    !uuidValidate(boardId) ||
+    (columnId && !uuidValidate(columnId)) ||
+    (userId && !uuidValidate(userId))
+  ) {
+    throw new IncorrectIdFormatError();
+  }
   const task = await tasksService.save({
     title,
     order,
