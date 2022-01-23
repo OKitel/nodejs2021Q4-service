@@ -9,9 +9,9 @@ import { userRoutes } from './routes/users.router';
 import { Logger, pinoLogger } from './logger';
 import { globalErrorHandler } from './errors';
 import { loginRoute } from './routes/login.router';
-import { verifyToken } from './auth/tokenUtils';
+import { fastifyTokenVerifier } from './auth/fastifyTokenVerifier';
 
-const server = fastify({
+export const server = fastify({
   logger: pinoLogger,
 });
 
@@ -37,16 +37,7 @@ server.register(userRoutes);
 server.register(taskRoutes);
 server.register(loginRoute);
 
-server.addHook('preHandler', async (req) => {
-  if (req.url.startsWith('/boards') || req.url.startsWith('/users')) {
-    const userData = await verifyToken(req.headers.authorization);
-    Logger.info(
-      req,
-      userData,
-      `User with login ${userData.login} successfully authorized`
-    );
-  }
-});
+fastifyTokenVerifier(server);
 
 /**
  * Start server on port from .env
