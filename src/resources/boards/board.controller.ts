@@ -101,7 +101,7 @@ export const updateBoard = async (
   }
   const { title, columns } = req.body;
   columns.forEach((item) => {
-    if (!uuidValidate(item.id)) {
+    if (item.id && !uuidValidate(item.id)) {
       throw new IncorrectIdFormatError();
     }
   });
