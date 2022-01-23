@@ -86,7 +86,7 @@ export const getTask = async (
 /**
  * Save new task
  * @param req - fastify request with board ID and new task info, see {@link TaskRequestPost}
- * @param reply - fastify reply, contains just saved task witn generated ID
+ * @param reply - fastify reply, contains just saved task with generated ID
  * @returns this function doesn't return any value
  */
 export const addTask = async (

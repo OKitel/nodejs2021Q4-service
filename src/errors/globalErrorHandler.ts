@@ -12,7 +12,7 @@ import { UnauthorizedError } from './UnauthorizedError';
 /**
  * Global error handler for requests
  * @param server - instance of Fastify server
- * @param logger - instanse of Logger
+ * @param logger - instance of Logger
  * @returns this function doesn't return any value
  */
 export const globalErrorHandler = (

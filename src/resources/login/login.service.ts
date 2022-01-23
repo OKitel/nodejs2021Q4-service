@@ -5,6 +5,11 @@ import { AccessForbiddenError } from '../../errors';
 import { User } from '../users/user.model';
 import { usersRepo } from '../users/user.repository';
 
+/**
+ * Gets user from repository by user's login
+ * @param login - user's login
+ * @returns user {@link User}
+ */
 const getUserByLogin = async (login: string) => {
   const user = await usersRepo.getUserByLogin(login);
   if (user === undefined) {
@@ -13,6 +18,12 @@ const getUserByLogin = async (login: string) => {
   return user;
 };
 
+/**
+ * Compares user password from db and request
+ * @param user - {@link User}
+ * @param password - user password from request
+ * @returns nothing
+ */
 const compareUserPassword = async (user: User, password: string) => {
   const hashedPassword = await hashPasswordWithSalt(password, user.salt);
   if (user.password !== hashedPassword[1]) {
@@ -20,6 +31,11 @@ const compareUserPassword = async (user: User, password: string) => {
   }
 };
 
+/**
+ * Create jsonwebtoken
+ * @param user - {@link User}
+ * @returns jwt
+ */
 const createJWT = async (user: User): Promise<string> =>
   new Promise((res, rej) => {
     jwt.sign(

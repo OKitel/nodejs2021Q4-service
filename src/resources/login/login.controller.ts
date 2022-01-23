@@ -7,6 +7,12 @@ type LoginRequest = FastifyRequest<{
   Body: ILogin;
 }>;
 
+/**
+ * Login user
+ * @param req - fastify request {@link LoginRequest}
+ * @param reply - fastify reply {@link FastifyReply}
+ * @returns nothing
+ */
 export const loginUser = async (req: LoginRequest, reply: FastifyReply) => {
   const { login, password } = req.body;
   const user = await loginService.getUserByLogin(login);

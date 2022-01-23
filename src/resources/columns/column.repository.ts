@@ -38,6 +38,11 @@ const saveAll = async (columns: BoardColumn[]): Promise<BoardColumn[]> => {
   return columns;
 };
 
+/**
+ * Delete all columns by id
+ * @param ids - array of columns ids for deletion
+ * @returns this function doesn't return any value
+ */
 const deleteAllByColumnId = async (ids: string[]): Promise<void> => {
   if (ids.length === 0) {
     return;
