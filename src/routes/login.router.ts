@@ -5,10 +5,7 @@ import { loginUser } from '../resources/login/login.controller';
 const loginOpts = {
   schema: {
     response: {
-      200: {
-        type: 'object',
-        items: Token,
-      },
+      200: Token,
     },
   },
   handler: loginUser,

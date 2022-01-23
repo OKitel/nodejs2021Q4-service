@@ -58,11 +58,11 @@ export const addUser = async (
 ): Promise<void> => {
   const { name, login, password } = req.body;
   const user = new User({ name, login, password });
-  await usersService.save(user);
+  const userSaved = await usersService.save(user);
   reply
     .code(StatusCodes.CREATED)
     .header('Content-Type', 'application/json')
-    .send(user);
+    .send(userSaved);
 };
 
 /**

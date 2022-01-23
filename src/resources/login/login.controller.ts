@@ -15,5 +15,5 @@ export const loginUser = async (req: LoginRequest, reply: FastifyReply) => {
   reply
     .code(StatusCodes.OK)
     .header('Content-Type', 'application/json')
-    .send(token);
+    .send({ token });
 };

@@ -43,13 +43,14 @@ const deleteById = async (id: string): Promise<void> => {
  * @param user - see type {@link User}
  * @returns this function doesn't return any value
  */
-const save = async (user: IUser): Promise<void> => {
+const save = async (user: IUser): Promise<User> => {
   const userSaltAndHash = await hashPassword(user.password);
-  await usersRepo.save({
+  const userSaved = await usersRepo.save({
     ...user,
     password: userSaltAndHash[1],
     salt: userSaltAndHash[0],
   });
+  return userSaved;
 };
 
 /**
