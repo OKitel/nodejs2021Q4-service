@@ -35,10 +35,12 @@ export class BoardColumn implements IBoardColumn {
    * @returns a new {@link BoardColumn} instance
    */
   constructor({
+    id = '-',
     order = 0,
     title = `column #${order}`,
     board = new Board({}),
   }: Partial<IBoardColumn> = {}) {
+    if (id !== '-') this.id = id;
     this.title = title;
     this.order = order;
     this.board = board;

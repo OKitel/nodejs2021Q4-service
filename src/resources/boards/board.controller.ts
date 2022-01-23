@@ -100,6 +100,11 @@ export const updateBoard = async (
     throw new IncorrectIdFormatError();
   }
   const { title, columns } = req.body;
+  columns.forEach((item) => {
+    if (!uuidValidate(item.id)) {
+      throw new IncorrectIdFormatError();
+    }
+  });
   const board = await boardsService.update({ id, title, columns });
   reply
     .code(StatusCodes.OK)

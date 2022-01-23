@@ -38,8 +38,21 @@ const saveAll = async (columns: BoardColumn[]): Promise<BoardColumn[]> => {
   return columns;
 };
 
+const deleteAllByColumnId = async (ids: string[]): Promise<void> => {
+  if (ids.length === 0) {
+    return;
+  }
+  await getConnection()
+    .createQueryBuilder()
+    .delete()
+    .from(BoardColumn)
+    .where('id in (:...ids)', { ids })
+    .execute();
+};
+
 export const columnsRepo = {
   getOne,
   deleteByBoardId,
   saveAll,
+  deleteAllByColumnId,
 };

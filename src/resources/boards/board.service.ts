@@ -68,9 +68,19 @@ const update = async (board: Board): Promise<Board> => {
   if (!oldBoard) {
     throw new BoardNotFoundError(board.id);
   }
+  const columns: BoardColumn[] = board.columns.map(
+    (item) => new BoardColumn({ ...item, board })
+  );
 
-  await columnsRepo.saveAll(board.columns.map((item) => ({ ...item, board })));
-  const updatedBoard = await boardsRepo.update(board);
+  const idsInDatabase = oldBoard.columns.map((item) => item.id);
+  const idsInRequest = columns.map((item) => item.id);
+  const idsForDeletion = idsInDatabase.filter(
+    (id) => !idsInRequest.includes(id)
+  );
+  await columnsRepo.deleteAllByColumnId(idsForDeletion);
+
+  const updatedBoard = await boardsRepo.update({ ...board, columns });
+
   return updatedBoard;
 };
 
