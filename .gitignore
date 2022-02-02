@@ -3,3 +3,4 @@ docs/
 logs/
 postgres_data/
 .vscode/
+fastify-service/
