@@ -83,10 +83,14 @@ export class Logger {
   configureRequestLogging(): void {
     this.server.addHook('preHandler', (req, _, done) => {
       if (req.body) {
-        Logger.info(req, { body: req.body }, 'parsed body');
+        const masked = Logger.maskSensitiveInfo(req.body);
+        Logger.info(req, { body: masked }, 'parsed body');
       }
-      Logger.info(req, { query: req.query }, 'request query string');
-      Logger.info(req, { params: req.params }, 'path params');
+      Logger.info(
+        req,
+        { query: req.query, params: req.params },
+        'request query string + path params'
+      );
       done();
     });
     this.server.addHook('onResponse', (req, reply, done) => {
@@ -101,5 +105,14 @@ export class Logger {
       );
       done();
     });
+  }
+
+  private static maskSensitiveInfo(requestBody: unknown): {
+    password?: string;
+  } {
+    // eslint-disable-next-line prefer-object-spread
+    const masked: { password?: string } = Object.assign({}, requestBody);
+    if (masked.password) masked.password = '***';
+    return masked;
   }
 }

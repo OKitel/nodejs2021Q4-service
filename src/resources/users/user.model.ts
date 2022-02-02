@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-interface IUser {
+export interface IUser {
   id: string;
 
   name: string;
@@ -26,6 +26,9 @@ export class User implements IUser {
 
   @Column({ type: 'varchar', length: 255 })
   password: string;
+
+  @Column({ type: 'varchar', length: 255 })
+  salt: string;
 
   /**
    * Constructor for the `User` object

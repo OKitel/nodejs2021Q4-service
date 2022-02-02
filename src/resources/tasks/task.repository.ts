@@ -18,7 +18,7 @@ const getAllByBoardId = async (id: string): Promise<Task[]> => {
  * Returns single task by ID from repository
  * @param boardId - board ID
  * @param taskId - task ID
- * @returns sigle task by ID or undefined if there wasn't found task by passed ID
+ * @returns single task by ID or undefined if there wasn't found task by passed ID
  */
 const getOne = async (
   boardId: string,

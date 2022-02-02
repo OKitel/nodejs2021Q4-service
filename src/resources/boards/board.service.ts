@@ -46,10 +46,15 @@ const deleteById = async (id: string): Promise<void> => {
  * @returns this function doesn't return any value
  */
 const save = async ({ title, columns }: BoardLight): Promise<Board> => {
-  const createdColumns = columns.map((column) => new BoardColumn(column));
-  const board = new Board({ title, columns: createdColumns });
+  const board = new Board({ title });
+  const createdColumns = columns.map(
+    ({ order, title: columnTitle }) =>
+      new BoardColumn({ order, title: columnTitle, board })
+  );
   await boardsRepo.save(board);
-  return board;
+  await columnsRepo.saveAll(createdColumns);
+
+  return { ...board, columns: createdColumns };
 };
 
 /**
@@ -63,11 +68,19 @@ const update = async (board: Board): Promise<Board> => {
   if (!oldBoard) {
     throw new BoardNotFoundError(board.id);
   }
+  const columns: BoardColumn[] = board.columns.map(
+    (item) => new BoardColumn({ ...item, board })
+  );
 
-  const updatedBoard = await boardsRepo.update({
-    ...board,
-    columns: board.columns.map((item) => ({ ...item, board })),
-  });
+  const idsInDatabase = oldBoard.columns.map((item) => item.id);
+  const idsInRequest = columns.map((item) => item.id);
+  const idsForDeletion = idsInDatabase.filter(
+    (id) => !idsInRequest.includes(id)
+  );
+  await columnsRepo.deleteAllByColumnId(idsForDeletion);
+
+  const updatedBoard = await boardsRepo.update({ ...board, columns });
+
   return updatedBoard;
 };
 

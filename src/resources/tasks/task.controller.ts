@@ -35,7 +35,7 @@ type TaskRequestParams = FastifyRequest<{
  * @param taskId - task ID
  * @returns true if all checks passed or false if not
  */
-export const checkId = (boardId: string, taskId: string): boolean => {
+const checkId = (boardId: string, taskId: string): boolean => {
   if (!boardId || !uuidValidate(boardId) || !taskId || !uuidValidate(taskId)) {
     return true;
   }
@@ -86,7 +86,7 @@ export const getTask = async (
 /**
  * Save new task
  * @param req - fastify request with board ID and new task info, see {@link TaskRequestPost}
- * @param reply - fastify reply, contains just saved task witn generated ID
+ * @param reply - fastify reply, contains just saved task with generated ID
  * @returns this function doesn't return any value
  */
 export const addTask = async (
@@ -95,6 +95,13 @@ export const addTask = async (
 ): Promise<void> => {
   const { boardId } = req.params;
   const { title, order, description, userId, columnId } = req.body;
+  if (
+    !uuidValidate(boardId) ||
+    (columnId && !uuidValidate(columnId)) ||
+    (userId && !uuidValidate(userId))
+  ) {
+    throw new IncorrectIdFormatError();
+  }
   const task = await tasksService.save({
     title,
     order,
@@ -143,14 +150,14 @@ export const updateTask = async (
   if (checkId(boardIdParam, taskId)) {
     throw new IncorrectIdFormatError();
   }
-  const { title, order, description, userId, boardId, columnId } = req.body;
+  const { title, order, description, userId, columnId } = req.body;
   const task = await tasksService.update({
     id: taskId,
     title,
     order,
     description,
     userId,
-    boardId,
+    boardId: boardIdParam,
     columnId,
   });
   reply
