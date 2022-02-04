@@ -1,0 +1,46 @@
+version: '3.0'
+services:
+  # app:
+  #   build: .
+  #   restart: always
+  #   ports:
+  #     - ${PORT}:${PORT}
+  #   environment:
+  #     PORT: ${PORT}
+  #     TYPEORM_HOST: postgres
+  #   depends_on:
+  #     - postgres
+  #   networks:
+  #     - back
+  #   volumes:
+  #     - ./logs:/app/logs
+  #     - ./src:/app/src
+
+  postgres:
+    build: ./postgres
+    ports:
+      - ${TYPEORM_PORT}:${TYPEORM_PORT}
+    restart: always
+    environment:
+      POSTGRES_PORT: ${TYPEORM_PORT}
+      POSTGRES_USER: ${TYPEORM_USERNAME}
+      POSTGRES_PASSWORD: ${TYPEORM_PASSWORD}
+      POSTGRES_DB: ${TYPEORM_DATABASE}
+    networks:
+      - back
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./logs:/logs:z
+    command: -p ${TYPEORM_PORT} -c logging_collector=on -c log_destination=stderr -c log_directory=/logs
+
+networks:
+  back:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${SUBNET}
+
+volumes:
+  db:
+  logs:

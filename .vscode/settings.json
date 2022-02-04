@@ -1,0 +1,14 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "OK",
+      "database": "rssello",
+      "username": "user123",
+      "password": "pass123"
+    }
+  ]
+}
