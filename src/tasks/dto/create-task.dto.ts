@@ -1,15 +1,14 @@
-import { IsString } from 'class-validator';
+import { IsString, IsNumber } from 'class-validator';
+
 export class CreateTaskDto {
   @IsString()
   title: string;
-
+  @IsNumber()
   order: number;
-
+  @IsString()
   description: string;
 
   userId: string | null;
-
-  boardId: string;
 
   columnId: string | null;
 }

@@ -74,11 +74,11 @@ export class TasksService {
     };
   }
 
-  async create(task: CreateTaskDto): Promise<TaskDto> {
+  async create(boardId: string, task: CreateTaskDto): Promise<TaskDto> {
     const user = task.userId
       ? await this.usersService.findOne(task.userId)
       : null;
-    const board = await this.boardsService.findOne(task.boardId);
+    const board = await this.boardsService.findOne(boardId);
     if (!board) {
       throw new NotFoundException();
     }
@@ -105,7 +105,11 @@ export class TasksService {
     };
   }
 
-  async update(id: string, updatedTask: CreateTaskDto): Promise<TaskDto> {
+  async update(
+    id: string,
+    boardId: string,
+    updatedTask: CreateTaskDto,
+  ): Promise<TaskDto> {
     const oldTask = await this.taskRepository.findOne(id);
     if (!oldTask) {
       throw new NotFoundException();
@@ -113,7 +117,7 @@ export class TasksService {
     const user = updatedTask.userId
       ? await this.usersService.findOne(updatedTask.userId)
       : null;
-    const board = await this.boardsService.findOne(updatedTask.boardId);
+    const board = await this.boardsService.findOne(boardId);
     if (!board) {
       throw new NotFoundException();
     }

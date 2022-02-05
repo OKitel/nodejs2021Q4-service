@@ -37,8 +37,7 @@ export class TasksController {
     @Param('boardId', new ParseUUIDPipe()) boardId: string,
     @Body() task: CreateTaskDto,
   ): Promise<TaskDto> {
-    task = { ...task, boardId };
-    return await this.tasksService.create(task);
+    return await this.tasksService.create(boardId, task);
   }
 
   @Put(':taskId')
@@ -47,8 +46,7 @@ export class TasksController {
     @Param('taskId', new ParseUUIDPipe()) taskId: string,
     @Body() task: CreateTaskDto,
   ): Promise<TaskDto> {
-    task = { ...task, boardId };
-    return await this.tasksService.update(taskId, task);
+    return await this.tasksService.update(taskId, boardId, task);
   }
 
   @Delete(':taskId')
