@@ -49,4 +49,15 @@ export class UsersService {
     await this.tasksService.unassignUserFromAllTasks(id);
     return await this.userRepository.delete(id);
   }
+
+  async getUserWithPassword(login: string): Promise<User> {
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .where('user.login = :login', { login })
+      .getOne();
+    if (!user) {
+      throw new NotFoundException();
+    }
+    return user;
+  }
 }
