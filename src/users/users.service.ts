@@ -1,4 +1,10 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+  forwardRef,
+} from '@nestjs/common';
+import { TasksService } from 'src/tasks/tasks.service';
 import { Repository } from 'typeorm';
 import { User } from '../database/entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -9,6 +15,8 @@ export class UsersService {
   constructor(
     @Inject('USER_REPOSITORY')
     private userRepository: Repository<User>,
+    @Inject(forwardRef(() => TasksService))
+    private tasksService: TasksService,
   ) {}
 
   async findAll(): Promise<UserDto[]> {
@@ -38,6 +46,7 @@ export class UsersService {
   }
 
   async delete(id: string) {
+    await this.tasksService.unassignUserFromAllTasks(id);
     return await this.userRepository.delete(id);
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { ColumnsService } from 'src/columns/columns.service';
 import { BoardColumn } from 'src/database/entities/column.entity';
+import { TasksService } from 'src/tasks/tasks.service';
 import { Repository } from 'typeorm';
 import { Board } from '../database/entities/board.entity';
 import { BoardDto } from './dto/board.dto';
@@ -10,7 +11,8 @@ export class BoardsService {
   constructor(
     @Inject('BOARD_REPOSITORY')
     private boardRepository: Repository<Board>,
-    private columnService: ColumnsService,
+    private columnsService: ColumnsService,
+    private tasksService: TasksService,
   ) {}
 
   async findAll(): Promise<BoardDto[]> {
@@ -31,11 +33,29 @@ export class BoardsService {
     return board;
   }
 
-  async create(board: BoardDto) {
-    return await this.boardRepository.save(board);
+  async create({ title, columns }: BoardDto): Promise<BoardDto> {
+    const board = new Board();
+    board.title = title;
+    const createdColumns = columns.map(({ order, title: columnTitle }) => {
+      const col = new BoardColumn();
+      col.board = board;
+      col.title = columnTitle;
+      col.order = order;
+      return col;
+    });
+    await this.boardRepository.save(board);
+    await this.columnsService.saveAll(createdColumns);
+    const columnsToResponse = createdColumns.map((item) => {
+      return { id: item.id, title: item.title, order: item.order };
+    });
+    return {
+      id: board.id,
+      title: board.title,
+      columns: columnsToResponse,
+    };
   }
 
-  async update(boardId: string, updatedBoard: BoardDto) {
+  async update(boardId: string, updatedBoard: BoardDto): Promise<BoardDto> {
     const oldBoard = await this.boardRepository.findOne(boardId);
     if (!oldBoard) {
       throw new NotFoundException();
@@ -52,13 +72,14 @@ export class BoardsService {
     const idsForDeletion = idsInDatabase.filter(
       (id) => !idsInRequest.includes(id),
     );
-    await this.columnService.deleteAllByColumnId(idsForDeletion);
+    await this.columnsService.deleteAllByColumnId(idsForDeletion);
     updatedBoard = { ...updatedBoard, id: boardId };
     return await this.boardRepository.save(updatedBoard);
   }
 
   async delete(boardId: string) {
-    await this.columnService.deleteByBoardId(boardId);
+    await this.tasksService.deleteByBoardId(boardId);
+    await this.columnsService.deleteByBoardId(boardId);
     return await this.boardRepository.delete(boardId);
   }
 }

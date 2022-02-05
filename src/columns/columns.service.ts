@@ -23,4 +23,12 @@ export class ColumnsService {
       .where('board.id = :id', { id })
       .execute();
   }
+
+  async findOne(id: string): Promise<BoardColumn | undefined> {
+    return await this.columnRepository.findOne(id);
+  }
+
+  async saveAll(columns: BoardColumn[]): Promise<BoardColumn[]> {
+    return await this.columnRepository.save(columns);
+  }
 }
