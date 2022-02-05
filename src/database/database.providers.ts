@@ -11,8 +11,15 @@ export const databaseProviders = [
         username: 'user123',
         password: 'pass123',
         database: 'rssello',
-        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-        synchronize: true,
+        entities: ['dist/**/*.entity.js'],
+        synchronize: false,
+        migrations: ['dist/migration/*.js'],
+        cli: {
+          migrationsDir: 'migration',
+        },
+      }).then(async (connection) => {
+        await connection.runMigrations();
+        return connection;
       }),
   },
 ];
