@@ -3,6 +3,7 @@ import { utilities, WinstonModule } from 'nest-winston';
 import { AppModule } from './app.module';
 import * as winston from 'winston';
 import { join } from 'path';
+import { ValidationPipe } from './pipes/validation.pipe';
 
 const winstonConfig = {
   transports: [
@@ -32,6 +33,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: WinstonModule.createLogger(winstonConfig),
   });
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(4000);
 }
 
