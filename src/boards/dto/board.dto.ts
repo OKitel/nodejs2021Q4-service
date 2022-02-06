@@ -1,5 +1,6 @@
 import { ColumnDto } from 'src/columns/dto/column.dto';
-import { IsString, IsArray } from 'class-validator';
+import { IsString, IsArray, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class BoardDto {
   id: string;
@@ -8,5 +9,7 @@ export class BoardDto {
   title: string;
 
   @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ColumnDto)
   columns: Array<ColumnDto>;
 }
