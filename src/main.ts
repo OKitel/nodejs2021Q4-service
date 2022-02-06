@@ -4,6 +4,23 @@ import { AppModule } from './app.module';
 import * as winston from 'winston';
 import { join } from 'path';
 import { ValidationPipe } from './pipes/validation.pipe';
+import { ConfigService } from '@nestjs/config';
+
+const { LOG_LEVEL: LOG } = process.env;
+let LOG_LEVEL_TYPED;
+if (
+  LOG === 'info' ||
+  LOG === 'error' ||
+  LOG === 'warn' ||
+  LOG === 'debug' ||
+  LOG === 'trace' ||
+  LOG === 'fatal'
+) {
+  LOG_LEVEL_TYPED = LOG;
+} else {
+  LOG_LEVEL_TYPED = 'info';
+}
+const LOG_LEVEL = LOG_LEVEL_TYPED;
 
 const winstonConfig = {
   transports: [
@@ -15,11 +32,13 @@ const winstonConfig = {
           prettyPrint: true,
         }),
       ),
+      level: LOG_LEVEL,
     }),
 
     new winston.transports.File({
       dirname: join(__dirname, './../logs'),
       filename: 'all.log',
+      level: LOG_LEVEL,
     }),
     new winston.transports.File({
       dirname: join(__dirname, './../logs'),
@@ -33,8 +52,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: WinstonModule.createLogger(winstonConfig),
   });
+
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(4000);
+
+  const config = app.get<ConfigService>(ConfigService);
+  const port = config.get('PORT');
+  outLogger.info(`App running on port ${port}`);
+  await app.listen(port);
 }
 
 const outLogger = winston.createLogger(winstonConfig);

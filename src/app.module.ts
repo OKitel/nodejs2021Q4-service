@@ -1,4 +1,5 @@
 import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { BoardsController } from './boards/boards.controller';
 import { BoardsModule } from './boards/boards.module';
 import { UsersController } from './users/users.controller';
@@ -16,6 +17,9 @@ import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     BoardsModule,
     ColumnsModule,
     UsersModule,
