@@ -8,6 +8,7 @@ export const databaseProviders = [
     useFactory: async (configService: ConfigService) =>
       await createConnection({
         type: configService.get<'postgres'>('TYPEORM_CONNECTION'),
+        host: configService.get<'string'>('TYPEORM_HOST') || 'localhost',
         port: configService.get<number>('TYPEORM_PORT'),
         username: configService.get<string>('TYPEORM_USERNAME'),
         password: configService.get<string>('TYPEORM_PASSWORD'),
