@@ -31,7 +31,6 @@ export class FileController {
     return { message: 'File was successfully uploaded!' };
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get(':filename')
   async getFile(@Param('filename') filename: string): Promise<StreamableFile> {
     const fileFromDb = await this.fileService.findOne(filename);
