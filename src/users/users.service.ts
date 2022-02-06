@@ -3,6 +3,7 @@ import {
   Inject,
   NotFoundException,
   forwardRef,
+  ForbiddenException,
 } from '@nestjs/common';
 import { TasksService } from 'src/tasks/tasks.service';
 import { Repository } from 'typeorm';
@@ -72,7 +73,7 @@ export class UsersService {
       .where('user.login = :login', { login })
       .getOne();
     if (!user) {
-      throw new NotFoundException();
+      throw new ForbiddenException();
     }
     return user;
   }
