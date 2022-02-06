@@ -6,11 +6,12 @@ export class AddAdmin1644088904439 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
       INSERT INTO "user"
-      ("name", "login", "password")
+      ("name", "login", "password", "salt")
       VALUES (
         'admin',
         'admin',
-        'admin'
+        '$2b$10$9K8h3srKgNUTS6bc/c36jOzg2.WSFbhEWn3JHx/mIcVcq.afzG7.S',
+        '$2b$10$9K8h3srKgNUTS6bc/c36jO'
       );
     `);
   }

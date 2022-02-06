@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { User } from '../database/entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserDto } from './dto/user.dto';
+import { CryptoService } from 'src/auth/crypto';
 
 @Injectable()
 export class UsersService {
@@ -17,6 +18,8 @@ export class UsersService {
     private userRepository: Repository<User>,
     @Inject(forwardRef(() => TasksService))
     private tasksService: TasksService,
+    @Inject(forwardRef(() => CryptoService))
+    private crypto: CryptoService,
   ) {}
 
   async findAll(): Promise<UserDto[]> {
@@ -32,7 +35,12 @@ export class UsersService {
   }
 
   async create(user: CreateUserDto): Promise<UserDto> {
-    const newUser = await this.userRepository.save(user);
+    const userSaltAndHash = await this.crypto.hashPassword(user.password);
+    const newUser = await this.userRepository.save({
+      ...user,
+      password: userSaltAndHash[1],
+      salt: userSaltAndHash[0],
+    });
     const { id, name, login } = newUser;
     return { id, name, login };
   }
@@ -42,7 +50,15 @@ export class UsersService {
     if (!oldUser) {
       throw new NotFoundException();
     }
-    return await this.userRepository.save(updatedUser);
+    const userSaltAndHash = await this.crypto.hashPassword(
+      updatedUser.password,
+    );
+    const persistedUser = await this.userRepository.save({
+      ...updatedUser,
+      password: userSaltAndHash[1],
+      salt: userSaltAndHash[0],
+    });
+    return persistedUser;
   }
 
   async delete(id: string) {
