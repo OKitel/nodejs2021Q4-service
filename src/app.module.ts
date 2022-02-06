@@ -11,14 +11,24 @@ import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { AppLoggerMiddleware } from './middlewares/app.logger.middleware';
 import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
+import { FileController } from './file/file.controller';
+import { FileModule } from './file/file.module';
 
 @Module({
-  imports: [BoardsModule, ColumnsModule, UsersModule, TasksModule, AuthModule],
+  imports: [
+    BoardsModule,
+    ColumnsModule,
+    UsersModule,
+    TasksModule,
+    AuthModule,
+    FileModule,
+  ],
   controllers: [
     BoardsController,
     UsersController,
     TasksController,
     AppController,
+    FileController,
   ],
   providers: [Logger, { provide: APP_FILTER, useClass: HttpExceptionFilter }],
 })

@@ -26,16 +26,9 @@ export class AuthService {
   }
 
   async login(user: UserDto) {
-    const payload = { login: user.login, id: user.id };
+    const payload = { login: user.login, userId: user.id };
     return {
       token: this.jwtService.sign(payload),
     };
   }
 }
-
-// const compareUserPassword = async (user: User, password: string) => {
-//   const hashedPassword = await hashPasswordWithSalt(password, user.salt);
-//   if (user.password !== hashedPassword[1]) {
-//     throw new AccessForbiddenError(user.login);
-//   }
-// };
