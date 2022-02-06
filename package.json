@@ -15,7 +15,8 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "cross-env DEBUG=rs:* jest --testMatch \"<rootDir>/test/e2e/test/*.test.js\" --noStackTrace --runInBand",
-    "test:auth": "cross-env DEBUG=rs:* TEST_MODE=auth jest --noStackTrace"
+    "test:auth": "cross-env DEBUG=rs:* TEST_MODE=auth jest --noStackTrace",
+    "test:load": "npx artillery run artillery-tests/user.test.yml"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
@@ -53,6 +54,7 @@
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "artillery": "^2.0.0-11",
     "chai": "4.3.4",
     "cross-env": "7.0.3",
     "debug": "4.3.2",
