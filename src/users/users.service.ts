@@ -24,7 +24,12 @@ export class UsersService {
   ) {}
 
   async findAll(): Promise<UserDto[]> {
-    return await this.userRepository.find();
+    const users = await this.userRepository.find();
+    return users.map((user) => ({
+      id: user.id,
+      login: user.login,
+      name: user.name,
+    }));
   }
 
   async findOne(id: string): Promise<UserDto> {
@@ -32,7 +37,11 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException();
     }
-    return user;
+    return {
+      id: user.id,
+      login: user.login,
+      name: user.name,
+    };
   }
 
   async create(user: CreateUserDto): Promise<UserDto> {
@@ -59,7 +68,11 @@ export class UsersService {
       password: userSaltAndHash[1],
       salt: userSaltAndHash[0],
     });
-    return persistedUser;
+    return {
+      id: persistedUser.id,
+      login: persistedUser.login,
+      name: persistedUser.name,
+    };
   }
 
   async delete(id: string) {
