@@ -18,7 +18,7 @@ export class BoardsService {
   async findAll(): Promise<BoardDto[]> {
     const boards = await this.boardRepository.find();
     const boardsWithSortedColumns = boards.map((item) => {
-      item.columns = item.columns.sort();
+      item.columns = item.columns.sort((a, b) => a.order - b.order);
       return item;
     });
     return boardsWithSortedColumns;
@@ -29,7 +29,7 @@ export class BoardsService {
     if (!board) {
       throw new NotFoundException();
     }
-    board.columns.sort();
+    board.columns.sort((a, b) => a.order - b.order);
     return board;
   }
 
