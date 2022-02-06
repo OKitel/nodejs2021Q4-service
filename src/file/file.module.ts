@@ -4,7 +4,7 @@ import { fileProviders } from './file.providers';
 import { FileService } from './file.service';
 
 @Module({
-  imports: [DatabaseModule, Logger],
+  imports: [DatabaseModule],
   providers: [...fileProviders, FileService, Logger],
   exports: [FileService],
 })
