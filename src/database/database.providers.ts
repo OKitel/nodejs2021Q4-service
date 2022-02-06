@@ -13,7 +13,8 @@ export const databaseProviders = [
         password: configService.get<string>('TYPEORM_PASSWORD'),
         database: configService.get<string>('TYPEORM_DATABASE'),
         entities: [configService.get<string>('TYPEORM_ENTITIES')],
-        synchronize: configService.get<boolean>('TYPEORM_SYNCHRONIZE'),
+        synchronize:
+          configService.get<string>('TYPEORM_SYNCHRONIZE') === 'true',
         migrations: [configService.get<string>('TYPEORM_MIGRATIONS')],
         cli: {
           migrationsDir: configService.get<string>('TYPEORM_MIGRATIONS_DIR'),
