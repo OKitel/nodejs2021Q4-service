@@ -62,6 +62,6 @@ export class TasksController {
     @Param('boardId', new ParseUUIDPipe()) boardId: string,
     @Param('taskId', new ParseUUIDPipe()) taskId: string,
   ) {
-    return await this.tasksService.delete(taskId);
+    await this.tasksService.delete(taskId);
   }
 }

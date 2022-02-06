@@ -1,26 +1,32 @@
 import { NestFactory } from '@nestjs/core';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 import { utilities, WinstonModule } from 'nest-winston';
 import { AppModule } from './app.module';
 import * as winston from 'winston';
 import { join } from 'path';
 import { ValidationPipe } from './pipes/validation.pipe';
 import { ConfigService } from '@nestjs/config';
+import { INestApplication } from '@nestjs/common';
 
 const { LOG_LEVEL: LOG } = process.env;
 let LOG_LEVEL_TYPED;
 if (
   LOG === 'info' ||
   LOG === 'error' ||
-  LOG === 'warn' ||
+  LOG === 'warning' ||
   LOG === 'debug' ||
-  LOG === 'trace' ||
-  LOG === 'fatal'
+  LOG === 'emerg'
 ) {
   LOG_LEVEL_TYPED = LOG;
 } else {
   LOG_LEVEL_TYPED = 'info';
 }
 const LOG_LEVEL = LOG_LEVEL_TYPED;
+
+const { USE_FASTIFY } = process.env;
 
 const winstonConfig = {
   transports: [
@@ -49,9 +55,19 @@ const winstonConfig = {
 };
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    logger: WinstonModule.createLogger(winstonConfig),
-  });
+  let app: INestApplication;
+  if (USE_FASTIFY !== 'true') {
+    app = await NestFactory.create(AppModule, {
+      logger: WinstonModule.createLogger(winstonConfig),
+    });
+    outLogger.info('EXPRESS');
+  } else {
+    app = await NestFactory.create<NestFastifyApplication>(
+      AppModule,
+      new FastifyAdapter(),
+    );
+    outLogger.info('FASTIFY');
+  }
 
   app.useGlobalPipes(new ValidationPipe());
 
