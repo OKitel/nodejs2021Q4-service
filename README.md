@@ -7,7 +7,7 @@
 
 ## Description
 
-This application is a [Trello](https://trello.com/) competitor. It can be used for managing tasks and boards. Backend is written in [Typescript](https://www.typescriptlang.org/) and uses [Nest](https://github.com/nestjs/nest). It may be used on every type of OS because it works inside isolated [Docker](https://www.docker.com/) containers. Data is stored inside [PostgreSQL](postgresql.org) database.
+This application is a [Trello](https://trello.com/) competitor. It can be used for managing tasks and boards, uploading files. Backend is written in [Typescript](https://www.typescriptlang.org/) and uses [Nest](https://github.com/nestjs/nest). It may be used on every type of OS because it works inside isolated [Docker](https://www.docker.com/) containers. Data is stored inside [PostgreSQL](postgresql.org) database.
 
 ## Downloading
 
@@ -18,7 +18,7 @@ git clone https://github.com/OKitel/nodejs2021Q4-service.git
 ## Installation
 
 ```bash
-$ npm install
+npm install
 ```
 
 ## Running the app
@@ -33,6 +33,52 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
+## REST endpoints
+
+- `BOARDS`
+
+  - `GET /boards` - get all boards
+  - `GET /boards/:boardID` - get the board by id
+  - `POST /boards` - create board
+  - `PUT /boards/:boardID` - update board by id
+  - `DELETE /boards/:boardID` - delete board by id
+
+- `TASKS`
+
+  - `GET /boards/:boardID/tasks` - get all tasks by boardID
+  - `GET /boards/:boardID/tasks/taskID` - get the task by taskID and boardID
+  - `POST /boards/:boardID/tasks` - create task
+  - `PUT /boards/:boardID/tasks/:taskID` - update task by taskID and boarID
+  - `DELETE /boards/:boardID/tasks/:taskID` - delete task by taskID and boarID
+
+- `USERS`
+
+  - `GET /users` - get all users
+  - `GET /users/:userID` - get the user by id
+  - `POST /users` - create user
+  - `PUT /users/:userID` - update user by id
+  - `DELETE /users/:userID` - delete user by id
+
+- `LOGIN`
+
+  - `POST /login` - logins a user with login and password and returns access token (Public)
+
+- `FILE`
+
+  - `POST /file` - upload file
+  - `GET /file/:filename` - download file (Public)
+
+All endpoints are private and require authorization, except those marked as Public.
+
+## API HTTP error codes
+
+| Error Code | Meaning                                                      |
+| ---------- | ------------------------------------------------------------ |
+| 401        | Unauthourized - invalid or missing token                     |
+| 403        | Forbidden - there is no such user or incorrect data provided |
+| 404        | Not found - The specified resource could not be found        |
+| 500        | Internal server error - There is a problem with the server   |
 
 ## Testing
 
