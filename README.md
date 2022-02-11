@@ -75,9 +75,10 @@ All endpoints are private and require authorization, except those marked as Publ
 
 | Error Code | Meaning                                                      |
 | ---------- | ------------------------------------------------------------ |
-| 401        | Unauthourized - invalid or missing token                     |
+| 401        | Unauthorized - invalid or missing token                      |
 | 403        | Forbidden - there is no such user or incorrect data provided |
-| 404        | Not found - The specified resource could not be found        |
+| 404        | Not found - the specified resource could not be found        |
+| 409        | Conflict - the user with provided login already exists       |
 | 500        | Internal server error - There is a problem with the server   |
 
 ## Testing

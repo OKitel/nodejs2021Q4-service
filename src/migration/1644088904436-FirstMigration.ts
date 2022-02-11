@@ -24,7 +24,7 @@ export class FirstMigration1644088904436 implements MigrationInterface {
             CREATE TABLE "user" (
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "name" character varying(255) NOT NULL,
-                "login" character varying(255) NOT NULL,
+                "login" character varying(255) NOT NULL UNIQUE,
                 "password" character varying(255) NOT NULL,
                 CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id")
             )
