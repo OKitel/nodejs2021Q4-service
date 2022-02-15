@@ -10,6 +10,7 @@ import { join } from 'path';
 import { ValidationPipe } from './pipes/validation.pipe';
 import { ConfigService } from '@nestjs/config';
 import { INestApplication } from '@nestjs/common';
+import fmp from 'fastify-multipart';
 
 const { LOG_LEVEL: LOG } = process.env;
 let LOG_LEVEL_TYPED;
@@ -62,10 +63,13 @@ async function bootstrap() {
     });
     outLogger.info('EXPRESS');
   } else {
-    app = await NestFactory.create<NestFastifyApplication>(
+    const fastifyApp = await NestFactory.create<NestFastifyApplication>(
       AppModule,
       new FastifyAdapter(),
     );
+    fastifyApp.register(fmp);
+    fastifyApp.enableCors();
+    app = fastifyApp;
     outLogger.info('FASTIFY');
   }
 
