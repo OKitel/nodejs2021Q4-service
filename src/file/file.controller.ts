@@ -10,15 +10,49 @@ import {
   Logger,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { FileService } from './file.service';
 
+@ApiTags('file')
 @Controller('file')
 export class FileController {
   constructor(private fileService: FileService, private logger: Logger) {}
 
+  @ApiOperation({
+    summary: 'Upload file',
+  })
+  @ApiBearerAuth()
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'OK',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
   @UseGuards(JwtAuthGuard)
   @Post()
   @UseInterceptors(FileInterceptor('file', { dest: 'uploads/' }))
@@ -31,6 +65,14 @@ export class FileController {
     return { message: 'File was successfully uploaded!' };
   }
 
+  @ApiOperation({
+    summary: 'Get file by name',
+  })
+  @ApiParam({
+    name: 'filename',
+    description: 'string',
+    example: 'astronaut.jpg',
+  })
   @Get(':filename')
   async getFile(@Param('filename') filename: string): Promise<StreamableFile> {
     const fileFromDb = await this.fileService.findOne(filename);
