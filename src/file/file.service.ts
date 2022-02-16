@@ -32,7 +32,7 @@ export class FileService {
     await this.fileRepository.save(file);
   }
 
-  async uploadFile(req: FastifyRequest, res: FastifyReply<any>): Promise<any> {
+  async uploadFile(req: FastifyRequest, res: FastifyReply): Promise<void> {
     if (!req.isMultipart()) {
       res.send(
         new BadRequestException(
@@ -41,12 +41,9 @@ export class FileService {
       );
       return;
     }
-    const mp = await req.multipart(this.handler, onEnd);
+    await req.multipart(this.handler, onEnd);
 
-    mp.on('field', function (key: any, value: any) {
-      console.log('form-data', key, value);
-    });
-    async function onEnd(err: any) {
+    async function onEnd(err: Error) {
       if (err) {
         res.send(new HttpException('Internal server error', 500));
         return;

@@ -18,10 +18,9 @@ export class FastifyFileController {
   @Post()
   async uploadFile(
     @Req() req: FastifyRequest,
-    @Res() res: FastifyReply<any>,
-  ): Promise<any> {
-    console.log('KUSKA FASTIFY');
-    return await this.fileService.uploadFile(req, res);
+    @Res() res: FastifyReply,
+  ): Promise<void> {
+    await this.fileService.uploadFile(req, res);
   }
 
   @Get(':filename')
