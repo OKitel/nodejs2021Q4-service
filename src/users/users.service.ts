@@ -4,6 +4,7 @@ import {
   NotFoundException,
   forwardRef,
   ForbiddenException,
+  ConflictException,
 } from '@nestjs/common';
 import { TasksService } from 'src/tasks/tasks.service';
 import { Repository } from 'typeorm';
@@ -46,13 +47,24 @@ export class UsersService {
 
   async create(user: CreateUserDto): Promise<UserDto> {
     const userSaltAndHash = await this.crypto.hashPassword(user.password);
-    const newUser = await this.userRepository.save({
-      ...user,
-      password: userSaltAndHash[1],
-      salt: userSaltAndHash[0],
-    });
-    const { id, name, login } = newUser;
-    return { id, name, login };
+    try {
+      const newUser = await this.userRepository.save({
+        ...user,
+        password: userSaltAndHash[1],
+        salt: userSaltAndHash[0],
+      });
+      const { id, name, login } = newUser;
+      return { id, name, login };
+    } catch (error: unknown) {
+      if (
+        error instanceof Error &&
+        error.message ===
+          'duplicate key value violates unique constraint "user_login_key"'
+      ) {
+        throw new ConflictException();
+      }
+      throw error;
+    }
   }
 
   async update(id: string, updatedUser: CreateUserDto): Promise<UserDto> {

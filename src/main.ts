@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import {
   FastifyAdapter,
   NestFastifyApplication,
@@ -10,6 +11,8 @@ import { join } from 'path';
 import { ValidationPipe } from './pipes/validation.pipe';
 import { ConfigService } from '@nestjs/config';
 import { INestApplication } from '@nestjs/common';
+import fmp from 'fastify-multipart';
+import fastifySwagger from 'fastify-swagger';
 
 const { LOG_LEVEL: LOG } = process.env;
 let LOG_LEVEL_TYPED;
@@ -62,10 +65,19 @@ async function bootstrap() {
     });
     outLogger.info('EXPRESS');
   } else {
-    app = await NestFactory.create<NestFastifyApplication>(
+    const fastifyApp = await NestFactory.create<NestFastifyApplication>(
       AppModule,
       new FastifyAdapter(),
     );
+    fastifyApp.register(fmp);
+    fastifyApp.register(fastifySwagger, {
+      exposeRoute: false,
+      swagger: {
+        info: { title: 'Trello API', version: '1.0' },
+      },
+    });
+    fastifyApp.enableCors();
+    app = fastifyApp;
     outLogger.info('FASTIFY');
   }
 
@@ -74,6 +86,15 @@ async function bootstrap() {
   const config = app.get<ConfigService>(ConfigService);
   const port = config.get('PORT');
   outLogger.info(`App running on port ${port}`);
+
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('Trello Service')
+    .setDescription("Let's try to create a competitor for Trello!")
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('doc', app, document);
+
   await app.listen(port);
 }
 

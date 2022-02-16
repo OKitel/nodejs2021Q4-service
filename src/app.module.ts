@@ -14,6 +14,18 @@ import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
 import { FileController } from './file/file.controller';
 import { FileModule } from './file/file.module';
+import { FastifyFileController } from './file/fastifyfile.controller';
+import { config } from 'dotenv';
+import { join } from 'path';
+
+config({
+  path: join(__dirname, '../.env'),
+});
+
+const { USE_FASTIFY } = process.env;
+
+const fileModule =
+  USE_FASTIFY === 'true' ? FastifyFileController : FileController;
 
 @Module({
   imports: [
@@ -32,7 +44,7 @@ import { FileModule } from './file/file.module';
     UsersController,
     TasksController,
     AppController,
-    FileController,
+    fileModule,
   ],
   providers: [Logger, { provide: APP_FILTER, useClass: HttpExceptionFilter }],
 })

@@ -1,15 +1,17 @@
 import {
   Controller,
-  UseGuards,
-  Post,
   Get,
-  UseInterceptors,
-  UploadedFile,
-  StreamableFile,
   Param,
-  Logger,
+  Post,
+  Req,
+  Res,
+  StreamableFile,
+  UseGuards,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileService } from './file.service';
+import { FastifyRequest, FastifyReply } from 'fastify';
+import { createReadStream } from 'fs';
+import { join } from 'path';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -19,15 +21,12 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { createReadStream } from 'fs';
-import { join } from 'path';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { FileService } from './file.service';
 
 @ApiTags('file')
 @Controller('file')
-export class FileController {
-  constructor(private fileService: FileService, private logger: Logger) {}
+export class FastifyFileController {
+  constructor(private fileService: FileService) {}
 
   @ApiOperation({
     summary: 'Upload file',
@@ -55,14 +54,11 @@ export class FileController {
   })
   @UseGuards(JwtAuthGuard)
   @Post()
-  @UseInterceptors(FileInterceptor('file', { dest: 'uploads/' }))
-  async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    this.fileService.create({
-      generatedName: file.filename,
-      originalName: file.originalname,
-    });
-    this.logger.log('File was successfully uploaded!');
-    return { message: 'File was successfully uploaded!' };
+  async uploadFile(
+    @Req() req: FastifyRequest,
+    @Res() res: FastifyReply,
+  ): Promise<void> {
+    await this.fileService.uploadFile(req, res);
   }
 
   @ApiOperation({
@@ -75,10 +71,7 @@ export class FileController {
   })
   @Get(':filename')
   async getFile(@Param('filename') filename: string): Promise<StreamableFile> {
-    const fileFromDb = await this.fileService.findOne(filename);
-    const file = createReadStream(
-      join(process.cwd(), 'uploads', fileFromDb.generatedName),
-    );
+    const file = createReadStream(join(process.cwd(), 'uploads', filename));
     return new StreamableFile(file);
   }
 }

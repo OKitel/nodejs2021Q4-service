@@ -3,10 +3,7 @@ import { IsString, IsArray, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class BoardDto {
-  @ApiProperty()
-  id: string;
-
+export class CreateBoardDto {
   @ApiProperty()
   @IsString()
   title: string;

@@ -12,22 +12,45 @@ config:
       arrivalRate: 10
       name: Sustained load
 
+before:
+  flow:
+    - log: 'Get token'
+    - post:
+        url: '/login'
+        json:
+          login: 'admin'
+          password: 'admin'
+        capture:
+          - json: '$.token'
+            as: 'JWT'
+
 scenarios:
   - name: 'Test Users CRUD'
     flow:
-      - post:
-          url: '/login'
-          json:
-            login: 'admin'
-            password: 'admin'
-          capture:
-            - json: '$.token'
-              as: 'JWT'
       - post:
           url: '/users'
           json:
             name: 'new user'
             login: 'newUser'
             password: 'newuser123'
+          capture:
+            - json: '$.id'
+              as: 'userId'
+          headers:
+            Authorization: 'Bearer {{JWT}}'
+      - get:
+          url: '/users'
+          headers:
+            Authorization: 'Bearer {{JWT}}'
+      - put:
+          url: '/users/{{userId}}'
+          headers:
+            Authorization: 'Bearer {{JWT}}'
+          json:
+            name: 'updated user'
+            login: 'UUser'
+            password: 'newuser123'
+      - delete:
+          url: '/users/{{userId}}'
           headers:
             Authorization: 'Bearer {{JWT}}'

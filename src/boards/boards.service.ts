@@ -5,6 +5,7 @@ import { TasksService } from 'src/tasks/tasks.service';
 import { Repository } from 'typeorm';
 import { Board } from '../database/entities/board.entity';
 import { BoardDto } from './dto/board.dto';
+import { CreateBoardDto } from './dto/create-board.dto';
 
 @Injectable()
 export class BoardsService {
@@ -33,7 +34,7 @@ export class BoardsService {
     return board;
   }
 
-  async create({ title, columns }: BoardDto): Promise<BoardDto> {
+  async create({ title, columns }: CreateBoardDto): Promise<BoardDto> {
     const board = new Board();
     board.title = title;
     const createdColumns = columns.map(({ order, title: columnTitle }) => {
