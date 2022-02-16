@@ -120,7 +120,7 @@ export class UsersController {
 
   @ApiOperation({
     summary: 'Delete user',
-    description: 'Deletes a User by ID',
+    description: "Deletes a User by ID, all user's tasks are unassigned",
   })
   @ApiParam({
     name: 'userId',

@@ -121,7 +121,8 @@ export class BoardsController {
 
   @ApiOperation({
     summary: 'Delete board',
-    description: 'Deletes a Board by ID',
+    description:
+      'Deletes a Board by ID, all tasks and columns  are also deleted from the board',
   })
   @ApiParam({
     name: 'boardId',
