@@ -1,13 +1,13 @@
-# RS School REST service
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
+</p>
 
-![PostgreSQL, nodejs, Docker](./assets/techs.png)
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-This application is a [Trello](https://trello.com/) competitor. It can be used for managing tasks and boards. Backend is written in [Typescript](https://www.typescriptlang.org/) and uses [Fastify](https://www.fastify.io/) framework to handle requests in [nodejs](https://nodejs.org/en/) server. It may be used on every type of OS because it works inside isolated [Docker](https://www.docker.com/) containers. Data is stored inside [PostgreSQL](postgresql.org) database.
+## Description
 
-## Prerequisites
-
-- Git - [Download & Install Git](https://git-scm.com/downloads).
-- Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
+This application is a [Trello](https://trello.com/) competitor. It can be used for managing tasks and boards, uploading files. Backend is written in [Typescript](https://www.typescriptlang.org/) and uses [Nest](https://github.com/nestjs/nest). It may be used on every type of OS because it works inside isolated [Docker](https://www.docker.com/) containers. Data is stored inside [PostgreSQL](postgresql.org) database.
 
 ## Downloading
 
@@ -15,21 +15,71 @@ This application is a [Trello](https://trello.com/) competitor. It can be used f
 git clone https://github.com/OKitel/nodejs2021Q4-service.git
 ```
 
-## Installing NPM modules
+## Installation
 
-```sh
+```bash
 npm install
 ```
 
-## Running application
+## Running the app
 
-```sh
-npm start
+```bash
+# development
+$ npm run start
+
+# watch mode
+$ npm run start:dev
+
+# production mode
+$ npm run start:prod
 ```
 
-After starting the app on port (4000 as default) you can open
-in your browser OpenAPI documentation by typing http://localhost:4000/docs/.
-For more information about OpenAPI/Swagger please visit https://swagger.io/.
+## REST endpoints
+
+- `BOARDS`
+
+  - `GET /boards` - get all boards
+  - `GET /boards/:boardID` - get the board by id
+  - `POST /boards` - create board
+  - `PUT /boards/:boardID` - update board by id
+  - `DELETE /boards/:boardID` - delete board by id
+
+- `TASKS`
+
+  - `GET /boards/:boardID/tasks` - get all tasks by boardID
+  - `GET /boards/:boardID/tasks/taskID` - get the task by taskID and boardID
+  - `POST /boards/:boardID/tasks` - create task
+  - `PUT /boards/:boardID/tasks/:taskID` - update task by taskID and boarID
+  - `DELETE /boards/:boardID/tasks/:taskID` - delete task by taskID and boarID
+
+- `USERS`
+
+  - `GET /users` - get all users
+  - `GET /users/:userID` - get the user by id
+  - `POST /users` - create user
+  - `PUT /users/:userID` - update user by id
+  - `DELETE /users/:userID` - delete user by id
+
+- `LOGIN`
+
+  - `POST /login` - logins a user with login and password and returns access token (Public)
+
+- `FILE`
+
+  - `POST /file` - upload file
+  - `GET /file/:filename` - download file (Public)
+
+All endpoints are private and require authorization, except those marked as Public.
+
+## API HTTP error codes
+
+| Error Code | Meaning                                                      |
+| ---------- | ------------------------------------------------------------ |
+| 401        | Unauthorized - invalid or missing token                      |
+| 403        | Forbidden - there is no such user or incorrect data provided |
+| 404        | Not found - the specified resource could not be found        |
+| 409        | Conflict - the user with provided login already exists       |
+| 500        | Internal server error - There is a problem with the server   |
 
 ## Testing
 
@@ -59,21 +109,11 @@ To run only specific test suite with authorization (users, boards or tasks)
 npm run test:auth <suite name>
 ```
 
-## Development
-
-If you're using VSCode, you can get a better developer experience from integration with [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) extensions.
-
 ### Auto-fix and format
 
 ```sh
 npm run lint
 ```
-
-### Debugging in VSCode
-
-Press <kbd>F5</kbd> to debug.
-
-For more information, visit: https://code.visualstudio.com/docs/editor/debugging
 
 ## Docker 🐳
 
@@ -84,7 +124,7 @@ To run the entire app use the next command in your terminal in the project root 
 docker compose up
 ```
 
-This command will build containers with app and postgreSQL database. The size of app container is 270 MB.
+This command will build containers with app and postgreSQL database.
 
 When containers start, the application waits for the Postgres container to start first.
 
@@ -130,10 +170,79 @@ The image of this app is in private Docker Hub repository [okitel/rsschool-nodej
 
 To launch tests you need to install all dependencies into the root directory. There are no tests inside docker containers.
 
-### Documentation
+# Performance comparison table Nestjs/express vs Nestjs/fastify
 
-Typedoc is installed so you can generate documentation based on tsdoc. To do this, use the following script:
+This table was made based on [artillery](https://www.artillery.io/) reports.
 
-```sh
-npm run docs
+| Data                       | Express                        | Fastify                        |
+| -------------------------- | ------------------------------ | ------------------------------ |
+| http.requests              | 3630                           | 3630                           |
+| http.responses             | 3630                           | 3630                           |
+| http.response_time(median) | 108.9                          | 102.5                          |
+| http.response_time(min)    | 3                              | 4                              |
+| http.response_time(max)    | 345                            | 319                            |
+| Status Codes [code:count]  | [200:2178] [201:726] [204:726] | [200:2178] [201:726] [204:726] |
+
+## Nestjs/Express
+
+### Summary report Express
+
+```none
+--------------------------------
+Summary report @ 22:42:50(+0100)
+--------------------------------
+
+http.codes.200: ................................................................ 2178
+http.codes.201: ................................................................ 726
+http.codes.204: ................................................................ 726
+http.request_rate: ............................................................. 50/sec
+http.requests: ................................................................. 3630
+http.response_time:
+  min: ......................................................................... 3
+  max: ......................................................................... 345
+  median: ...................................................................... 108.9
+  p95: ......................................................................... 169
+  p99: ......................................................................... 186.8
+http.responses: ................................................................ 3630
+vusers.completed: .............................................................. 726
+vusers.created: ................................................................ 726
+vusers.created_by_name.Test Users CRUD: ........................................ 726
+vusers.session_length:
+  min: ......................................................................... 192.8
+  max: ......................................................................... 664.7
+  median: ...................................................................... 424.2
+  p95: ......................................................................... 497.8
+  p99: ......................................................................... 550.1
+```
+
+## Nestjs/Fastify
+
+### Summary report Fastify
+
+```none
+--------------------------------
+Summary report @ 23:12:24(+0100)
+--------------------------------
+
+http.codes.200: ................................................................ 2178
+http.codes.201: ................................................................ 726
+http.codes.204: ................................................................ 726
+http.request_rate: ............................................................. 50/sec
+http.requests: ................................................................. 3630
+http.response_time:
+  min: ......................................................................... 4
+  max: ......................................................................... 319
+  median: ...................................................................... 102.5
+  p95: ......................................................................... 190.6
+  p99: ......................................................................... 210.6
+http.responses: ................................................................ 3630
+vusers.completed: .............................................................. 726
+vusers.created: ................................................................ 726
+vusers.created_by_name.Test Users CRUD: ........................................ 726
+vusers.session_length:
+  min: ......................................................................... 219.3
+  max: ......................................................................... 693.1
+  median: ...................................................................... 459.5
+  p95: ......................................................................... 528.6
+  p99: ......................................................................... 584.2
 ```

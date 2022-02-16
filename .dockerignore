@@ -20,3 +20,6 @@ typedoc.json
 .dockerignore
 docker-compose.yml
 Dockerfile
+artillery-tests/
+dist/
+uploads/

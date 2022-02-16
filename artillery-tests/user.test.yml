@@ -1,0 +1,56 @@
+config:
+  target: 'http://localhost:4000'
+  phases:
+    - duration: 6
+      arrivalRate: 1
+      name: Warm up
+    - duration: 12
+      arrivalRate: 5
+      rampTo: 10
+      name: Ramp up load
+    - duration: 60
+      arrivalRate: 10
+      name: Sustained load
+
+before:
+  flow:
+    - log: 'Get token'
+    - post:
+        url: '/login'
+        json:
+          login: 'admin'
+          password: 'admin'
+        capture:
+          - json: '$.token'
+            as: 'JWT'
+
+scenarios:
+  - name: 'Test Users CRUD'
+    flow:
+      - post:
+          url: '/users'
+          json:
+            name: 'new user'
+            login: 'newUser'
+            password: 'newuser123'
+          capture:
+            - json: '$.id'
+              as: 'userId'
+          headers:
+            Authorization: 'Bearer {{JWT}}'
+      - get:
+          url: '/users'
+          headers:
+            Authorization: 'Bearer {{JWT}}'
+      - put:
+          url: '/users/{{userId}}'
+          headers:
+            Authorization: 'Bearer {{JWT}}'
+          json:
+            name: 'updated user'
+            login: 'UUser'
+            password: 'newuser123'
+      - delete:
+          url: '/users/{{userId}}'
+          headers:
+            Authorization: 'Bearer {{JWT}}'
